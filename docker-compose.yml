@@ -1,0 +1,33 @@
+version: '3.9'
+
+
+services:
+  web:
+    container_name: knock_bank_web
+    build: 
+      context: ./client
+    ports:
+      - "5173:5173"
+
+  api:
+    container_name: knock_bank_api
+    build: 
+      context: ./server
+    ports:
+      - "5000:5000"
+
+  db:
+    image: mysql:5.7
+    container_name: knock_bank_db
+    environment:
+      MYSQL_DATABASE: 'knock_bank_db'
+      MYSQL_USER: 'admin'
+      MYSQL_PASSWORD: 'admin'
+      MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-db:/var/lib/mysql
+
+volumes:
+  mysql-db:

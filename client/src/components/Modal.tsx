@@ -1,14 +1,18 @@
-import { ReactNode } from "react";
+import React from "react";
 import { XCircle } from "@phosphor-icons/react";
 
-type ModalProps = {
-  title: string
-  children: ReactNode
-  closeModal: () => void,
+
+export type BaseModalProps = {
   isOpen?: boolean
+  closeModal: () => void,
 }
 
-export function Modal({ title, children, closeModal, isOpen = false }: ModalProps) {
+type ModalProps = BaseModalProps & {
+  title: string
+  children: React.ReactNode
+} 
+
+export const Modal: React.FC<ModalProps> = ({ title, children, closeModal, isOpen = false }) => {
   return (
     <>
       {isOpen && (
@@ -16,13 +20,13 @@ export function Modal({ title, children, closeModal, isOpen = false }: ModalProp
           fixed inset-0 bg-gray-200 bg-opacity-30
           backdrop-blur-sm s flex justify-center items-center
       ">
-        <div className="bg-white w-1/3 h-2/3 shadow-xl rounded-3xl">
-          <header className="rounded-t-3xl flex justify-between items-center w-full px-12 pt-8">
+        <div className="bg-white min-w-96 w-1/3 shadow-xl rounded-3xl border-8 border-t-blue border-x-0 border-b-0">
+          <header className="rounded-t-3xl flex justify-between items-center w-full px-16 py-12">
             <h1 className="text-4xl self-center cursor-default duration-300 hover:text-blue">
               {title}
             </h1>
             <XCircle
-              size={40} 
+              size={48} 
               onClick={closeModal} 
               className="
                 fill-gray-100 hover:fill-blue 

@@ -1,12 +1,21 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { HomeProps } from "..";
+import { LoginForm } from "./LoginForm";
 import { CurrencyCircleDollar } from "@phosphor-icons/react";
-import { Modal } from "../../components/Modal";
 
 
-export function Header() {
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
-  const handleOpenLoginModal = () => { setIsLoginModalOpen(true) };
-  const handleCloseLoginModal = () => { setIsLoginModalOpen(false) };
+export function Header({ isModalOpen }: HomeProps) {
+  const navigate = useNavigate();
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(isModalOpen);
+  const handleOpenLoginModal = () => {
+    navigate('/login');
+    setIsLoginModalOpen(true);
+  };
+  const handleCloseLoginModal = () => {
+    navigate('/');
+    setIsLoginModalOpen(false);
+  };
 
   return (
     <>
@@ -16,7 +25,7 @@ export function Header() {
           <span> KnockBank</span>
         </div>
         <button
-          onClick={handleOpenLoginModal} 
+          onClick={handleOpenLoginModal}
           className="
             px-4 py-2 h-fit 
             border-gray-100 border rounded-2xl
@@ -28,9 +37,10 @@ export function Header() {
           Fazer Login
         </button>
       </header>
-      <Modal title="Entrar" isOpen={isLoginModalOpen} closeModal={handleCloseLoginModal}>
-        <form action=""></form>
-      </Modal>
+      <LoginForm
+        isOpen={isLoginModalOpen}
+        closeModal={handleCloseLoginModal}
+      />
     </>
   );
 }

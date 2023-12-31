@@ -1,14 +1,22 @@
-import Home from "../pages/Home";
-import { DashboardPage } from "../pages/Dashboard";
 import { Route, Routes, BrowserRouter } from "react-router-dom";
+import { Home } from "../pages/Home";
+import { Dashboard } from "../pages/Dashboard";
 
 
-export function AppRoutes() {
+export function Router() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route element={<Home />} index/>
-        <Route path="/dashboard" element={<DashboardPage />}/>
+        {/* Home Routes */}
+        <>
+          <Route element={<Home loginFormOpen={false} registerFormOpen={false}/>} index/>
+          <Route path="/login" element={<Home loginFormOpen={true} registerFormOpen={false}/>} />
+          <Route path="/cadastrar" element={<Home loginFormOpen={false} registerFormOpen={true}/>} />
+        </>
+        {/* Dashboard Routes */}
+        <>
+          <Route path="/dashboard" element={<Dashboard />}/>
+        </>
       </Routes>
     </BrowserRouter>
   )

@@ -1,18 +1,25 @@
-import { useEffect } from "react";
-import { Header } from "./Header";
-import { Hero } from "./Hero";
+import { Hero } from "./components/Hero";
+import { Header } from "./components/Header";
+import { useTitle } from "../../hooks/useTitle";
 
 
-export default function Home() {
+export type HomeProps = {
+  isModalOpen: boolean
+}
+
+type HomeModalStates = {
+  registerFormOpen: boolean,
+  loginFormOpen: boolean
+}
+
+export function Home({ registerFormOpen, loginFormOpen }: HomeModalStates) {
   // Tab Title
-  useEffect(() => {
-    document.title = "Home";
-  }, []);
+  useTitle('Home | KnockBank')
 
   return (
     <div className="bg-white h-screen">
-      <Header />
-      <Hero />
+      <Header isModalOpen={loginFormOpen}/>
+      <Hero isModalOpen={registerFormOpen}/>
     </div>
   );
 }

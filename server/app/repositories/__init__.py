@@ -1,2 +1,2 @@
-from .pessoa_repository import PessoaRepository
 from .conta_repository import ContaRepository
+from .user_repository import UserRepository

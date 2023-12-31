@@ -16,7 +16,7 @@ class Pessoa(BaseModel):
     nome: str = Column(String(255), nullable=False)
     data_nascimento: date = Column(Date, nullable=False)
 
-    contas: Mapped['Conta'] = relationship('Conta', back_populates='pessoa')
+    conta: Mapped['Conta'] = relationship('Conta', back_populates='pessoa')
 
     def __init__(self, nome: str, cpf: str, data_nascimento: date) -> None:
         self.nome = nome

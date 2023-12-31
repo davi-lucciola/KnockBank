@@ -10,8 +10,10 @@ python = "^3.10"
 apiflask = "^2.0.2"
 flask-sqlalchemy = "^3.1.1"
 flask-migrate = "^4.0.5"
+flask-cors = "^4.0.0"
 python-dotenv = "^1.0.0"
 mysql-connector-python = "^8.2.0"
+python-jose = "^3.3.0"
 
 
 [build-system]

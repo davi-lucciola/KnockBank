@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from sqlalchemy import select
 from app.database import db
 from app.models import Conta, Pessoa
 from app.errors import InfraError
@@ -11,8 +10,12 @@ class ContaRepository:
         return db.session.query(Conta).get(conta_id)
     
     def buscar_pelo_cpf(self, cpf: str) -> Conta | None:
-        stmt = select(Conta).join(Pessoa, Conta.pessoa_id == Pessoa.id).where(Pessoa.cpf == cpf)
-        return db.session.execute(stmt).first()
+        stmt = db.session.query(Conta)\
+            .join(Pessoa, Conta.pessoa_id == Pessoa.id)\
+            .where(Pessoa.cpf == cpf)
+            
+        conta: Conta = db.session.execute(stmt).first()
+        return conta[0] if conta is not None else None
 
     def salvar(self, conta: Conta) -> Conta:
         try:

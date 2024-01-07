@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { HomeProps } from "..";
 import { LoginForm } from "./LoginForm";
-import { CurrencyCircleDollar } from "@phosphor-icons/react";
+import { KnockBankLogo } from "../../../components/KnockBankLogo";
 
 
 export function Header({ isModalOpen }: HomeProps) {
@@ -21,7 +21,7 @@ export function Header({ isModalOpen }: HomeProps) {
     <>
       <header className="container m-auto flex justify-between items-center px-4">
         <div id="logo" className="flex items-center text-2xl font-bold">
-          <CurrencyCircleDollar size={64} className="fill-blue" />
+          <KnockBankLogo size={64} />
           <span> KnockBank</span>
         </div>
         <button

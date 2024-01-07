@@ -4,6 +4,7 @@ import { Api, apiError } from "../Api";
 
 export interface IAuthService {
   login(user_login: UserLogin): Promise<any>
+  logout(): Promise<void>
 }
 
 export class AuthService implements IAuthService {
@@ -17,6 +18,15 @@ export class AuthService implements IAuthService {
     try {
       const response = await this.api.post('/login', user_login);
       return response.data;
+    } catch (e: any) {
+      apiError(e);
+    }
+  }
+
+  async logout(): Promise<void> {
+    try {
+      const response = await this.api.delete('/logout')
+      return response.data
     } catch (e: any) {
       apiError(e);
     }

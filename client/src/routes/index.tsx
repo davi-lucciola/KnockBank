@@ -1,6 +1,7 @@
 import { Route, Routes, BrowserRouter } from "react-router-dom";
-import { Home } from "../pages/Home";
-import { Dashboard } from "../pages/Dashboard";
+import { Home } from "../app/Home";
+import { Dashboard } from "../app/Dashboard";
+import { NotFound } from "../app/NotFound";
 
 
 export function Router() {
@@ -17,6 +18,7 @@ export function Router() {
         <>
           <Route path="/dashboard" element={<Dashboard />}/>
         </>
+        <Route path="*" element={<NotFound />}/>
       </Routes>
     </BrowserRouter>
   )

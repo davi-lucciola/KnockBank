@@ -1,49 +1,41 @@
-import { useContext } from "react"
-import { AuthContext } from "../../../context/AuthContext"
-import { useForm } from "react-hook-form"
-import { BaseModalProps, Modal } from "../../../components/Modal"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { UserLoginSchema, UserLogin } from "../../../data/schemas/User"
-import { FormItem } from "../../../components/FormItem"
-import { Input } from "../../../components/Input"
-import { IAuthService } from "../../../data/services/AuthService"
 import { toast } from "react-toastify"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { Input } from "../../../components/Input"
+import { FormItem } from "../../../components/FormItem"
+import { BaseModalProps, Modal } from "../../../components/Modal"
+import { useAuth } from "../../../hooks/useAuth"
 import { ApiErrorType } from "../../../data/Api"
-import { useNavigate } from "react-router-dom"
+import { UserLoginSchema, UserLogin } from "../../../data/schemas/User"
 
 
 type LoginFormModalProps = BaseModalProps
 export function LoginForm({ isOpen, closeModal }: LoginFormModalProps) {
-  const navigate = useNavigate();
-  const { getAuthService, setToken } = useContext(AuthContext);
+  const { login, redirect } = useAuth();
   const { register, handleSubmit, formState: { errors }} = useForm<UserLogin>({
     resolver: zodResolver(UserLoginSchema)
   });
   
-  const authService: IAuthService = getAuthService();
-  async function login(user_login: UserLogin) {
+  async function handleLogin(userLogin: UserLogin) {
     try {
-      let token: string = await authService.login(user_login);
-      setToken(token)
+      await login(userLogin)
       toast.success('Conta logada com sucesso.');
       setTimeout(() => {  
-        navigate('/dashboard')
+        redirect('/dashboard')
       }, 1000);
     } catch (e: any) {
-      console.log(e)
       if (e.type == ApiErrorType.WARNING) {
         toast.warn(e.message);
-        return;
+      } else {
+        toast.error(e.message);
       }
-
-      toast.error(e.message);
     }
   }
 
   return (
     <Modal title="Entrar" isOpen={isOpen} closeModal={closeModal}>
       <form 
-        onSubmit={handleSubmit(login)}
+        onSubmit={handleSubmit(handleLogin)}
         className="flex flex-col gap-4 px-16 pb-12"
       >
         <FormItem errorMessage={errors.cpf?.message}>

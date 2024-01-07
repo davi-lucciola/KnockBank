@@ -31,7 +31,7 @@ class Conta(BaseModel):
     pessoa_id: int = Column(BigInteger, ForeignKey('pessoa.id'), nullable=False, unique=True)
     pessoa: Mapped['Pessoa'] = relationship('Pessoa', back_populates='conta')
 
-    user_id: int = Column(BigInteger, ForeignKey('users.id'), nullable=False, unique=True)
+    user_id: int = Column(BigInteger, ForeignKey('user.id'), nullable=False, unique=True)
     user: Mapped['User'] = relationship('User', back_populates='conta')
 
     def __init__(self, nome: str, cpf: str, data_nascimento: date, senha: str, tipo_conta: int, limite_saque_diario: float = 999) -> None:

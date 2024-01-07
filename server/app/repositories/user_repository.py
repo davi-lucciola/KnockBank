@@ -6,6 +6,9 @@ from app.errors import InfraError
 
 @dataclass
 class UserRepository:
+    def buscar_pelo_id(self, id: int) -> User | None:
+        return db.session.query(User).filter(User.id == id).first()
+
     def buscar_pelo_token(self, token: str) -> User | None:
         return db.session.query(User).filter(User.token == token).first()
 

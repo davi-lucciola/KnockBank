@@ -1,17 +1,17 @@
 from datetime import datetime as dt, timedelta
 from dataclasses import dataclass, field
 from app.security import JwtService
-from app.models import Conta
-from app.repositories import ContaRepository
+from app.models import Conta, User
+from app.repositories import ContaRepository, UserRepository
 from app.errors import NotFoundError, ForbiddenError
 
 
 @dataclass
 class AuthService:
     jwt_service: JwtService = field(default_factory=lambda: JwtService())
+    user_repository: UserRepository = field(default_factory=lambda: UserRepository())
     conta_repository: ContaRepository = field(default_factory=lambda: ContaRepository())
     
-
     def login(self, cpf: str, senha: str) -> str:
         conta: Conta = self.conta_repository.buscar_pelo_cpf(cpf)
 
@@ -33,3 +33,7 @@ class AuthService:
         self.conta_repository.salvar(conta)
 
         return token
+    
+    def logout(self, user: User) -> None:
+        user.token, user.refresh_token = None, None
+        self.user_repository.salvar(user)

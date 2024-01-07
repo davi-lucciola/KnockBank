@@ -9,7 +9,7 @@ if typing.TYPE_CHECKING:
     from models import Conta
 
 class User(BaseModel):
-    __tablename__ = 'users'
+    __tablename__ = 'user'
 
     id: int = Column(BigInteger, primary_key=True, autoincrement=True)
     senha: str = Column(String(255), nullable=False)

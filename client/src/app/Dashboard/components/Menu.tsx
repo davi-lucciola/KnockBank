@@ -3,13 +3,16 @@ import { SignOut, SquaresFour, User } from "@phosphor-icons/react";
 import { KnockBankLogo } from "../../../components/KnockBankLogo";
 import { useAuth } from "../../../hooks/useAuth";
 import { ApiErrorType } from "../../../data/Api";
+import { useNavigate } from "react-router-dom";
 
 export function Menu() {
-  const { logout, redirect } = useAuth();
+  const navigate = useNavigate();
+  const { logout } = useAuth();
 
   async function handleLogout() {
     try {
       await logout();
+      navigate('/');
     } catch(e: any) {
       if (e.type == ApiErrorType.WARNING) {
         toast.warn(e.message);
@@ -17,8 +20,6 @@ export function Menu() {
         toast.error(e.message);
       }
     }
-
-    redirect('/')
   }
 
   return (

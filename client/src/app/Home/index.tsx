@@ -2,6 +2,7 @@ import { Hero } from "./components/Hero";
 import { Header } from "./components/Header";
 import { useTitle } from "../../hooks/useTitle";
 import { useAuth } from "../../hooks/useAuth";
+import { Outlet, useNavigate } from "react-router-dom";
 
 export type HomeProps = {
   isModalOpen: boolean
@@ -15,10 +16,13 @@ type HomeModalStates = {
 export function Home({ registerFormOpen, loginFormOpen }: HomeModalStates) {
   // Tab Title
   useTitle('Home | KnockBank');
-  const { isAuth, redirect } = useAuth();
 
-  if (isAuth) 
-    redirect('/dashboard');
+  const navigate = useNavigate();
+  const { isAuth } = useAuth();
+
+  if (isAuth) {
+    navigate('/dashboard');
+  }
   
   return (
     <div className="bg-white h-screen">

@@ -20,7 +20,7 @@ export const Modal: React.FC<ModalProps> = ({ title, children, closeModal, isOpe
           fixed inset-0 bg-gray-200 bg-opacity-30
           backdrop-blur-sm s flex justify-center items-center
       ">
-        <div className="bg-white min-w-96 w-1/3 shadow-xl rounded-3xl border-8 border-t-blue border-x-0 border-b-0">
+        <div className="bg-white min-w-96 w-1/3 shadow-xl rounded-3xl">
           <header className="rounded-t-3xl flex justify-between items-center w-full px-16 py-12">
             <h1 className="text-4xl self-center cursor-default duration-300 hover:text-blue">
               {title}

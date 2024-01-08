@@ -1,4 +1,4 @@
-import React, { InputHTMLAttributes, SelectHTMLAttributes, forwardRef } from "react"
+import { InputHTMLAttributes, SelectHTMLAttributes, forwardRef } from "react"
 
 
 type InputPropsBase = { 
@@ -11,9 +11,9 @@ type InputPropsSelect = SelectHTMLAttributes<HTMLSelectElement> & InputPropsBase
 
 type RefElement = HTMLInputElement | HTMLSelectElement;
 
-export const Input: React.FC<InputPropsInput | InputPropsSelect> = 
-  forwardRef<RefElement, InputPropsInput | InputPropsSelect>(
+export const Input = forwardRef<RefElement, InputPropsInput | InputPropsSelect>(
   ({ name, label, children, ...rest }, ref) => {
+    
   return (
     <>
       {label && (<label htmlFor={name}> {label} </label>)}
@@ -21,14 +21,14 @@ export const Input: React.FC<InputPropsInput | InputPropsSelect> =
         <input 
           id={name} 
           name={name}
-          ref={ref as React.Ref<HTMLInputElement>}
+          ref={ref as React.ForwardedRef<HTMLInputElement>}
           className="border border-gray-100 rounded-lg py-2 px-2 focus:outline-blue text-lg "
           {...rest as InputPropsInput} 
         /> :
         <select 
           id={name} 
           name={name} 
-          ref={ref as React.Ref<HTMLSelectElement>}
+          ref={ref as React.ForwardedRef<HTMLSelectElement>}
           className="border border-gray-100 rounded-lg py-2 px-2 focus:outline-blue text-lg"
           {...rest as InputPropsSelect} 
         >

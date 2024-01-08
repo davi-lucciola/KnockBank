@@ -1,8 +1,8 @@
-import './index.css'
+import '../index.css'
 import 'react-toastify/ReactToastify.css'
-import { Router } from './routes'
-import { AuthContextProvider } from './context/AuthContext'
-import { ContaContextProvider } from './context/ContaContext'
+import { Router } from '../routes'
+import { AuthContextProvider } from '../context/AuthContext'
+import { ContaContextProvider } from '../context/ContaContext'
 
 
 export default function App() {

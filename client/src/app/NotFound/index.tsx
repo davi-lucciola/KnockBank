@@ -1,4 +1,5 @@
-import { KnockBankLogo } from "../components/KnockBankLogo"
+import { KnockBankLogo } from "../../components/KnockBankLogo"
+
 
 export function NotFound() {
   return (

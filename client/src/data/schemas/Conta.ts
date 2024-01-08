@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { z } from "zod";
 import { cpf } from "cpf-cnpj-validator";
 
 
@@ -17,7 +17,31 @@ export const ContaInSchema = z.object({
   }).transform((date: Date) => date.toISOString().split('T')[0]),
   senha: z.string()
     .trim()
-    .min(8, 'Sua senha deve conter pelo menos 8 caracteres.'),
+    .min(8, 'Sua senha deve conter pelo menos 8 caracteres.')
+    .refine((senha: string) => {
+      let haveLower = false;
+      for (let char of senha) {
+        if (char.toLowerCase() === char) {
+          haveLower = true;
+          break;
+        }
+      }
+      return haveLower;
+    }, 'Sua senha deve conter pelo menos uma letra minúscula.')
+    .refine((senha: string) => {
+      let haveUpper = false;
+      for (let char of senha) {
+        if (char.toUpperCase() === char) {
+          haveUpper = true;
+          break;
+        }
+      }
+      return haveUpper;
+    }, 'Sua senha deve conter pelo menos uma letra maiúscula.')
+    .refine((senha: string) => 
+      /[0-9]/.test(senha), 'Sua senha deve conter pelo menos um numero.')
+    .refine((senha: string) => 
+      /\W|_/.test(senha), 'Sua senha deve conter pelo menos um caractere especial.' ),
   tipo_conta: z.string()
     .transform((value: string) => Number(value))
 });

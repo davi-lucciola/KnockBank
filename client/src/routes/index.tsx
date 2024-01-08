@@ -10,7 +10,7 @@ export function Router() {
       <Routes>
         {/* Home Routes */}
         <>
-          <Route element={<Home loginFormOpen={false} registerFormOpen={false}/>} index/>
+          <Route element={<Home loginFormOpen={false} registerFormOpen={false}/>} index />
           <Route path="/login" element={<Home loginFormOpen={true} registerFormOpen={false}/>} />
           <Route path="/cadastrar" element={<Home loginFormOpen={false} registerFormOpen={true}/>} />
         </>

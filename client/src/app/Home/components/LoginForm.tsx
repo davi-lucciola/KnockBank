@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -11,8 +12,14 @@ import { UserLoginSchema, UserLogin } from "../../../data/schemas/User"
 
 type LoginFormModalProps = BaseModalProps
 export function LoginForm({ isOpen, closeModal }: LoginFormModalProps) {
-  const { login, redirect } = useAuth();
-  const { register, handleSubmit, formState: { errors }} = useForm<UserLogin>({
+  const navigate = useNavigate();
+  const { login } = useAuth();
+  const { 
+    register, 
+    handleSubmit, 
+    formState: { errors }
+  } = useForm<UserLogin>({
+    mode: 'onChange',
     resolver: zodResolver(UserLoginSchema)
   });
   
@@ -21,7 +28,7 @@ export function LoginForm({ isOpen, closeModal }: LoginFormModalProps) {
       await login(userLogin)
       toast.success('Conta logada com sucesso.');
       setTimeout(() => {  
-        redirect('/dashboard')
+        navigate('/dashboard')
       }, 1000);
     } catch (e: any) {
       if (e.type == ApiErrorType.WARNING) {

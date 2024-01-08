@@ -1,28 +1,26 @@
 import { useContext } from "react";
-import { ContaContext } from "../../../context/ContaContext";
-import { Input } from "../../../components/Input";
-import { FormItem } from "../../../components/FormItem";
+import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Input } from "../../../components/Input";
+import { FormItem } from "../../../components/FormItem";
 import { BaseModalProps, Modal } from "../../../components/Modal";
-import { ToastContainer, toast } from "react-toastify";
-import { TipoConta } from "../../../data/models/Conta";
+import { ContaContext } from "../../../context/ContaContext";
 import { ApiErrorType } from "../../../data/Api";
+import { TipoConta } from "../../../data/models/Conta";
 import { ContaInSchema, ContaIn } from "../../../data/schemas/Conta";
 import { IContaService } from "../../../data/services/ContaService";
 
 
 type RegisterFormModalProps = BaseModalProps;
-export function RegisterForm({
-  isOpen,
-  closeModal
-}: RegisterFormModalProps) {
+export function RegisterForm({ isOpen, closeModal }: RegisterFormModalProps) {
   const { getContaService } = useContext(ContaContext);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<ContaIn>({
+    mode: 'onChange',
     resolver: zodResolver(ContaInSchema),
   });
 
@@ -45,8 +43,7 @@ export function RegisterForm({
   return (
     <>
       <Modal title="Cadastre-se" isOpen={isOpen} closeModal={closeModal}>
-        <form
-          onSubmit={handleSubmit(createAccount)}
+        <form onSubmit={handleSubmit(createAccount)}
           className="flex flex-col gap-4 px-16 pb-12"
         >
           <FormItem errorMessage={errors.nome?.message}>
@@ -97,7 +94,6 @@ export function RegisterForm({
           </button>
         </form>
       </Modal>
-      <ToastContainer position="bottom-right" pauseOnHover={false} />
     </>
   );
 }

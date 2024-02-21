@@ -1,9 +1,10 @@
-from app.database import db
+from app.db import db
 
 
 BaseModel = db.Model
 
 
-from .pessoa import Pessoa
+from .person import Person
 from .user import User
-from .conta import Conta, TipoConta
+from .account import Account, AccountType
+from .transactions import Transaction, TransactionType

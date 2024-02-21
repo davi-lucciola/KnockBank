@@ -1,4 +1,3 @@
-from typing import Any
 from http import HTTPStatus
 from dataclasses import dataclass
 from apiflask import HTTPError

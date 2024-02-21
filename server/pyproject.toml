@@ -14,7 +14,11 @@ flask-cors = "^4.0.0"
 python-dotenv = "^1.0.0"
 mysql-connector-python = "^8.2.0"
 python-jose = "^3.3.0"
+cpf-cnpj-validate = "^1.4"
 
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.2.0"
 
 [build-system]
 requires = ["poetry-core"]

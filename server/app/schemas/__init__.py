@@ -7,5 +7,6 @@ class Response(Schema):
     detail: dict = Dict(default={})
 
 
-from .conta import *
+from .account import *
 from .user import *
+from .transaction import *

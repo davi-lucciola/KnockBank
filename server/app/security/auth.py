@@ -6,23 +6,27 @@ from app.repositories import UserRepository
 from app.security.jwt import JwtService
 
 
-auth = HTTPTokenAuth(scheme='Bearer')
+auth = HTTPTokenAuth(scheme="Bearer")
+
 
 @auth.verify_token
 def verify_token(
-    token: str, 
-    jwt_service: JwtService = JwtService(), 
-    user_repository: UserRepository = UserRepository()
+    token: str,
+    jwt_service: JwtService = JwtService(),
+    user_repository: UserRepository = UserRepository(),
 ) -> User:
-    user: User = user_repository.buscar_pelo_token(token)
-    
+    user: User = user_repository.get_by_token(token)
+
+    if user is None:
+        raise UnauthorizedError("Token expirado.")
+
     try:
         jwt_service.decode_token(token)
     except ExpiredSignatureError:
         user.token = None
-        user_repository.salvar(user)
-        raise UnauthorizedError('Token expirado.')
+        user_repository.save(user)
+        raise UnauthorizedError("Token expirado.")
     except JWTError:
-        raise UnauthorizedError('Token inválido.')
-    
+        raise UnauthorizedError("Token inválido.")
+
     return user

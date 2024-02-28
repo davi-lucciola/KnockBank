@@ -9,6 +9,8 @@ RUN apk update && \
 
 COPY . /knock-bank-web/
 
+RUN yarn run build
+
 EXPOSE 5173
 
-CMD ["yarn", "run", "dev", "--host", "0.0.0.0"]
+CMD ["yarn", "run", "preview"]

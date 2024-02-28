@@ -2,7 +2,7 @@ import { Hero } from "./components/Hero";
 import { Header } from "./components/Header";
 import { useTitle } from "../../hooks/useTitle";
 import { useAuth } from "../../hooks/useAuth";
-import { Outlet, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export type HomeProps = {
   isModalOpen: boolean

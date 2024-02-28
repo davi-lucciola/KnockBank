@@ -18,10 +18,10 @@ class Person(BaseModel):
 
     account: Mapped["Account"] = relationship("Account", back_populates="person")
 
+    def __str__(self) -> str:
+        return f"<Person - {self.name}>"
+
     def __init__(self, name: str, cpf: str, birth_date: date) -> None:
         self.name = name
         self.cpf = cpf
         self.birth_date = birth_date
-
-    def __str__(self) -> str:
-        return f"<Person - {self.name}>"

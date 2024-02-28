@@ -1,7 +1,7 @@
 from apiflask import APIBlueprint
 from app.security import auth
 from app.models import Account
-from app.schemas import TransactionIn, TransactionTransfer
+from app.schemas import TransactionIn, TransactionOut, TransactionTransfer
 from app.services import TransactionService
 
 
@@ -10,6 +10,7 @@ transaction_bp = APIBlueprint("Transaction", __name__, url_prefix="/transaction"
 
 @transaction_bp.get("/")
 @transaction_bp.auth_required(auth)
+@transaction_bp.output(TransactionOut(many=True))
 def get_all_transactions(
     transaction_service: TransactionService = TransactionService(),
 ):
@@ -20,8 +21,11 @@ def get_all_transactions(
 
 @transaction_bp.get("/<int:id>")
 @transaction_bp.auth_required(auth)
-def detail_transaction(id: int):
-    pass
+def detail_transaction(
+    id: int, transaction_service: TransactionService = TransactionService()
+):
+    transaction = transaction_service.get_by_id(id)
+    return transaction.to_json()
 
 
 @transaction_bp.post("/withdraw")

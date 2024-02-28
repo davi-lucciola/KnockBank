@@ -1,8 +1,10 @@
-from datetime import date
 from apiflask import Schema
+from app.schemas import PersonOut
+from datetime import date
+from typing import TypedDict
 from pycpfcnpj import cpfcnpj
-from apiflask.fields import Integer, String, Date, Float, Boolean, Dict
-from apiflask.validators import OneOf, Length, Range
+from apiflask.fields import Integer, String, Date, Float, Boolean, Dict, Nested
+from apiflask.validators import OneOf, Range
 from marshmallow import validates, ValidationError
 from string import ascii_lowercase, ascii_uppercase, digits, punctuation
 
@@ -24,7 +26,6 @@ class AccountIn(Schema):
 
     @validates("cpf")
     def validate_cpf(self, cpf: str, **kwargs):
-        print(cpfcnpj.validate(cpf))
         if cpfcnpj.validate(cpf) is False:
             raise ValidationError("Cpf inválido.")
 
@@ -64,10 +65,21 @@ class AccountIn(Schema):
                 raise ValidationError("A senha deve conter carácteres especiais.")
 
 
+class AccountQuery(Schema):
+    search: str = String()
+
+
+class AccountFilter(TypedDict):
+    search: str
+
+
 class AccountOut(Schema):
     id: int = Integer()
-    saldo: float = Float()
     fl_ativo: bool = Boolean()
-    pessoa: dict = Dict()
-    tipo_Account: dict = Dict()
+    pessoa: dict = Nested(PersonOut)
+
+
+class AccountMe(AccountOut):
+    saldo: float = Float()
+    tipo_conta: dict = Dict()
     limite_saque_diario: float = Float()

@@ -1,6 +1,5 @@
 from apiflask import Schema
-from apiflask.fields import Float, Integer
-from apiflask.validators import Range
+from apiflask.fields import Float, Integer, Dict
 from marshmallow import validates, ValidationError
 
 
@@ -15,3 +14,9 @@ class TransactionIn(Schema):
 
 class TransactionTransfer(TransactionIn):
     account_id: int = Integer(required=True)
+
+
+class TransactionOut(Schema):
+    id: int = Integer()
+    money: float = Float()
+    transaction_type: dict = Dict()

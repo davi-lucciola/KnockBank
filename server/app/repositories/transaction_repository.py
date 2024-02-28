@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from datetime import datetime as dt
 from sqlalchemy import select, func
 from app.db import db
 from app.errors import InfraError

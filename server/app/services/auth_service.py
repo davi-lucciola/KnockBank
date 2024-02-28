@@ -17,7 +17,6 @@ class AuthService:
     def login(self, cpf: str, password: str) -> str:
         account: Account = self.account_repository.get_by_cpf(cpf)
 
-        print(account)
         if account is None or account.user.verify_password_hash(password) is False:
             raise ForbiddenError("Credenciais Inválidas.")
 

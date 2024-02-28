@@ -1,10 +1,9 @@
 from enum import Enum
 from decimal import Decimal
 from datetime import date
-from app.models import BaseModel
-from sqlalchemy.orm import Mapped, relationship
 from sqlalchemy import Column, BigInteger, ForeignKey, Integer, Numeric, Boolean
-from app.models import Person, User
+from sqlalchemy.orm import Mapped, relationship
+from app.models import BaseModel, Person, User
 import typing
 
 if typing.TYPE_CHECKING:
@@ -67,6 +66,9 @@ class Account(BaseModel):
         self.daily_withdrawal_limit = daily_withdrawal_limit
         self.fl_active = True
 
+    def __str__(self) -> str:
+        return f"<Account - {self.person.name} | {self.id}>"
+
     def to_json(self) -> dict:
         return {
             "id": self.id,
@@ -84,6 +86,3 @@ class Account(BaseModel):
             },
             "limite_saque_diario": self.daily_withdrawal_limit,
         }
-
-    def __str__(self) -> str:
-        return f"<Account - {self.person.name}|{self.id}>"

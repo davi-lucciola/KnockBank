@@ -25,24 +25,27 @@ class Transaction(BaseModel):
 
     id: int = Column(BigInteger, primary_key=True, autoincrement=True)
     date_time: dt = Column(DateTime, nullable=False, default=dt.now())
-    value: Decimal = Column(Numeric(10, 2), nullable=False)
+    money: Decimal = Column(Numeric(10, 2), nullable=False)
     transaction_type: int = Column(Integer, nullable=False)
 
     account_id: int = Column(BigInteger, ForeignKey("accounts.id"), nullable=False)
     account: Mapped["Account"] = relationship("Account", back_populates="transactions")
 
     def __init__(
-        self, value: float, account: Account, transaction_type: TransactionType
+        self, money: float, account: Account, transaction_type: TransactionType
     ) -> None:
-        self.value = Decimal(value)
+        self.money = Decimal(money)
         self.account_id = account.id
         self.account = account
         self.transaction_type = transaction_type.value[0]
 
+    def __str__(self) -> str:
+        return f"<Transaction - {self.account.person.name} | R${self.money:.2f}>"
+
     def to_json(self):
         return {
             "id": self.id,
-            "value": self.value,
+            "money": self.money,
             "transaction_type": {
                 "id": self.transaction_type,
                 "description": TransactionType.get_transaction_type(

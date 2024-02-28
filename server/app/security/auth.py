@@ -15,6 +15,9 @@ def verify_token(
     jwt_service: JwtService = JwtService(),
     user_repository: UserRepository = UserRepository(),
 ) -> User:
+    if not token:
+        raise UnauthorizedError("Token inválido")
+
     user: User = user_repository.get_by_token(token)
 
     if user is None:

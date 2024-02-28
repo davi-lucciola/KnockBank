@@ -23,6 +23,14 @@ class TransactionService:
 
         return transactions
 
+    def get_by_id(self, transaction_id: int) -> Transaction:
+        transaction = self.transaction_repository.get_by_id(transaction_id)
+
+        if transaction is None:
+            raise NotFoundError("Transação não Encontrada")
+
+        return transaction
+
     def withdraw(self, account_id: int, money: float) -> Transaction:
         account: Account = self.account_repository.get_by_id(account_id)
 
@@ -34,13 +42,12 @@ class TransactionService:
             account_id
         )
         total_today_transactions = reduce(
-            lambda total, tran: total + tran.value, today_transactions, Decimal(0)
+            lambda total, tran: total + tran.money, today_transactions, Decimal(0)
         )
         if total_today_transactions + money > account.daily_withdrawal_limit:
             raise DomainError("Limite de saque diário excedido.")
 
         account.balance -= money
-        account.daily_withdrawal_limit += money
 
         transaction = Transaction(-money, account, TransactionType.WITHDRAW)
         return self.transaction_repository.save(transaction)
@@ -56,15 +63,15 @@ class TransactionService:
 
     def transfer(self, account_sender_id: int, account_reciver_id: int, money: float):
         account_reciver: Account = self.account_repository.get_by_id(account_reciver_id)
-        if account_sender is None:
+        if account_reciver is None:
             raise NotFoundError("Conta destino não encontrada.")
 
         account_sender: Account = self.account_repository.get_by_id(account_sender_id)
 
+        money: Decimal = Decimal(money)
         if account_sender.balance - money < 0:
             raise DomainError("Não é possivel transferir mais do que há na conta.")
 
-        money: Decimal = Decimal(money)
         account_sender.balance -= money
         account_reciver.balance += money
 

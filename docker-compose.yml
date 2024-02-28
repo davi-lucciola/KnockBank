@@ -3,14 +3,14 @@ version: '3.9'
 
 services:
   web:
-    container_name: knock_bank_web
+    container_name: knockbank-web
     build: 
       context: ./client
     ports:
       - "5173:5173"
 
   api:
-    container_name: knock_bank_api
+    container_name: knockbank-api
     build: 
       context: ./server
     ports:
@@ -18,7 +18,7 @@ services:
 
   db:
     image: mysql:5.7
-    container_name: knock_bank_db
+    container_name: knockbank-db
     environment:
       MYSQL_DATABASE: 'knock_bank_db'
       MYSQL_USER: 'admin'

@@ -8,10 +8,11 @@ RUN apk update && \
     pip install --upgrade pip && \
     pip install --no-cache-dir poetry && \
     poetry config virtualenvs.create false && \
-    poetry install
+    poetry install && \
+    poetry add gunicorn
 
 COPY . /knock-bank-api/
 
 EXPOSE 5000
 
-CMD ["flask", "run", "--host", "0.0.0.0"]
+CMD ["gunicorn", "-b", "0.0.0.0:5000", "app:create_app()"]

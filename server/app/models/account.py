@@ -1,7 +1,7 @@
 from enum import Enum
 from decimal import Decimal
 from datetime import date
-from sqlalchemy import Column, BigInteger, ForeignKey, Integer, Numeric, Boolean
+from sqlalchemy import CheckConstraint, Column, BigInteger, ForeignKey, Integer, Numeric, Boolean
 from sqlalchemy.orm import Mapped, relationship
 from app.models import BaseModel, Person, User
 import typing
@@ -27,28 +27,29 @@ class AccountType(Enum):
 
 class Account(BaseModel):
     __tablename__ = "accounts"
+    __table_args__ = (
+        CheckConstraint('balance < 0'),
+    )
 
-    id: int = Column(BigInteger, primary_key=True, autoincrement=True)
-    balance: Decimal = Column(Numeric(10, 2), nullable=False, default=Decimal(0))
-    fl_active: bool = Column(Boolean, nullable=False, default=True)
-    account_type: str = Column(Integer, nullable=False)
-    daily_withdrawal_limit: Decimal = Column(
+    id: Column[int] = Column(BigInteger, primary_key=True, autoincrement=True)
+    balance: Column[Decimal] = Column(
+        Numeric(10, 2), nullable=False, default=Decimal(0)
+    )
+    fl_active: Column[bool] = Column(Boolean, nullable=False, default=True)
+    account_type: Column[str] = Column(Integer, nullable=False)
+    daily_withdrawal_limit: Column[Decimal] = Column(
         Numeric(10, 2), nullable=False, default=Decimal(999)
     )
 
-    person_id: int = Column(
+    person_id: Column[int] = Column(
         BigInteger, ForeignKey("persons.id"), nullable=False, unique=True
     )
     person: Mapped["Person"] = relationship("Person", back_populates="account")
 
-    user_id: int = Column(
+    user_id: Column[int] = Column(
         BigInteger, ForeignKey("users.id"), nullable=False, unique=True
     )
     user: Mapped["User"] = relationship("User", back_populates="account")
-
-    transactions: Mapped[list["Transaction"]] = relationship(
-        "Transaction", back_populates="account"
-    )
 
     def __init__(
         self,
@@ -72,17 +73,17 @@ class Account(BaseModel):
     def to_json(self) -> dict:
         return {
             "id": self.id,
-            "saldo": self.balance,
-            "fl_ativo": self.fl_active,
-            "pessoa": {
+            "balance": self.balance,
+            "fl_active": self.fl_active,
+            "person": {
                 "id": self.person.id,
-                "nome": self.person.name,
+                "name": self.person.name,
                 "cpf": self.person.cpf,
-                "data_nascimento": self.person.birth_date.isoformat(),
+                "birth_date": self.person.birth_date.isoformat(),
             },
-            "tipo_conta": {
+            "account_type": {
                 "id": AccountType.get_account_type(self.account_type).value[0],
-                "descricao": AccountType.get_account_type(self.account_type).value[1],
+                "description": AccountType.get_account_type(self.account_type).value[1],
             },
-            "limite_saque_diario": self.daily_withdrawal_limit,
+            "daily_withdrawal_limit": self.daily_withdrawal_limit,
         }

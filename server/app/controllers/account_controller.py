@@ -33,7 +33,8 @@ def get_all(
     account_query: AccountFilter, account_service: AccountService = AccountService()
 ):
     """Endpoint para buscar contas cadastradas,"""
-    accounts = account_service.get_all(account_query, auth.current_user.account.id)
+    current_user: User = auth.current_user
+    accounts = account_service.get_all(account_query, current_user.account.id)
     return [account.to_json() for account in accounts]
 
 

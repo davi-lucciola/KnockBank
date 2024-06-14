@@ -4,4 +4,4 @@ from apiflask.fields import Integer, String
 
 class PersonOut(Schema):
     id: int = Integer()
-    nome: int = String()
+    name: int = String()

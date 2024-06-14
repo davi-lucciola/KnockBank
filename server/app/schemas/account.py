@@ -75,11 +75,11 @@ class AccountFilter(TypedDict):
 
 class AccountOut(Schema):
     id: int = Integer()
-    fl_ativo: bool = Boolean()
-    pessoa: dict = Nested(PersonOut)
+    fl_active: bool = Boolean()
+    person: dict = Nested(PersonOut)
 
 
 class AccountMe(AccountOut):
-    saldo: float = Float()
-    tipo_conta: dict = Dict()
-    limite_saque_diario: float = Float()
+    balance: float = Float()
+    account_type: dict = Dict()
+    daily_withdrawal_limit: float = Float()

@@ -1,6 +1,8 @@
 from apiflask import Schema
-from apiflask.fields import Float, Integer, Dict
+from apiflask.fields import Float, Integer, Dict, Nested
 from marshmallow import validates, ValidationError
+
+from app.schemas.person import PersonOut
 
 
 class TransactionIn(Schema):
@@ -20,3 +22,5 @@ class TransactionOut(Schema):
     id: int = Integer()
     money: float = Float()
     transaction_type: dict = Dict()
+    sender: dict = Nested(PersonOut)
+    reciver: dict = Nested(PersonOut)

@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from sqlalchemy import select, func
+from sqlalchemy import or_, select, func
 from app.db import db
 from app.errors import InfraError
 from app.models import Transaction
@@ -8,8 +8,14 @@ from app.models import Transaction
 @dataclass
 class TransactionRepository:
     def get_all(self, account_id: int) -> list[Transaction]:
-        stmt = select(Transaction).where(Transaction.account_id == account_id)
-        return [transaction[0] for transaction in db.session.execute(stmt).all()]
+        stmt = select(Transaction).where(
+            or_(
+                Transaction.account_id == account_id,
+                Transaction.reciver_id == account_id,
+            )
+        )
+        transactions = db.session.execute(stmt).all()
+        return [transaction[0] for transaction in transactions]
 
     def get_by_id(self, id: int) -> Transaction | None:
         return db.session.query(Transaction).get(id)

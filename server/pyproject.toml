@@ -1,9 +1,8 @@
 [tool.poetry]
-name = "knock-bank-api"
+name = "app"
 version = "0.1.0"
-description = ""
+description = "Bank API"
 authors = ["Davi Lucciola <davilucciola14@gmail.com>"]
-readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
@@ -19,6 +18,7 @@ cpf-cnpj-validate = "^1.4"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.2.0"
+flask-pytest = "^0.0.5"
 
 [build-system]
 requires = ["poetry-core"]

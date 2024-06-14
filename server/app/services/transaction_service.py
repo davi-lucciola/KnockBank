@@ -49,7 +49,7 @@ class TransactionService:
 
         account.balance -= money
 
-        transaction = Transaction(-money, account, TransactionType.WITHDRAW)
+        transaction = Transaction(-money, TransactionType.WITHDRAW, account)
         return self.transaction_repository.save(transaction)
 
     def deposit(self, account_id: int, money: float):
@@ -58,7 +58,7 @@ class TransactionService:
         money: Decimal = Decimal(money)
         account.balance += money
 
-        transaction = Transaction(money, account, TransactionType.DEPOSIT)
+        transaction = Transaction(money, TransactionType.DEPOSIT, account, account)
         return self.transaction_repository.save(transaction)
 
     def transfer(self, account_sender_id: int, account_reciver_id: int, money: float):
@@ -75,11 +75,8 @@ class TransactionService:
         account_sender.balance -= money
         account_reciver.balance += money
 
-        transaction_sender = Transaction(
-            -money, account_sender, TransactionType.TRANSFER
-        )
-        transaction_reciver = Transaction(
-            money, account_reciver, TransactionType.TRANSFER
+        transfer_transaction = Transaction(
+            money, TransactionType.DEPOSIT, account_sender, account_reciver
         )
 
-        self.transaction_repository.save_all([transaction_sender, transaction_reciver])
+        self.transaction_repository.save(transfer_transaction)

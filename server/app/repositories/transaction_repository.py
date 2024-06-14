@@ -1,32 +1,34 @@
+from datetime import date
 from dataclasses import dataclass
-from sqlalchemy import or_, select, func
+from sqlalchemy import select, func
 from app.db import db
 from app.errors import InfraError
-from app.models import Transaction
+from app.models import Transaction, TransactionType
 
 
 @dataclass
 class TransactionRepository:
-    def get_all(self, account_id: int) -> list[Transaction]:
-        stmt = select(Transaction).where(
-            or_(
-                Transaction.account_id == account_id,
-                Transaction.reciver_id == account_id,
+    def get_all(
+        self,
+        account_id: int,
+        transaction_type: TransactionType = None,
+        date: date = None,
+    ) -> list[Transaction]:
+        query = select(Transaction).where(Transaction.account_id == account_id)
+
+        if transaction_type is not None:
+            query = query.where(
+                Transaction.transaction_type == transaction_type.value[0]
             )
-        )
-        transactions = db.session.execute(stmt).all()
+
+        if date is not None:
+            query = query.where(func.date(Transaction.date_time) == date)
+
+        transactions = db.session.execute(query).all()
         return [transaction[0] for transaction in transactions]
 
     def get_by_id(self, id: int) -> Transaction | None:
         return db.session.query(Transaction).get(id)
-
-    def get_today_transactions(self, account_id: int) -> list[Transaction]:
-        stmt = (
-            select(Transaction)
-            .where(Transaction.account_id == account_id)
-            .where(func.date(Transaction.date_time) == func.current_date())
-        )
-        return [transaction[0] for transaction in db.session.execute(stmt).all()]
 
     def save(self, transaction: Transaction) -> Transaction:
         try:
@@ -35,6 +37,7 @@ class TransactionRepository:
             db.session.commit()
             return transaction
         except Exception as err:
+            print(err)
             db.session.rollback()
             raise InfraError("Houve um error ao salvar a transação.")
 

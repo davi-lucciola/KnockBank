@@ -1,13 +1,20 @@
 from enum import Enum
 from decimal import Decimal
 from datetime import date
-from sqlalchemy import CheckConstraint, Column, BigInteger, ForeignKey, Integer, Numeric, Boolean
-from sqlalchemy.orm import Mapped, relationship
+from sqlalchemy import (
+    CheckConstraint,
+    BigInteger,
+    ForeignKey,
+    Integer,
+    Numeric,
+    Boolean,
+)
+from sqlalchemy.orm import Mapped, relationship, mapped_column
 from app.models import BaseModel, Person, User
 import typing
 
 if typing.TYPE_CHECKING:
-    from models import Transaction
+    from app.models import Transaction
 
 
 class AccountType(Enum):
@@ -27,26 +34,26 @@ class AccountType(Enum):
 
 class Account(BaseModel):
     __tablename__ = "accounts"
-    __table_args__ = (
-        CheckConstraint('balance < 0'),
-    )
 
-    id: Column[int] = Column(BigInteger, primary_key=True, autoincrement=True)
-    balance: Column[Decimal] = Column(
-        Numeric(10, 2), nullable=False, default=Decimal(0)
+    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    balance: Mapped[Decimal] = mapped_column(
+        Numeric(10, 2),
+        CheckConstraint("balance > 0"),
+        nullable=False,
+        default=Decimal(0),
     )
-    fl_active: Column[bool] = Column(Boolean, nullable=False, default=True)
-    account_type: Column[str] = Column(Integer, nullable=False)
-    daily_withdrawal_limit: Column[Decimal] = Column(
+    fl_active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
+    account_type: Mapped[int] = mapped_column(Integer, nullable=False)
+    daily_withdrawal_limit: Mapped[Decimal] = mapped_column(
         Numeric(10, 2), nullable=False, default=Decimal(999)
     )
 
-    person_id: Column[int] = Column(
+    person_id: Mapped[int] = mapped_column(
         BigInteger, ForeignKey("persons.id"), nullable=False, unique=True
     )
     person: Mapped["Person"] = relationship("Person", back_populates="account")
 
-    user_id: Column[int] = Column(
+    user_id: Mapped[int] = mapped_column(
         BigInteger, ForeignKey("users.id"), nullable=False, unique=True
     )
     user: Mapped["User"] = relationship("User", back_populates="account")
@@ -74,16 +81,16 @@ class Account(BaseModel):
         return {
             "id": self.id,
             "balance": self.balance,
-            "fl_active": self.fl_active,
+            "flActive": self.fl_active,
             "person": {
                 "id": self.person.id,
                 "name": self.person.name,
                 "cpf": self.person.cpf,
                 "birth_date": self.person.birth_date.isoformat(),
             },
-            "account_type": {
+            "accountType": {
                 "id": AccountType.get_account_type(self.account_type).value[0],
                 "description": AccountType.get_account_type(self.account_type).value[1],
             },
-            "daily_withdrawal_limit": self.daily_withdrawal_limit,
+            "dailyWithdrawlLimit": self.daily_withdrawal_limit,
         }

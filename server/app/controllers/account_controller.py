@@ -45,7 +45,15 @@ def create_account(
     account_in: dict, account_service: AccountService = AccountService()
 ):
     """Endpoint para cadastrar uma conta."""
-    account: Account = account_service.create(Account(**account_in))
+    account = Account(
+        account_in.get('name'),
+        account_in.get('cpf'),
+        account_in.get('birthDate'),
+        account_in.get('password'),
+        account_in.get('accountType'),
+        account_in.get('dailyWithdrawalLimit')
+    )
+    account: Account = account_service.create(account)
     return {
         "message": "Conta cadastrada com sucesso.",
         "detail": {"created_id": account.id},

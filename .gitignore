@@ -31,3 +31,4 @@ dist-ssr
 # Server
 .venv
 __pycache__
+users.txt

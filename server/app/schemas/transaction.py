@@ -15,12 +15,12 @@ class TransactionIn(Schema):
 
 
 class TransactionTransfer(TransactionIn):
-    account_id: int = Integer(required=True)
+    accountId: int = Integer(required=True)
 
 
 class TransactionOut(Schema):
     id: int = Integer()
     money: float = Float()
-    transaction_type: dict = Dict()
-    sender: dict = Nested(PersonOut)
-    reciver: dict = Nested(PersonOut)
+    transactionType: dict = Dict()
+    account: dict = Nested(PersonOut)
+    originAccount: dict = Nested(PersonOut)

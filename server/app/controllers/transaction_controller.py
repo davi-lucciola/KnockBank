@@ -72,7 +72,7 @@ def transfer_money(
     current_account: Account = auth.current_user.account
     transaction_service.transfer(
         current_account.id,
-        transaction_data.get("account_id"),
+        transaction_data.get("accountId"),
         transaction_data.get("money"),
     )
     return {"message": "Transferência realizada com sucesso."}

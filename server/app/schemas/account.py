@@ -12,15 +12,15 @@ from string import ascii_lowercase, ascii_uppercase, digits, punctuation
 class AccountIn(Schema):
     name: str = String(required=True)
     cpf: str = String(required=True)
-    birth_date: date = Date(required=True)
+    birthDate: date = Date(required=True)
     password: str = String(required=True)
-    account_type: int = Integer(
+    accountType: int = Integer(
         required=True,
         validate=[
             OneOf([1, 2, 3, 4], error="Tipo de Conta Inválida. Deve ser 1, 2, 3 ou 4.")
         ],
     )
-    daily_withdrawal_limit: float = Float(
+    dailyWithdrawalLimit: float = Float(
         required=False, validate=[Range(min=0)], default=999
     )
 
@@ -75,11 +75,11 @@ class AccountFilter(TypedDict):
 
 class AccountOut(Schema):
     id: int = Integer()
-    fl_active: bool = Boolean()
+    flActive: bool = Boolean()
     person: dict = Nested(PersonOut)
 
 
 class AccountMe(AccountOut):
     balance: float = Float()
-    account_type: dict = Dict()
-    daily_withdrawal_limit: float = Float()
+    accountType: dict = Dict()
+    dailyWithdrawlLimit: float = Float()

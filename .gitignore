@@ -26,6 +26,8 @@ node_modules
 dist
 dist-ssr
 *.local
+react-front
+
 
 # ------------------------
 # Server

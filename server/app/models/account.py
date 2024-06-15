@@ -86,11 +86,11 @@ class Account(BaseModel):
                 "id": self.person.id,
                 "name": self.person.name,
                 "cpf": self.person.cpf,
-                "birth_date": self.person.birth_date.isoformat(),
+                "birthDate": self.person.birth_date.isoformat(),
             },
             "accountType": {
                 "id": AccountType.get_account_type(self.account_type).value[0],
                 "description": AccountType.get_account_type(self.account_type).value[1],
             },
-            "dailyWithdrawlLimit": self.daily_withdrawal_limit,
+            "dailyWithdrawLimit": self.daily_withdrawal_limit,
         }

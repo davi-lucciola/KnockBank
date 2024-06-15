@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "app"
 version = "0.1.0"
-description = "Bank API"
+description = "Knock Bank API"
 authors = ["Davi Lucciola <davilucciola14@gmail.com>"]
 
 [tool.poetry.dependencies]

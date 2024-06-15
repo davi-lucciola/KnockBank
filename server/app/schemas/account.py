@@ -1,5 +1,5 @@
 from apiflask import Schema
-from app.schemas import PersonOut
+from app.schemas import PersonOut, PersonBasic
 from datetime import date
 from typing import TypedDict
 from pycpfcnpj import cpfcnpj
@@ -76,10 +76,11 @@ class AccountFilter(TypedDict):
 class AccountOut(Schema):
     id: int = Integer()
     flActive: bool = Boolean()
-    person: dict = Nested(PersonOut)
+    person: dict = Nested(PersonBasic)
 
 
 class AccountMe(AccountOut):
+    person: dict = Nested(PersonOut)
     balance: float = Float()
     accountType: dict = Dict()
     dailyWithdrawlLimit: float = Float()

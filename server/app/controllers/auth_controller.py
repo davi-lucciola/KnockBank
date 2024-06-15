@@ -19,7 +19,7 @@ def login(user_payload: dict, auth_service: AuthService = AuthService()):
     token: str = auth_service.login(
         user_payload.get("cpf"), user_payload.get("password")
     )
-    return {"type": "bearer", "access_token": token}
+    return {"type": "bearer", "accessToken": token}
 
 
 @auth_bp.delete("/logout")

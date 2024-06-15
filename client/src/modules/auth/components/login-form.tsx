@@ -7,7 +7,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/modules/shared/components/ui/form";
+} from "@/components/ui/form";
 import {
   Dialog,
   DialogContent,
@@ -15,24 +15,52 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/modules/shared/components/ui/dialog";
+} from "@/components/ui/dialog";
 import {
   LoginUserPayload,
   LoginUserSchema,
-} from "@/modules/shared/schemas/login-user";
-import { Button } from "@/modules/shared/components/ui/button";
-import { Input } from "@/modules/shared/components/ui/input";
+} from "@/modules/auth/schemas/login-user";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginUserUseCase } from "../usecases/login-user.use-case";
+import { useContext } from "react";
+import { AuthContext } from "@/modules/auth/contexts/auth-context";
+import { useToast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 
 export function LoginForm() {
+  const router = useRouter();
+  const { toast } = useToast();
+  const { loginUser } = useContext(AuthContext);
   const form = useForm<LoginUserPayload>({
     resolver: zodResolver(LoginUserSchema),
+    defaultValues: {
+      cpf: "",
+      password: "",
+    },
   });
 
-  const onSubmit = async (data: LoginUserPayload) => {
-    await loginUserUseCase(data);
+  const onSubmit = async (payload: LoginUserPayload) => {
+    const toastDurationInMiliseconds = 3 * 1000; // 5 Seconds
+    try {
+      console.log(loginUser);
+      await loginUser(payload);
+      toast({
+        title: "Usuário Logado com sucesso.",
+        variant: "success",
+        duration: toastDurationInMiliseconds,
+      });
+      router.push("/dashboard");
+    } catch (error) {
+      if (error instanceof Error) {
+        toast({
+          title: error.message,
+          variant: "destructive",
+          duration: toastDurationInMiliseconds,
+        });
+      }
+    }
   };
 
   return (
@@ -48,7 +76,7 @@ export function LoginForm() {
           Fazer Login
         </button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="md:max-w-[600px]">
         <DialogHeader>
           <DialogTitle> Login </DialogTitle>
         </DialogHeader>

@@ -1,6 +1,6 @@
+import { KnockBankLogo } from "@/components/knock-bank-logo";
 import { LoginForm } from "@/modules/auth/components/login-form";
 import { RegisterForm } from "@/modules/auth/components/register-form";
-import { KnockBankLogo } from "@/modules/shared/components/knock-bank-logo";
 
 function Header() {
   return (

@@ -1,4 +1,4 @@
-import { KnockBankLogo } from "@/modules/shared/components/knock-bank-logo";
+import { KnockBankLogo } from "@/components/knock-bank-logo";
 
 export default function NotFoundPage() {
   return (

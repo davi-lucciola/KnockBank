@@ -1,12 +1,10 @@
-export const API_LOCAL_URL = "http://127.0.0.1:5000";
-export const API_SERVER_URL = "http://api:5000";
-
 export const HttpStatus = {
   Ok: 200,
   Created: 201,
   BadRequest: 400,
   Unauthorized: 401,
   Forbidden: 403,
+  InternalServerError: 500,
 };
 
 export class ApiError extends Error {
@@ -17,3 +15,8 @@ export class ApiError extends Error {
     this.detail = detail;
   }
 }
+
+export class ApiBadRequestError extends ApiError {}
+export class ApiUnauthorizedError extends ApiError {}
+export class ApiForbiddenError extends ApiError {}
+export class ApiInternalServerError extends ApiError {}

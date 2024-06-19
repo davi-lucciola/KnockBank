@@ -53,29 +53,31 @@ export function DatePicker({ date, onChange }: DatePickerProps) {
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start">
-        <Select
-          onValueChange={(value: string) =>
-            setDisplayedMounth(
-              new Date(Number(value), displayedMounth.getMonth())
-            )
-          }
-          defaultValue={`${displayedMounth.getFullYear()}`}
-        >
-          <SelectTrigger>
-            <SelectValue placeholder={`${displayedMounth.getFullYear()}`} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              {getLastHundredYears(currentDate.getFullYear()).map(
-                (year, index) => (
-                  <SelectItem key={index} value={`${year}`}>
-                    {year}
-                  </SelectItem>
-                )
-              )}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+        <div className="px-3 pt-3">
+          <Select
+            onValueChange={(value: string) =>
+              setDisplayedMounth(
+                new Date(Number(value), displayedMounth.getMonth())
+              )
+            }
+            defaultValue={`${displayedMounth.getFullYear()}`}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder={`${displayedMounth.getFullYear()}`} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                {getLastHundredYears(currentDate.getFullYear()).map(
+                  (year, index) => (
+                    <SelectItem key={index} value={`${year}`}>
+                      {year}
+                    </SelectItem>
+                  )
+                )}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
         <Calendar
           mode="single"
           month={displayedMounth}

@@ -16,6 +16,7 @@ export function AuthContextProvider({
 }: {
   children: React.ReactNode;
 }) {
+  const authService = new AuthService()
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   // function getToken(): string | null {
@@ -23,7 +24,7 @@ export function AuthContextProvider({
   // }
 
   async function loginUser(payload: LoginUserPayload): Promise<void> {
-    const data = await AuthService.login(payload);
+    const data = await authService.login(payload);
 
     const expireTimeInSeconds = 60 * 60; // 1 Hour
 

@@ -42,9 +42,8 @@ export function LoginForm() {
   });
 
   const onSubmit = async (payload: LoginUserPayload) => {
-    const toastDurationInMiliseconds = 3 * 1000; // 5 Seconds
+    const toastDurationInMiliseconds = 3 * 1000; // 3 Seconds
     try {
-      console.log(loginUser);
       await loginUser(payload);
       toast({
         title: "Usuário Logado com sucesso.",

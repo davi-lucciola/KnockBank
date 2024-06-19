@@ -5,6 +5,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/toaster";
 import { AuthContextProvider } from "@/modules/auth/contexts/auth-context";
+import { AccountContextProvider } from "@/modules/account/contexts/account-context";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -24,18 +25,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <AuthContextProvider>
-      <html lang="en">
-        <body
-          className={cn(
-            "min-h-screen bg-background font-sans antialiased",
-            roboto.variable
-          )}
-        >
-          {children}
-          <Toaster />
-        </body>
-      </html>
-    </AuthContextProvider>
+    <AccountContextProvider>
+      <AuthContextProvider>
+        <html lang="en">
+          <body
+            className={cn(
+              "min-h-screen bg-background font-sans antialiased",
+              roboto.variable
+            )}
+          >
+            {children}
+            <Toaster />
+          </body>
+        </html>
+      </AuthContextProvider>
+    </AccountContextProvider>
   );
 }

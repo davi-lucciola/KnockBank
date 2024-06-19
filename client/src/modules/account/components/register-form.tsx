@@ -34,12 +34,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useContext, useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
+import { AccountContext } from "@/modules/account/contexts/account-context";
 import { DatePicker } from "@/components/date-picker";
 import { AccountType } from "@/models/account";
 
 export function RegisterForm() {
+  const [open, setOpen] = useState<boolean>(false);
   const { toast } = useToast();
+  const { createAccount } = useContext(AccountContext);
   const form = useForm<CreateAccountPayload>({
     resolver: zodResolver(CreateAccountSchema),
     defaultValues: {
@@ -47,16 +51,33 @@ export function RegisterForm() {
       cpf: "",
       birthDate: "",
       password: "",
-      accountType: 1,
+      accountType: undefined,
     },
   });
 
   const onSubmit = async (data: CreateAccountPayload) => {
-    console.log(data);
+    const toastDurationInMiliseconds = 3 * 1000; // 3 Seconds
+    try {
+      const response = await createAccount(data);
+      toast({
+        title: response.message,
+        variant: "success",
+        duration: toastDurationInMiliseconds,
+      });
+      setOpen(false);
+    } catch (error) {
+      if (error instanceof Error) {
+        toast({
+          title: error.message,
+          variant: "destructive",
+          duration: toastDurationInMiliseconds,
+        });
+      }
+    }
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={(open) => setOpen(open)}>
       <DialogTrigger asChild>
         <Button className="text-xl py-8 px-10 rounded-2xl lg:max-w-60">
           Crie sua conta

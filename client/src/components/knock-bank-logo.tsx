@@ -6,6 +6,6 @@ type LogoProps = {
 
 export function KnockBankLogo({ size }: LogoProps) {
   return (
-    <CurrencyCircleDollar size={size} className="fill-blue" />
+    <CurrencyCircleDollar size={size} className="fill-primary" />
   )
 }

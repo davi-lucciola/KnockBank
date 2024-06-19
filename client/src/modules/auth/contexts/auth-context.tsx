@@ -5,10 +5,6 @@ import { setCookie, destroyCookie } from "nookies";
 import { AuthService } from "@/modules/auth/services/auth-service";
 import { LoginUserPayload } from "@/modules/auth/schemas/login-user";
 
-type AuthContextProps = {
-  isAuthenticated: boolean;
-};
-
 interface IAuthContext {
   isAuth: () => boolean;
   loginUser: (payload: LoginUserPayload) => Promise<void>;
@@ -20,9 +16,7 @@ export function AuthContextProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [authContextData, setAuthContextData] = useState<AuthContextProps>({
-    isAuthenticated: false,
-  });
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   // function getToken(): string | null {
   //   return localStorage.getItem("token");
@@ -37,16 +31,16 @@ export function AuthContextProvider({
       maxAge: expireTimeInSeconds,
     });
 
-    setAuthContextData({ isAuthenticated: true });
+    setIsAuthenticated(true);
   }
 
   function isAuth(): boolean {
-    return authContextData.isAuthenticated;
+    return isAuthenticated;
   }
 
   function removeToken() {
     destroyCookie(undefined, "knock-bank.token");
-    setAuthContextData({ isAuthenticated: false });
+    setIsAuthenticated(false);
   }
 
   return (

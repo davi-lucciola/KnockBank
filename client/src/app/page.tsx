@@ -1,6 +1,6 @@
 import { KnockBankLogo } from "@/components/knock-bank-logo";
 import { LoginForm } from "@/modules/auth/components/login-form";
-import { RegisterForm } from "@/modules/auth/components/register-form";
+import { RegisterForm } from "@/modules/account/components/register-form";
 
 function Header() {
   return (
@@ -16,11 +16,11 @@ function Header() {
 
 function Hero() {
   return (
-    <main className="container px-40 py-72 m-auto flex flex-col gap-6">
-      <h1 className="text-5xl font-extrabold w-2/5">
+    <main className="container flex flex-col flex-grow justify-center gap-4">
+      <h1 className="text-5xl font-extrabold lg:max-w-lg">
         Sempre dando um <strong>Knock Out</strong> nas suas dívidas
       </h1>
-      <p className="text-justify text-2xl w-1/2">
+      <p className="text-justify text-2xl lg:max-w-lg">
         Venha com o banco que traz a maior facilidade para trânsferências.
         Quando você vê, o dinheiro já está batendo na sua porta.
       </p>
@@ -31,7 +31,7 @@ function Hero() {
 
 export default function HomePage() {
   return (
-    <div className="bg-white h-screen">
+    <div className="bg-white h-screen flex flex-col">
       <Header />
       <Hero />
     </div>

@@ -76,12 +76,16 @@ export function LoginForm() {
           Fazer Login
         </button>
       </DialogTrigger>
-      <DialogContent className="md:max-w-[600px]">
+      <DialogContent className="w-full max-w-sm rounded-lg lg:rounded-sm lg:max-w-xl gap-8">
         <DialogHeader>
-          <DialogTitle> Login </DialogTitle>
+          <DialogTitle className="text-2xl"> Login </DialogTitle>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} autoComplete="off">
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            autoComplete="off"
+            className="flex flex-col gap-4"
+          >
             <FormField
               control={form.control}
               name="cpf"
@@ -89,7 +93,7 @@ export function LoginForm() {
                 <FormItem>
                   <FormLabel>Cpf</FormLabel>
                   <FormControl>
-                    <Input placeholder="000.000.000-33" {...field} />
+                    <Input placeholder="000.000.000-14" {...field} />
                   </FormControl>
                   <FormDescription>
                     Digite o seu cpf onde sua conta está cadastrada.
@@ -105,7 +109,7 @@ export function LoginForm() {
                 <FormItem>
                   <FormLabel>Senha</FormLabel>
                   <FormControl>
-                    <Input type="password" placeholder="*****" {...field} />
+                    <Input type="password" placeholder="********" {...field} />
                   </FormControl>
                   <FormDescription>Insira sua senha.</FormDescription>
                   <FormMessage />
@@ -113,7 +117,10 @@ export function LoginForm() {
               )}
             />
             <DialogFooter>
-              <Button type="submit"> Entrar </Button>
+              <Button type="submit" className="w-full max-w-52">
+                {" "}
+                Entrar{" "}
+              </Button>
             </DialogFooter>
           </form>
         </Form>

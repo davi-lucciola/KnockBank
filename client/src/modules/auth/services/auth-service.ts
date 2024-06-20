@@ -14,4 +14,8 @@ export class AuthService {
     );
     return data;
   }
+
+  async logout() {
+    this.api.delete(`${API_LOCAL_URL}/logout`);
+  }
 }

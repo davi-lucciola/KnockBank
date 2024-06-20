@@ -1,10 +1,12 @@
 "use client";
 
-import { createContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { Account } from "@/models/account";
 import { AccountService } from "@/modules/account/services/account-service";
 import { CreateAccountPayload } from "../schemas/create-account";
 import { ApiResponse } from "@/api";
+import { AuthContext } from "@/modules/auth/contexts/auth-context";
+import { getToken } from "@/lib/token";
 
 interface IAccountContext {
   getAccount: () => Account | null;
@@ -18,7 +20,21 @@ export function AccountContextProvider({
   children: React.ReactNode;
 }) {
   const accountService = new AccountService();
+  const { isAuth } = useContext(AuthContext);
   const [account, setAccount] = useState<Account | null>(null);
+
+  useEffect(() => {
+    const token = getToken();
+    if (token) {
+      const accountPromise = accountService.getCurrentAccount();
+      accountPromise.then((data) => {
+        setAccount(data);
+      });
+    } else {
+      setAccount(null);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuth]);
 
   function getAccount(): Account | null {
     return account;

@@ -6,6 +6,7 @@ import {
   ApiForbiddenError,
   ApiInternalServerError,
 } from "@/api/errors";
+import { getToken } from "@/lib/token";
 
 export const API_LOCAL_URL = "http://127.0.0.1:5000";
 export const API_SERVER_URL = "http://api:5000";
@@ -16,10 +17,23 @@ export type ApiResponse = {
 };
 
 export class Api {
+  private accessToken?: string;
+
+  constructor() {
+    this.accessToken = getToken();
+  }
+
   async get<R>(url: string, params?: URLSearchParams): Promise<R> {
     url = !params ? url : `${url}?${params?.toString()}`;
 
-    const response = await fetch(url, { method: "GET" });
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        ...(this.accessToken && {
+          Authorization: `Bearer ${this.accessToken}`,
+        }),
+      },
+    });
     const data = await response.json();
 
     this.handleError(response, data);
@@ -31,6 +45,9 @@ export class Api {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        ...(this.accessToken && {
+          Authorization: `Bearer ${this.accessToken}`,
+        }),
       },
       body: JSON.stringify(body),
     });
@@ -45,6 +62,9 @@ export class Api {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        ...(this.accessToken && {
+          Authorization: `Bearer ${this.accessToken}`,
+        }),
       },
       body: JSON.stringify(body),
     });
@@ -55,19 +75,17 @@ export class Api {
   }
 
   async delete<R, B>(url: string, body?: B): Promise<R> {
-    let requestConfig = {};
-    if (body) {
-      requestConfig = {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
-      };
-    }
-
     const response = await fetch(url, {
       method: "DELETE",
-      ...requestConfig,
+      headers: {
+        ...(body && {
+          "Content-Type": "application/json",
+        }),
+        ...(this.accessToken && {
+          Authorization: `Bearer ${this.accessToken}`,
+        }),
+      },
+      ...(body && { body: JSON.stringify(body) }),
     });
     const data = await response.json();
 

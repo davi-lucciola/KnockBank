@@ -32,7 +32,7 @@ import { useRouter } from "next/navigation";
 export function LoginForm() {
   const router = useRouter();
   const { toast } = useToast();
-  const { loginUser } = useContext(AuthContext);
+  const { login } = useContext(AuthContext);
   const form = useForm<LoginUserPayload>({
     resolver: zodResolver(LoginUserSchema),
     defaultValues: {
@@ -44,9 +44,9 @@ export function LoginForm() {
   const onSubmit = async (payload: LoginUserPayload) => {
     const toastDurationInMiliseconds = 3 * 1000; // 3 Seconds
     try {
-      await loginUser(payload);
+      await login(payload);
       toast({
-        title: "Usuário Logado com sucesso.",
+        title: "Usuário conectado com sucesso.",
         variant: "success",
         duration: toastDurationInMiliseconds,
       });

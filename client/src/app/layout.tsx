@@ -25,8 +25,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <AccountContextProvider>
-      <AuthContextProvider>
+    <AuthContextProvider>
+      <AccountContextProvider>
         <html lang="en">
           <body
             className={cn(
@@ -38,7 +38,7 @@ export default function RootLayout({
             <Toaster />
           </body>
         </html>
-      </AuthContextProvider>
-    </AccountContextProvider>
+      </AccountContextProvider>
+    </AuthContextProvider>
   );
 }

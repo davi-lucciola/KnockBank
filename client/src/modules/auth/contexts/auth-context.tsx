@@ -1,13 +1,15 @@
 "use client";
 
-import { createContext, useState } from "react";
-import { setCookie, destroyCookie } from "nookies";
+import { createContext, useEffect, useState } from "react";
+import { setCookie, parseCookies, destroyCookie } from "nookies";
 import { AuthService } from "@/modules/auth/services/auth-service";
 import { LoginUserPayload } from "@/modules/auth/schemas/login-user";
+import { getToken } from "@/lib/token";
 
 interface IAuthContext {
-  isAuth: () => boolean;
-  loginUser: (payload: LoginUserPayload) => Promise<void>;
+  isAuth: boolean;
+  login: (payload: LoginUserPayload) => Promise<void>;
+  logout: () => Promise<void>;
 }
 
 export const AuthContext = createContext({} as IAuthContext);
@@ -16,36 +18,31 @@ export function AuthContextProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const authService = new AuthService()
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const authService = new AuthService();
+  const [isAuth, setIsAuth] = useState<boolean>(() =>
+    getToken() ? true : false
+  );
 
-  // function getToken(): string | null {
-  //   return localStorage.getItem("token");
-  // }
-
-  async function loginUser(payload: LoginUserPayload): Promise<void> {
-    const data = await authService.login(payload);
+  async function login(payload: LoginUserPayload): Promise<void> {
+    const { accessToken } = await authService.login(payload);
 
     const expireTimeInSeconds = 60 * 60; // 1 Hour
 
-    setCookie(undefined, "knock-bank.token", data.accessToken, {
+    setCookie(undefined, "knock-bank.token", accessToken, {
       maxAge: expireTimeInSeconds,
     });
 
-    setIsAuthenticated(true);
+    setIsAuth(true);
   }
 
-  function isAuth(): boolean {
-    return isAuthenticated;
-  }
-
-  function removeToken() {
+  async function logout() {
+    await authService.logout();
     destroyCookie(undefined, "knock-bank.token");
-    setIsAuthenticated(false);
+    setIsAuth(false);
   }
 
   return (
-    <AuthContext.Provider value={{ isAuth, loginUser }}>
+    <AuthContext.Provider value={{ isAuth, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

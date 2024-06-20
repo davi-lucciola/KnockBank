@@ -51,7 +51,7 @@ export function RegisterForm() {
       cpf: "",
       birthDate: "",
       password: "",
-      accountType: undefined,
+      accountType: 1,
     },
   });
 

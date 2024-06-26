@@ -1,8 +1,13 @@
+"use client";
+
 import { KnockBankLogo } from "@/components/knock-bank-logo";
 import { LoginForm } from "@/modules/auth/components/login-form";
 import { RegisterForm } from "@/modules/account/components/register-form";
+import { useContext, useEffect } from "react";
+import { AuthContext } from "@/modules/auth/contexts/auth-context";
+import { useRouter } from "next/navigation";
 
-function Header() {
+export function Header() {
   return (
     <header className="container m-auto flex justify-between items-center px-4">
       <div id="logo" className="flex items-center text-2xl font-bold">
@@ -30,6 +35,15 @@ function Hero() {
 }
 
 export default function HomePage() {
+  const router = useRouter();
+  const { isAuth } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (isAuth) {
+      router.push("/dashboard");
+    }
+  });
+
   return (
     <div className="bg-white h-screen flex flex-col">
       <Header />

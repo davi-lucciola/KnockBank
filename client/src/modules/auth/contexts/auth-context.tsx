@@ -1,13 +1,15 @@
 "use client";
 
-import { createContext, useEffect, useState } from "react";
-import { setCookie, parseCookies, destroyCookie } from "nookies";
+import { createContext, useState } from "react";
 import { AuthService } from "@/modules/auth/services/auth-service";
 import { LoginUserPayload } from "@/modules/auth/schemas/login-user";
-import { getToken } from "@/lib/token";
+import { Api } from "@/api";
+
+const tokenKey = "knock-bank.token";
 
 interface IAuthContext {
   isAuth: boolean;
+  getToken: () => string | null;
   login: (payload: LoginUserPayload) => Promise<void>;
   logout: () => Promise<void>;
 }
@@ -18,31 +20,32 @@ export function AuthContextProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const authService = new AuthService();
   const [isAuth, setIsAuth] = useState<boolean>(() =>
     getToken() ? true : false
   );
 
+  function getToken() {
+    return typeof window !== "undefined"
+      ? localStorage.getItem(tokenKey)
+      : null;
+  }
+  
+  const authService = new AuthService(new Api(getToken() ?? undefined));
+
   async function login(payload: LoginUserPayload): Promise<void> {
     const { accessToken } = await authService.login(payload);
-
-    const expireTimeInSeconds = 60 * 60; // 1 Hour
-
-    setCookie(undefined, "knock-bank.token", accessToken, {
-      maxAge: expireTimeInSeconds,
-    });
-
+    localStorage?.setItem(tokenKey, accessToken);
     setIsAuth(true);
   }
 
   async function logout() {
     await authService.logout();
-    destroyCookie(undefined, "knock-bank.token");
+    localStorage?.removeItem(tokenKey);
     setIsAuth(false);
   }
 
   return (
-    <AuthContext.Provider value={{ isAuth, login, logout }}>
+    <AuthContext.Provider value={{ isAuth, getToken, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

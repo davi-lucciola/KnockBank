@@ -4,9 +4,8 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { Account } from "@/models/account";
 import { AccountService } from "@/modules/account/services/account-service";
 import { CreateAccountPayload } from "../schemas/create-account";
-import { ApiResponse } from "@/api";
+import { Api, ApiResponse } from "@/api";
 import { AuthContext } from "@/modules/auth/contexts/auth-context";
-import { getToken } from "@/lib/token";
 
 interface IAccountContext {
   getAccount: () => Account | null;
@@ -19,9 +18,9 @@ export function AccountContextProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const accountService = new AccountService();
-  const { isAuth } = useContext(AuthContext);
   const [account, setAccount] = useState<Account | null>(null);
+  const { isAuth, getToken } = useContext(AuthContext);
+  const accountService = new AccountService(new Api(getToken() ?? undefined));
 
   useEffect(() => {
     const token = getToken();

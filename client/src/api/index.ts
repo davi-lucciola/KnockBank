@@ -6,10 +6,8 @@ import {
   ApiForbiddenError,
   ApiInternalServerError,
 } from "@/api/errors";
-import { getToken } from "@/lib/token";
 
-export const API_LOCAL_URL = "http://127.0.0.1:5000";
-export const API_SERVER_URL = "http://api:5000";
+export const API_URL = "http://127.0.0.1:5000";
 
 export type ApiResponse = {
   message: string;
@@ -19,8 +17,8 @@ export type ApiResponse = {
 export class Api {
   private accessToken?: string;
 
-  constructor() {
-    this.accessToken = getToken();
+  constructor(accessToken: string | undefined = undefined) {
+    this.accessToken = accessToken;
   }
 
   async get<R>(url: string, params?: URLSearchParams): Promise<R> {

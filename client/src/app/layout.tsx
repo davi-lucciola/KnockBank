@@ -15,7 +15,7 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
-  title: "Home | KnockBank",
+  title: "KnockBank",
   description: "Home page for create an account or login in a existing account",
 };
 

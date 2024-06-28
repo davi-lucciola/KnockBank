@@ -62,6 +62,7 @@ class Transaction(BaseModel):
         return {
             "id": self.id,
             "money": self.money,
+            "dateTime": self.date_time,
             "transactionType": {
                 "id": self.transaction_type,
                 "description": TransactionType.get_transaction_type(

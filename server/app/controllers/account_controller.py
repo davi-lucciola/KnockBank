@@ -11,6 +11,7 @@ from app.schemas import (
 from app.security import auth
 from app.services import AccountService
 from app.models import Account, User
+from app.services.transaction_service import TransactionService
 
 
 account_bp = APIBlueprint("Account", __name__, url_prefix="/account")
@@ -19,10 +20,14 @@ account_bp = APIBlueprint("Account", __name__, url_prefix="/account")
 @account_bp.get("/me")
 @account_bp.auth_required(auth)
 @account_bp.output(AccountMe)
-def get_auth_account():
+def get_auth_account(transaction_service: TransactionService = TransactionService()):
     """Endpoint para buscar os dados da conta logada."""
     account: Account = auth.current_user.account
-    return account.to_json()
+    today_withdraw = transaction_service.get_today_withdraw(account.id)
+
+    account_json = account.to_json()
+    account_json["todayWithdraw"] = today_withdraw
+    return account_json
 
 
 @account_bp.get("/")

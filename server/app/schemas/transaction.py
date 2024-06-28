@@ -1,5 +1,6 @@
+from datetime import datetime as dt
 from apiflask import Schema
-from apiflask.fields import Float, Integer, Dict, Nested
+from apiflask.fields import Float, Integer, Dict, Nested, DateTime
 from marshmallow import validates, ValidationError
 
 from app.schemas.person import PersonOut
@@ -21,6 +22,7 @@ class TransactionTransfer(TransactionIn):
 class TransactionOut(Schema):
     id: int = Integer()
     money: float = Float()
+    dateTime: dt = DateTime()
     transactionType: dict = Dict()
     account: dict = Nested(PersonOut)
     originAccount: dict = Nested(PersonOut)

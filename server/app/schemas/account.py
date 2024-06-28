@@ -83,4 +83,5 @@ class AccountMe(AccountOut):
     person: dict = Nested(PersonOut)
     balance: float = Float()
     accountType: dict = Dict()
-    dailyWithdrawlLimit: float = Float()
+    dailyWithdrawLimit: float = Float()
+    todayWithdraw: float = Float()

@@ -2,7 +2,7 @@
 
 import { Api, ApiResponse } from "@/lib/api";
 import { createContext, useContext, useEffect, useState } from "react";
-import { Account } from "@/models/account";
+import { Account } from "@/modules/account/schemas/account";
 import { AccountService } from "@/modules/account/services/account-service";
 import { CreateAccountPayload } from "../schemas/create-account";
 import { AuthContext } from "@/modules/auth/contexts/auth-context";

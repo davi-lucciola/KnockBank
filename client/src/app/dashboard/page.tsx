@@ -6,6 +6,7 @@ import { BalanceCard } from "@/modules/account/components/balance-card";
 import { AccountContext } from "@/modules/account/contexts/account-context";
 import { LogoutButton } from "@/modules/auth/components/logout-button";
 import { AuthContext } from "@/modules/auth/contexts/auth-context";
+import { BankStatmentCard } from "@/modules/transaction/components/bank-statment-card";
 import { SquaresFour, User } from "@phosphor-icons/react/dist/ssr";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect } from "react";
@@ -54,10 +55,7 @@ function Content() {
           <CardContent></CardContent>
         </Card>
       </div>
-      <Card className="w-1/3">
-        <CardHeader className="text-2xl font-semibold">Extrato</CardHeader>
-        <CardContent></CardContent>
-      </Card>
+      <BankStatmentCard />
     </main>
   );
 }

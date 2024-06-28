@@ -39,7 +39,7 @@ import { useContext, useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { AccountContext } from "@/modules/account/contexts/account-context";
 import { DatePicker } from "@/components/date-picker";
-import { AccountType } from "@/models/account";
+import { AccountType } from "@/modules/account/schemas/account";
 
 export function RegisterForm() {
   const [open, setOpen] = useState<boolean>(false);
@@ -174,16 +174,16 @@ export function RegisterForm() {
                       <SelectContent>
                         <SelectGroup>
                           <SelectLabel>Tipos de Contas</SelectLabel>
-                          <SelectItem value={`${AccountType.CONTA_CORRENTE}`}>
+                          <SelectItem value={`${AccountType.CURRENT_ACCOUNT}`}>
                             Conta Corrente
                           </SelectItem>
-                          <SelectItem value={`${AccountType.CONTA_PAGAMENTO}`}>
+                          <SelectItem value={`${AccountType.PAYMENT_ACCOUNT}`}>
                             Conta Pagamento
                           </SelectItem>
-                          <SelectItem value={`${AccountType.CONTA_POUPANCA}`}>
+                          <SelectItem value={`${AccountType.SAVING_ACCOUNT}`}>
                             Conta Poupança
                           </SelectItem>
-                          <SelectItem value={`${AccountType.CONTA_SALARIO}`}>
+                          <SelectItem value={`${AccountType.SALARY_ACCOUNT}`}>
                             Conta Salário
                           </SelectItem>
                         </SelectGroup>

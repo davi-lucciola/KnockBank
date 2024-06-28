@@ -20,7 +20,6 @@ export function BalanceCard() {
   const { getAccount } = useContext(AccountContext);
   const account = getAccount();
 
-  // console.log(account);
   return (
     <Card className="h-full flex flex-col justify-between">
       <CardHeader className="w-full flex flex-row justify-between">

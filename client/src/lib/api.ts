@@ -52,7 +52,7 @@ export class Api {
     return data;
   }
 
-  public async post<R, B>(url: string, body: B): Promise<R> {
+  public async post<R, B = any>(url: string, body: B): Promise<R> {
     const response = await fetch(url, {
       method: "POST",
       headers: {
@@ -69,7 +69,7 @@ export class Api {
     return data;
   }
 
-  public async put<R, B>(url: string, body: B): Promise<R> {
+  public async put<R, B = any>(url: string, body: B): Promise<R> {
     const response = await fetch(url, {
       method: "PUT",
       headers: {
@@ -86,7 +86,7 @@ export class Api {
     return data;
   }
 
-  public async delete<R, B>(url: string, body?: B): Promise<R> {
+  public async delete<R, B = any>(url: string, body?: B): Promise<R> {
     const response = await fetch(url, {
       method: "DELETE",
       headers: {

@@ -63,12 +63,7 @@ class Transaction(BaseModel):
             "id": self.id,
             "money": self.money,
             "dateTime": self.date_time,
-            "transactionType": {
-                "id": self.transaction_type,
-                "description": TransactionType.get_transaction_type(
-                    self.transaction_type
-                ).value[1],
-            },
+            "transactionType": self.transaction_type,
             "account": {
                 "id": self.account.id,
                 "name": self.account.person.name,

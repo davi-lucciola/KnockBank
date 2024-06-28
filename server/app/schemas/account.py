@@ -82,6 +82,6 @@ class AccountOut(Schema):
 class AccountMe(AccountOut):
     person: dict = Nested(PersonOut)
     balance: float = Float()
-    accountType: dict = Dict()
+    accountType: int = Integer()
     dailyWithdrawLimit: float = Float()
     todayWithdraw: float = Float()

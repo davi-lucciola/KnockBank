@@ -88,9 +88,6 @@ class Account(BaseModel):
                 "cpf": self.person.cpf,
                 "birthDate": self.person.birth_date,
             },
-            "accountType": {
-                "id": AccountType.get_account_type(self.account_type).value[0],
-                "description": AccountType.get_account_type(self.account_type).value[1],
-            },
+            "accountType": self.account_type,
             "dailyWithdrawLimit": self.daily_withdrawal_limit,
         }

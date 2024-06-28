@@ -23,6 +23,6 @@ class TransactionOut(Schema):
     id: int = Integer()
     money: float = Float()
     dateTime: dt = DateTime()
-    transactionType: dict = Dict()
+    transactionType: int = Integer()
     account: dict = Nested(PersonOut)
     originAccount: dict = Nested(PersonOut)

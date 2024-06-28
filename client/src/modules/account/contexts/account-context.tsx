@@ -1,13 +1,15 @@
 "use client";
 
+import { Api, ApiResponse } from "@/lib/api";
 import { createContext, useContext, useEffect, useState } from "react";
 import { Account } from "@/models/account";
 import { AccountService } from "@/modules/account/services/account-service";
 import { CreateAccountPayload } from "../schemas/create-account";
-import { Api, ApiResponse } from "@/api";
 import { AuthContext } from "@/modules/auth/contexts/auth-context";
 
 interface IAccountContext {
+  isBalanceVisible: boolean;
+  toggleIsBalanceVisible: () => void;
   getAccount: () => Account | null;
   createAccount: (account: CreateAccountPayload) => Promise<ApiResponse>;
 }
@@ -18,8 +20,9 @@ export function AccountContextProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [account, setAccount] = useState<Account | null>(null);
   const { isAuth, getToken } = useContext(AuthContext);
+  const [account, setAccount] = useState<Account | null>(null);
+  const [isBalanceVisible, setIsBalanceVisible] = useState<boolean>(true);
   const accountService = new AccountService(new Api(getToken() ?? undefined));
 
   useEffect(() => {
@@ -35,6 +38,10 @@ export function AccountContextProvider({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuth]);
 
+  function toggleIsBalanceVisible() {
+    setIsBalanceVisible(!isBalanceVisible);
+  }
+
   function getAccount(): Account | null {
     return account;
   }
@@ -47,7 +54,14 @@ export function AccountContextProvider({
   }
 
   return (
-    <AccountContext.Provider value={{ getAccount, createAccount }}>
+    <AccountContext.Provider
+      value={{
+        isBalanceVisible,
+        toggleIsBalanceVisible,
+        getAccount,
+        createAccount,
+      }}
+    >
       {children}
     </AccountContext.Provider>
   );

@@ -7,7 +7,7 @@ import { useContext, useEffect } from "react";
 import { AuthContext } from "@/modules/auth/contexts/auth-context";
 import { useRouter } from "next/navigation";
 
-export function Header() {
+function Header() {
   return (
     <header className="container m-auto flex justify-between items-center px-4">
       <div id="logo" className="flex items-center text-2xl font-bold">

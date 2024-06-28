@@ -1,18 +1,32 @@
-import {
-  HttpStatus,
-  ApiError,
-  ApiBadRequestError,
-  ApiUnauthorizedError,
-  ApiForbiddenError,
-  ApiInternalServerError,
-} from "@/api/errors";
-
 export const API_URL = "http://127.0.0.1:5000";
+
+export const HttpStatus = {
+  Ok: 200,
+  Created: 201,
+  BadRequest: 400,
+  Unauthorized: 401,
+  Forbidden: 403,
+  InternalServerError: 500,
+};
 
 export type ApiResponse = {
   message: string;
   detail?: object;
 };
+
+export class ApiError extends Error {
+  detail?: object;
+
+  constructor(message: string, detail?: object) {
+    super(message);
+    this.detail = detail;
+  }
+}
+
+export class ApiBadRequestError extends ApiError {}
+export class ApiUnauthorizedError extends ApiError {}
+export class ApiForbiddenError extends ApiError {}
+export class ApiInternalServerError extends ApiError {}
 
 export class Api {
   private accessToken?: string;
@@ -21,7 +35,7 @@ export class Api {
     this.accessToken = accessToken;
   }
 
-  async get<R>(url: string, params?: URLSearchParams): Promise<R> {
+  public async get<R>(url: string, params?: URLSearchParams): Promise<R> {
     url = !params ? url : `${url}?${params?.toString()}`;
 
     const response = await fetch(url, {
@@ -38,7 +52,7 @@ export class Api {
     return data;
   }
 
-  async post<R, B>(url: string, body: B): Promise<R> {
+  public async post<R, B>(url: string, body: B): Promise<R> {
     const response = await fetch(url, {
       method: "POST",
       headers: {
@@ -55,7 +69,7 @@ export class Api {
     return data;
   }
 
-  async put<R, B>(url: string, body: B): Promise<R> {
+  public async put<R, B>(url: string, body: B): Promise<R> {
     const response = await fetch(url, {
       method: "PUT",
       headers: {
@@ -72,7 +86,7 @@ export class Api {
     return data;
   }
 
-  async delete<R, B>(url: string, body?: B): Promise<R> {
+  public async delete<R, B>(url: string, body?: B): Promise<R> {
     const response = await fetch(url, {
       method: "DELETE",
       headers: {
@@ -91,7 +105,7 @@ export class Api {
     return data;
   }
 
-  handleError(response: Response, data?: any) {
+  private handleError(response: Response, data?: any) {
     if (!response.ok) {
       switch (response.status) {
         case HttpStatus.BadRequest:

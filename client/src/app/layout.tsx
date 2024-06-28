@@ -27,7 +27,7 @@ export default function RootLayout({
   return (
     <AuthContextProvider>
       <AccountContextProvider>
-        <html lang="en">
+        <html lang="pt-BR">
           <body
             className={cn(
               "min-h-screen bg-background font-sans antialiased",

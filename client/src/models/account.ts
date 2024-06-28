@@ -12,6 +12,7 @@ export class Account {
   balance: number;
   flActive: boolean;
   dailyWithdrawLimit: number;
+  todayWithdraw: number;
   person: Person;
   accountType: AccountType;
 
@@ -20,6 +21,7 @@ export class Account {
     balance: number,
     flActive: boolean,
     dailyWithdrawLimit: number,
+    todayWithdraw: number,
     person: Person,
     accountType: AccountType
   ) {
@@ -27,6 +29,7 @@ export class Account {
     this.balance = balance;
     this.flActive = flActive;
     this.dailyWithdrawLimit = dailyWithdrawLimit;
+    this.todayWithdraw = todayWithdraw;
     this.person = person;
     this.accountType = accountType;
   }

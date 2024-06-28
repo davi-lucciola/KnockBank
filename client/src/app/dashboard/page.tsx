@@ -2,7 +2,7 @@
 
 import { KnockBankLogo } from "@/components/knock-bank-logo";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Account } from "@/models/account";
+import { BalanceCard } from "@/modules/account/components/balance-card";
 import { AccountContext } from "@/modules/account/contexts/account-context";
 import { LogoutButton } from "@/modules/auth/components/logout-button";
 import { AuthContext } from "@/modules/auth/contexts/auth-context";
@@ -48,17 +48,14 @@ function Content() {
   return (
     <main className="flex w-full h-full gap-8 p-8">
       <div className="w-2/3 flex flex-col gap-8">
-        <Card className="h-full">
-          <CardHeader className="text-2xl font-semibold">Saldo</CardHeader>
-          <CardContent></CardContent>
-        </Card>
+        <BalanceCard />
         <Card className="h-full">
           <CardHeader className="text-2xl font-semibold">Resumo</CardHeader>
           <CardContent></CardContent>
         </Card>
       </div>
       <Card className="w-1/3">
-        <CardHeader className="text-2xl font-semibold">Transações</CardHeader>
+        <CardHeader className="text-2xl font-semibold">Extrato</CardHeader>
         <CardContent></CardContent>
       </Card>
     </main>

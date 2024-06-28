@@ -36,6 +36,7 @@ const config = {
         destructive: {
           DEFAULT: "var(--destructive)",
           foreground: "hsl(var(--destructive-foreground))",
+          hover: "var(--destructive-hover)",
         },
         muted: {
           DEFAULT: "hsl(var(--muted))",
@@ -56,8 +57,10 @@ const config = {
         "gray-100": "#403937",
         "gray-200": "#272221",
         "light-gray": "#EDEDED",
-        red: "",
-        green: "#50AF47",
+        green: {
+          DEFAULT: "#50AF47",
+          hover: "#44943d",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

@@ -3,7 +3,7 @@
 import { createContext, useState } from "react";
 import { AuthService } from "@/modules/auth/services/auth-service";
 import { LoginUserPayload } from "@/modules/auth/schemas/login-user";
-import { Api } from "@/api";
+import { Api } from "@/lib/api";
 
 const tokenKey = "knock-bank.token";
 
@@ -29,7 +29,7 @@ export function AuthContextProvider({
       ? localStorage.getItem(tokenKey)
       : null;
   }
-  
+
   const authService = new AuthService(new Api(getToken() ?? undefined));
 
   async function login(payload: LoginUserPayload): Promise<void> {

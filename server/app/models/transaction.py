@@ -68,8 +68,12 @@ class Transaction(BaseModel):
                 "id": self.account.id,
                 "name": self.account.person.name,
             },
-            "originAccount": {
-                "id": self.origin_account.id,
-                "name": self.origin_account.person.name,
-            } if self.origin_account is not None else None,
+            "originAccount": (
+                {
+                    "id": self.origin_account.id,
+                    "name": self.origin_account.person.name,
+                }
+                if self.origin_account is not None
+                else None
+            ),
         }

@@ -11,10 +11,6 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import Mapped, relationship, mapped_column
 from app.models import BaseModel, Person, User
-import typing
-
-if typing.TYPE_CHECKING:
-    from app.models import Transaction
 
 
 class AccountType(Enum):

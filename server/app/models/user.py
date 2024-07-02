@@ -5,7 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import typing
 
 if typing.TYPE_CHECKING:
-    from models import Account
+    from app.models import Account
 
 
 class User(BaseModel):

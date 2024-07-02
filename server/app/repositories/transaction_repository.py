@@ -14,7 +14,11 @@ class TransactionRepository:
         transaction_type: TransactionType = None,
         date: date = None,
     ) -> list[Transaction]:
-        query = select(Transaction).where(Transaction.account_id == account_id)
+        query = (
+            select(Transaction)
+            .where(Transaction.account_id == account_id)
+            .order_by(Transaction.id.desc())
+        )
 
         if transaction_type is not None:
             query = query.where(

@@ -26,7 +26,7 @@ def get_auth_account(transaction_service: TransactionService = TransactionServic
     today_withdraw = transaction_service.get_today_withdraw(account.id)
 
     account_json = account.to_json()
-    account_json["todayWithdraw"] = today_withdraw
+    account_json["todayWithdraw"] = -(today_withdraw)
     return account_json
 
 
@@ -51,12 +51,12 @@ def create_account(
 ):
     """Endpoint para cadastrar uma conta."""
     account = Account(
-        account_in.get('name'),
-        account_in.get('cpf'),
-        account_in.get('birthDate'),
-        account_in.get('password'),
-        account_in.get('accountType'),
-        account_in.get('dailyWithdrawalLimit')
+        account_in.get("name"),
+        account_in.get("cpf"),
+        account_in.get("birthDate"),
+        account_in.get("password"),
+        account_in.get("accountType"),
+        account_in.get("dailyWithdrawalLimit"),
     )
     account: Account = account_service.create(account)
     return {

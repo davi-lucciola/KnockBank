@@ -5,7 +5,7 @@ from sqlalchemy import Column, BigInteger, String, Date
 import typing
 
 if typing.TYPE_CHECKING:
-    from models import Account
+    from app.models import Account
 
 
 class Person(BaseModel):

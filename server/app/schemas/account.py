@@ -3,7 +3,7 @@ from app.schemas import PersonOut, PersonBasic
 from datetime import date
 from typing import TypedDict
 from pycpfcnpj import cpfcnpj
-from apiflask.fields import Integer, String, Date, Float, Boolean, Dict, Nested
+from apiflask.fields import Integer, String, Date, Float, Boolean, Nested
 from apiflask.validators import OneOf, Range
 from marshmallow import validates, ValidationError
 from string import ascii_lowercase, ascii_uppercase, digits, punctuation

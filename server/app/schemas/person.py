@@ -7,6 +7,7 @@ class PersonBasic(Schema):
     id: int = Integer()
     name: int = String()
 
+
 class PersonOut(PersonBasic):
     cpf: str = String()
     birthDate: date = Date()

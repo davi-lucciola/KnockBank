@@ -1,9 +1,29 @@
-from datetime import datetime as dt
+from typing import TypedDict
+from datetime import datetime as dt, date
 from apiflask import Schema
-from apiflask.fields import Float, Integer, Dict, Nested, DateTime
+from apiflask.fields import Float, Integer, Nested, DateTime, Date
+from apiflask.validators import OneOf
 from marshmallow import validates, ValidationError
 
 from app.schemas.person import PersonOut
+
+
+class TransactionQuery(Schema):
+    pageSize: int = Integer(default=10)
+    pageIndex: int = Integer(default=1)
+    dateTime: date = Date()
+    transactionType: int = Integer(
+        validate=[
+            OneOf([1, 2, None], error="Tipo de transação inválida, deve ser 1 ou 2.")
+        ],
+    )
+
+
+class TransactionFilter(TypedDict):
+    pageSize: int
+    pageIndex: int
+    dateTime: date
+    transactionType: int
 
 
 class TransactionIn(Schema):

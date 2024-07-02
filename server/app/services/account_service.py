@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from app.schemas import AccountFilter
 from app.models import Account
 from app.repositories import AccountRepository
-from app.errors import NotFoundError, DomainError, ForbiddenError, NoContentError
+from app.errors import NotFoundError, DomainError, ForbiddenError
 
 
 @dataclass
@@ -13,10 +13,6 @@ class AccountService:
 
     def get_all(self, filter: AccountFilter, account_id: int) -> list[Account]:
         accounts = self.account_repository.get_all(filter, account_id)
-
-        if len(accounts) == 0:
-            raise NoContentError()
-
         return accounts
 
     def get_by_id(self, account_id: int) -> Account:

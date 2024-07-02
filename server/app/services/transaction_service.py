@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from datetime import date
 from decimal import Decimal
 from functools import reduce
-from app.errors import NotFoundError, DomainError, NoContentError
+from app.errors import NotFoundError, DomainError
 from app.models import Account, Transaction, TransactionType
 from app.repositories import AccountRepository, TransactionRepository
 
@@ -18,10 +18,6 @@ class TransactionService:
 
     def get_all(self, account_id: int) -> list[Transaction]:
         transactions = self.transaction_repository.get_all(account_id)
-
-        if len(transactions) == 0:
-            raise NoContentError()
-
         return transactions
 
     def get_by_id(self, transaction_id: int) -> Transaction:

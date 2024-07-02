@@ -49,7 +49,7 @@ export const CreateAccountSchema = z.object({
       (senha: string) => /\W|_/.test(senha),
       "Sua senha deve conter pelo menos um caractere especial."
     ),
-  accountType: z.string().transform((value: string) => Number(value)),
+  accountType: z.number(),
 });
 
 export type CreateAccountPayload = z.infer<typeof CreateAccountSchema>;

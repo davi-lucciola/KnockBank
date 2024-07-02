@@ -8,7 +8,7 @@ import { TransactionService } from "../services/transaction-service";
 import { AuthContext } from "@/modules/auth/contexts/auth-context";
 import { Api } from "@/lib/api";
 
-export function BankStatmentCard() {
+export function BankStatmentCard({ className }: { className: string}) {
   const { isAuth, getToken } = useContext(AuthContext);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
 
@@ -28,10 +28,16 @@ export function BankStatmentCard() {
   }, []);
 
   return (
-    <Card className="w-1/3 h-full">
+    <Card className={className}>
       <CardHeader className="text-2xl font-semibold">Extrato</CardHeader>
       <CardContent className="overflow-auto max-h-191">
-        <TransactionList transactions={transactions} />
+        {transactions.length != 0 ? (
+          <TransactionList transactions={transactions} />
+        ) : (
+          <p className="text-gray-100 font-light">
+            Não há transações para visualizar.
+          </p>
+        )}
       </CardContent>
     </Card>
   );

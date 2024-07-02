@@ -15,7 +15,7 @@ import { useContext, useEffect } from "react";
 
 function Menu() {
   return (
-    <aside className="w-24 bg-gray-200 h-screen flex flex-col justify-around items-center py-4">
+    <aside className="w-24 bg-gray-200 h-screen flex flex-col justify-around items-center py-4 fixed left-0">
       <KnockBankLogo size={64} />
       <nav className="flex-1 mt-16">
         <ul className="flex flex-col gap-8">
@@ -52,15 +52,16 @@ function Content() {
   const account = getAccount();
 
   return (
-    <main className="flex w-full h-full gap-8 p-8">
-      <div className="w-2/3 flex flex-col gap-8">
-        <BalanceCard account={account} />
-        <Card className="h-full">
-          <CardHeader className="text-2xl font-semibold">Resumo</CardHeader>
-          <CardContent></CardContent>
-        </Card>
-      </div>
-      <BankStatmentCard />
+    <main className="w-full h-full grid p-8 gap-8 grid-cols-1 grid-rows-3 lg:grid-cols-3 lg:grid-rows-2">
+      <BalanceCard
+        className="h-full flex flex-col justify-between lg:col-span-2"
+        account={account}
+      />
+      <Card className="w-full row-start-3 lg:row-start-2 lg:col-span-2">
+        <CardHeader className="text-2xl font-semibold">Resumo</CardHeader>
+        <CardContent></CardContent>
+      </Card>
+      <BankStatmentCard className="h-full lg:row-span-2 lg:col-start-3" />
     </main>
   );
 }
@@ -106,9 +107,9 @@ export default function DashboardPage() {
   }, [isAuth]);
 
   return (
-    <div className="flex flex-row w-screen h-screen">
+    <div className="flex flex-row w-screen min-h-screen">
       <Menu />
-      <section className="bg-light-gray flex flex-col w-full">
+      <section className="bg-light-gray flex flex-col w-full ps-24">
         <Header />
         <Content />
       </section>

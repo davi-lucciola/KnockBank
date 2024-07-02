@@ -15,9 +15,14 @@ import { TransferForm } from "@/modules/transaction/components/transfer-form";
 import { Hiddleble } from "@/components/hiddeble";
 import { Account } from "../schemas/account";
 
-export function BalanceCard({ account }: { account: Account | null }) {
+type BalanceCardProps = {
+  account: Account | null;
+  className: string;
+};
+
+export function BalanceCard({ account, className }: BalanceCardProps) {
   return (
-    <Card className="h-full flex flex-col justify-between">
+    <Card className={className}>
       <CardHeader className="w-full flex flex-row justify-between">
         <h2 className="text-2xl font-semibold">Saldo</h2>
         <BalanceVisibilityToggle />
@@ -33,7 +38,7 @@ export function BalanceCard({ account }: { account: Account | null }) {
           dailyWithdrawLimit={account?.dailyWithdrawLimit}
         />
       </CardContent>
-      <CardFooter className="flex gap-8">
+      <CardFooter className="w-full flex flex-col lg:flex-row gap-8">
         <DepositForm />
         <WithdrawForm />
         <TransferForm />

@@ -38,6 +38,10 @@ const config = {
           foreground: "hsl(var(--destructive-foreground))",
           hover: "var(--destructive-hover)",
         },
+        success: {
+          DEFAULT: "var(--success)",
+          hover: "var(--success-hover)",
+        },
         muted: {
           DEFAULT: "hsl(var(--muted))",
           foreground: "hsl(var(--muted-foreground))",
@@ -57,10 +61,10 @@ const config = {
         "gray-100": "#403937",
         "gray-200": "#272221",
         "light-gray": "#EDEDED",
-        green: {
-          DEFAULT: "#50AF47",
-          hover: "#44943d",
-        },
+      },
+      spacing: {
+        '128': '32rem',
+        '191': '47.75rem',
       },
       borderRadius: {
         lg: "var(--radius)",

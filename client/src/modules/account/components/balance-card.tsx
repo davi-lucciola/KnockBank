@@ -6,8 +6,6 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-import { useContext } from "react";
-import { AccountContext } from "@/modules/account/contexts/account-context";
 import { BalanceVisibilityToggle } from "@/modules/account/components/balance-visibility-toggle";
 import { toBrasilianReal } from "@/lib/utils";
 import { DailyWithdrawProgress } from "./daily-withdraw-progress";
@@ -15,11 +13,9 @@ import { DepositForm } from "@/modules/transaction/components/deposit-form";
 import { WithdrawForm } from "@/modules/transaction/components/withdraw-form";
 import { TransferForm } from "@/modules/transaction/components/transfer-form";
 import { Hiddleble } from "@/components/hiddeble";
+import { Account } from "../schemas/account";
 
-export function BalanceCard() {
-  const { getAccount } = useContext(AccountContext);
-  const account = getAccount();
-
+export function BalanceCard({ account }: { account: Account | null }) {
   return (
     <Card className="h-full flex flex-col justify-between">
       <CardHeader className="w-full flex flex-row justify-between">
@@ -33,8 +29,8 @@ export function BalanceCard() {
           </span>
         </Hiddleble>
         <DailyWithdrawProgress
-          dailyWithdrawLimit={account?.dailyWithdrawLimit}
           todayWithdraw={account?.todayWithdraw}
+          dailyWithdrawLimit={account?.dailyWithdrawLimit}
         />
       </CardContent>
       <CardFooter className="flex gap-8">

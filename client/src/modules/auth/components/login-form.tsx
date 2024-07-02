@@ -28,6 +28,8 @@ import { useContext } from "react";
 import { AuthContext } from "@/modules/auth/contexts/auth-context";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
+import { formatCpf } from "@/lib/utils";
+import { ApiError } from "@/lib/api";
 
 export function LoginForm() {
   const router = useRouter();
@@ -46,13 +48,13 @@ export function LoginForm() {
     try {
       await login(payload);
       toast({
-        title: "Usuário conectado com sucesso.",
+        title: "Conectado com sucesso.",
         variant: "success",
         duration: toastDurationInMiliseconds,
       });
       router.push("/dashboard");
     } catch (error) {
-      if (error instanceof Error) {
+      if (error instanceof ApiError) {
         toast({
           title: error.message,
           variant: "destructive",
@@ -88,11 +90,19 @@ export function LoginForm() {
             <FormField
               control={form.control}
               name="cpf"
-              render={({ field }) => (
+              render={({ field: { onChange, ...props } }) => (
                 <FormItem>
                   <FormLabel>Cpf</FormLabel>
                   <FormControl>
-                    <Input placeholder="000.000.000-14" {...field} />
+                    <Input
+                      placeholder="000.000.000-14"
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        event.target.value = formatCpf(value);
+                        onChange(event);
+                      }}
+                      {...props}
+                    />
                   </FormControl>
                   <FormDescription>
                     Digite o seu cpf onde sua conta está cadastrada.

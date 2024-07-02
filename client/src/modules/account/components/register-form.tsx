@@ -40,6 +40,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { AccountContext } from "@/modules/account/contexts/account-context";
 import { DatePicker } from "@/components/date-picker";
 import { AccountType } from "@/modules/account/schemas/account";
+import { formatCpf } from "@/lib/utils";
 
 export function RegisterForm() {
   const [open, setOpen] = useState<boolean>(false);
@@ -114,14 +115,22 @@ export function RegisterForm() {
             <FormField
               control={form.control}
               name="cpf"
-              render={({ field }) => (
+              render={({ field: { onChange, ...props } }) => (
                 <FormItem>
                   <FormLabel> Cpf </FormLabel>
                   <FormControl>
-                    <Input placeholder="000.000.000-14" {...field} />
+                    <Input
+                      placeholder="000.000.000-14"
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        event.target.value = formatCpf(value);
+                        onChange(event);
+                      }}
+                      {...props}
+                    />
                   </FormControl>
                   <FormDescription>
-                    Seu cadastro de pessoa física
+                    Seu cadastro de pessoa física (CPF)
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

@@ -2,6 +2,8 @@
 
 import { KnockBankLogo } from "@/components/knock-bank-logo";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { useToast } from "@/components/ui/use-toast";
+import { ApiUnauthorizedError } from "@/lib/api";
 import { BalanceCard } from "@/modules/account/components/balance-card";
 import { AccountContext } from "@/modules/account/contexts/account-context";
 import { LogoutButton } from "@/modules/auth/components/logout-button";
@@ -46,10 +48,13 @@ function Header() {
 }
 
 function Content() {
+  const { getAccount } = useContext(AccountContext);
+  const account = getAccount();
+
   return (
     <main className="flex w-full h-full gap-8 p-8">
       <div className="w-2/3 flex flex-col gap-8">
-        <BalanceCard />
+        <BalanceCard account={account} />
         <Card className="h-full">
           <CardHeader className="text-2xl font-semibold">Resumo</CardHeader>
           <CardContent></CardContent>
@@ -62,10 +67,39 @@ function Content() {
 
 export default function DashboardPage() {
   const router = useRouter();
-  const { isAuth } = useContext(AuthContext);
+  const { toast } = useToast();
+  const { isAuth, getToken, logout } = useContext(AuthContext);
+  const { fetchAccount, setAccount } = useContext(AccountContext);
 
   useEffect(() => {
-    if (!isAuth) {
+    const token = getToken();
+    if (!token || !isAuth) {
+      setAccount(null);
+      router.push("/");
+      return;
+    }
+
+    const toastDurationInMiliseconds = 3 * 1000; // 3 Seconds
+    try {
+      const accountPromise = fetchAccount();
+      accountPromise.then((data) => setAccount(data));
+    } catch (error) {
+      if (error instanceof ApiUnauthorizedError) {
+        const logoutPromise = logout();
+        logoutPromise.then(() => {
+          toast({
+            title: error.message,
+            variant: "destructive",
+            duration: toastDurationInMiliseconds,
+          });
+        });
+      } else {
+        toast({
+          title: "Houve um erro inesperado, tente novamente.",
+          variant: "destructive",
+          duration: toastDurationInMiliseconds,
+        });
+      }
       router.push("/");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

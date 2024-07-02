@@ -3,11 +3,11 @@ import { toBrasilianReal } from "@/lib/utils";
 import { Hiddleble } from "@/components/hiddeble";
 
 export function DailyWithdrawProgress({
-  dailyWithdrawLimit,
   todayWithdraw,
+  dailyWithdrawLimit,
 }: {
-  dailyWithdrawLimit?: number;
   todayWithdraw?: number;
+  dailyWithdrawLimit?: number;
 }) {
   // const usagePercent = (todayWithdraw * 100) / dailyWithdrawLimit;
   return (

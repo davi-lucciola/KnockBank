@@ -1,16 +1,19 @@
 "use client";
 
-import { Api, ApiResponse } from "@/lib/api";
+import { Api, ApiResponse, ApiUnauthorizedError } from "@/lib/api";
 import { createContext, useContext, useEffect, useState } from "react";
 import { Account } from "@/modules/account/schemas/account";
 import { AccountService } from "@/modules/account/services/account-service";
 import { CreateAccountPayload } from "../schemas/create-account";
 import { AuthContext } from "@/modules/auth/contexts/auth-context";
+import { useToast } from "@/components/ui/use-toast";
 
 interface IAccountContext {
   isBalanceVisible: boolean;
   toggleIsBalanceVisible: () => void;
+  fetchAccount: () => Promise<Account>;
   getAccount: () => Account | null;
+  setAccount: (account: Account | null) => void;
   createAccount: (account: CreateAccountPayload) => Promise<ApiResponse>;
 }
 
@@ -20,23 +23,10 @@ export function AccountContextProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const { isAuth, getToken } = useContext(AuthContext);
+  const { getToken } = useContext(AuthContext);
   const [account, setAccount] = useState<Account | null>(null);
   const [isBalanceVisible, setIsBalanceVisible] = useState<boolean>(true);
   const accountService = new AccountService(new Api(getToken() ?? undefined));
-
-  useEffect(() => {
-    const token = getToken();
-    if (token) {
-      const accountPromise = accountService.getCurrentAccount();
-      accountPromise.then((data) => {
-        setAccount(data);
-      });
-    } else {
-      setAccount(null);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAuth]);
 
   function toggleIsBalanceVisible() {
     setIsBalanceVisible(!isBalanceVisible);
@@ -44,6 +34,11 @@ export function AccountContextProvider({
 
   function getAccount(): Account | null {
     return account;
+  }
+
+  async function fetchAccount(): Promise<Account> {
+    const myAccount = await accountService.getCurrentAccount();
+    return myAccount;
   }
 
   async function createAccount(
@@ -58,7 +53,9 @@ export function AccountContextProvider({
       value={{
         isBalanceVisible,
         toggleIsBalanceVisible,
+        fetchAccount,
         getAccount,
+        setAccount,
         createAccount,
       }}
     >

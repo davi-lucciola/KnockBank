@@ -9,10 +9,15 @@ import { AuthContext } from "@/modules/auth/contexts/auth-context";
 import { Api } from "@/lib/api";
 
 export function BankStatmentCard() {
-  const { getToken } = useContext(AuthContext);
+  const { isAuth, getToken } = useContext(AuthContext);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
 
   useEffect(() => {
+    const token = getToken();
+    if (!isAuth || !token) {
+      return;
+    }
+
     const transactionService = new TransactionService(
       new Api(getToken() ?? undefined)
     );
@@ -23,9 +28,9 @@ export function BankStatmentCard() {
   }, []);
 
   return (
-    <Card className="w-1/3">
+    <Card className="w-1/3 h-full">
       <CardHeader className="text-2xl font-semibold">Extrato</CardHeader>
-      <CardContent>
+      <CardContent className="overflow-auto max-h-191">
         <TransactionList transactions={transactions} />
       </CardContent>
     </Card>

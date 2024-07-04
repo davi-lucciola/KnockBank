@@ -1,29 +1,29 @@
 "use client";
 
+import { Api } from "@/lib/api";
+import { useContext, useEffect, useState } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Transaction } from "@/modules/transaction/schemas/transaction";
 import { TransactionList } from "@/modules/transaction/components/transaction-list";
-import { useContext, useEffect, useState } from "react";
-import { TransactionService } from "../services/transaction-service";
+import { TransactionService } from "@/modules/transaction/services/transaction-service";
 import { AuthContext } from "@/modules/auth/contexts/auth-context";
-import { Api } from "@/lib/api";
+import { useUnauthorizedHandler } from "@/modules/auth/hooks/use-unauthorized-handler";
 
-export function BankStatmentCard({ className }: { className: string}) {
-  const { isAuth, getToken } = useContext(AuthContext);
+export function BankStatmentCard({ className }: { className: string }) {
+  const { getToken } = useContext(AuthContext);
+  const { verifyToken, unauthorizedHandler } = useUnauthorizedHandler();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
 
   useEffect(() => {
-    const token = getToken();
-    if (!isAuth || !token) {
-      return;
-    }
-
+    verifyToken();
     const transactionService = new TransactionService(
       new Api(getToken() ?? undefined)
     );
 
     const transactionsPromise = transactionService.getMyTransactions();
-    transactionsPromise.then((data) => setTransactions(data));
+    transactionsPromise
+      .then((data) => setTransactions(data))
+      .catch(unauthorizedHandler);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

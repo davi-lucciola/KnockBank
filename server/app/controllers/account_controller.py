@@ -7,11 +7,12 @@ from app.schemas import (
     AccountFilter,
     AccountQuery,
     AccountMe,
+    TransactionMonthResume,
 )
 from app.security import auth
 from app.services import AccountService
 from app.models import Account, User
-from app.services.transaction_service import TransactionService
+from app.services import TransactionService
 
 
 account_bp = APIBlueprint("Account", __name__, url_prefix="/account")
@@ -37,10 +38,20 @@ def get_auth_account(transaction_service: TransactionService = TransactionServic
 def get_all(
     account_query: AccountFilter, account_service: AccountService = AccountService()
 ):
-    """Endpoint para buscar contas cadastradas,"""
+    """Endpoint para buscar contas cadastradas."""
     current_user: User = auth.current_user
     accounts = account_service.get_all(account_query, current_user.account.id)
     return [account.to_json() for account in accounts]
+
+
+@account_bp.get("/resume")
+@account_bp.auth_required(auth)
+@account_bp.output(TransactionMonthResume(many=True))
+def get_account_resume(account_service: AccountService = AccountService()):
+    """Endpoint para buscar resumo de transações realizadas no ano."""
+    current_user: User = auth.current_user
+    transactions_resume = account_service.get_account_resume(current_user.account.id)
+    return transactions_resume
 
 
 @account_bp.post("/")

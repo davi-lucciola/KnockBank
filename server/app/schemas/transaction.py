@@ -1,7 +1,7 @@
 from typing import TypedDict
 from datetime import datetime as dt, date
 from apiflask import Schema
-from apiflask.fields import Float, Integer, Nested, DateTime, Date
+from apiflask.fields import Float, Integer, Nested, DateTime, Date, String
 from apiflask.validators import OneOf
 from marshmallow import validates, ValidationError
 
@@ -46,3 +46,15 @@ class TransactionOut(Schema):
     transactionType: int = Integer()
     account: dict = Nested(PersonOut)
     originAccount: dict = Nested(PersonOut)
+
+
+class TransactionMonthResume(Schema):
+    month: str = String()
+    label: str = String()
+    amount: float = Float()
+
+
+class TransactionMonthResumeDict(TypedDict):
+    month: int
+    label: str
+    amount: float

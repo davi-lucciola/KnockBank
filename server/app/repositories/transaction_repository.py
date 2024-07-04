@@ -1,9 +1,10 @@
 from datetime import date
 from dataclasses import dataclass
-from sqlalchemy import select, func
+from sqlalchemy import text, select, func
 from app.db import db
 from app.errors import InfraError
 from app.models import Transaction, TransactionType
+from app.schemas import TransactionMonthResumeDict
 
 
 @dataclass
@@ -30,6 +31,34 @@ class TransactionRepository:
 
         transactions = db.session.execute(query).all()
         return [transaction[0] for transaction in transactions]
+
+    def get_this_year_transactions(
+        self, account_id: int
+    ) -> list[TransactionMonthResumeDict]:
+        query = text(
+            """
+            SELECT
+                MONTH(t.date_time) as month,
+                (CASE WHEN t.transaction_type = 1 
+                    THEN 'Entrada'
+                    ELSE 'Saída' 
+                END) as label,
+                SUM(ABS(t.money)) as amount
+            FROM 
+                transactions t
+            WHERE 
+                t.account_id = :account_id
+                AND YEAR(t.date_time) = YEAR(CURRENT_TIMESTAMP())
+            GROUP BY 
+                label, month
+            ORDER BY 
+                month, label
+        """
+        )
+
+        data = db.session.execute(query, {"account_id": account_id}).all()
+
+        return [{"month": row[0], "label": row[1], "amount": row[2]} for row in data]
 
     def get_by_id(self, id: int) -> Transaction | None:
         return db.session.query(Transaction).get(id)

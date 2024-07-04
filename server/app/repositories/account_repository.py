@@ -35,6 +35,7 @@ class AccountRepository:
             .where(Person.cpf == cpf)
             .first()
         )
+
         return account
 
     def save(self, account: Account) -> Account:

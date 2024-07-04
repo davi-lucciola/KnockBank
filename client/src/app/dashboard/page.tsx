@@ -1,13 +1,14 @@
 "use client";
 
 import { KnockBankLogo } from "@/components/knock-bank-logo";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
 import { ApiUnauthorizedError } from "@/lib/api";
+import { AccountResumeCard } from "@/modules/account/components/account-resume-card";
 import { BalanceCard } from "@/modules/account/components/balance-card";
 import { AccountContext } from "@/modules/account/contexts/account-context";
 import { LogoutButton } from "@/modules/auth/components/logout-button";
 import { AuthContext } from "@/modules/auth/contexts/auth-context";
+import { useUnauthorizedHandler } from "@/modules/auth/hooks/use-unauthorized-handler";
 import { BankStatmentCard } from "@/modules/transaction/components/bank-statment-card";
 import { SquaresFour, User } from "@phosphor-icons/react/dist/ssr";
 import { useRouter } from "next/navigation";
@@ -57,54 +58,22 @@ function Content() {
         className="h-full flex flex-col justify-between lg:col-span-2"
         account={account}
       />
-      <Card className="w-full row-start-3 lg:row-start-2 lg:col-span-2">
-        <CardHeader className="text-2xl font-semibold">Resumo</CardHeader>
-        <CardContent></CardContent>
-      </Card>
+      <AccountResumeCard className="w-full flex flex-col row-start-3 lg:row-start-2 lg:col-span-2" />
       <BankStatmentCard className="h-full lg:row-span-2 lg:col-start-3" />
     </main>
   );
 }
 
 export default function DashboardPage() {
-  const router = useRouter();
-  const { toast } = useToast();
-  const { isAuth, getToken, logout } = useContext(AuthContext);
   const { fetchAccount, setAccount } = useContext(AccountContext);
+  const { verifyToken, unauthorizedHandler } = useUnauthorizedHandler();
 
   useEffect(() => {
-    const token = getToken();
-    if (!token || !isAuth) {
-      setAccount(null);
-      router.push("/");
-      return;
-    }
-
-    const toastDurationInMiliseconds = 3 * 1000; // 3 Seconds
-    try {
-      const accountPromise = fetchAccount();
-      accountPromise.then((data) => setAccount(data));
-    } catch (error) {
-      if (error instanceof ApiUnauthorizedError) {
-        const logoutPromise = logout();
-        logoutPromise.then(() => {
-          toast({
-            title: error.message,
-            variant: "destructive",
-            duration: toastDurationInMiliseconds,
-          });
-        });
-      } else {
-        toast({
-          title: "Houve um erro inesperado, tente novamente.",
-          variant: "destructive",
-          duration: toastDurationInMiliseconds,
-        });
-      }
-      router.push("/");
-    }
+    verifyToken();
+    const accountPromise = fetchAccount();
+    accountPromise.then((data) => setAccount(data)).catch(unauthorizedHandler);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAuth]);
+  }, []);
 
   return (
     <div className="flex flex-row w-screen min-h-screen">

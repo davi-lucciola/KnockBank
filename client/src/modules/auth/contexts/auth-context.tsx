@@ -9,6 +9,7 @@ const tokenKey = "knock-bank.token";
 
 interface IAuthContext {
   isAuth: boolean;
+  setIsAuth: (isAuth: boolean) => void;
   getToken: () => string | null;
   login: (payload: LoginUserPayload) => Promise<void>;
   logout: () => Promise<void>;
@@ -45,7 +46,9 @@ export function AuthContextProvider({
   }
 
   return (
-    <AuthContext.Provider value={{ isAuth, getToken, login, logout }}>
+    <AuthContext.Provider
+      value={{ isAuth, setIsAuth, getToken, login, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );

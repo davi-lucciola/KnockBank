@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/toaster";
 import { AuthContextProvider } from "@/modules/auth/contexts/auth-context";
 import { AccountContextProvider } from "@/modules/account/contexts/account-context";
+import { TransactionContextProvider } from "@/modules/transaction/contexts/transaction-context";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -27,17 +28,19 @@ export default function RootLayout({
   return (
     <AuthContextProvider>
       <AccountContextProvider>
-        <html lang="pt-BR">
-          <body
-            className={cn(
-              "min-h-screen bg-background font-sans antialiased overflow-x-hidden",
-              roboto.variable
-            )}
-          >
-            {children}
-            <Toaster />
-          </body>
-        </html>
+        <TransactionContextProvider>
+          <html lang="pt-BR">
+            <body
+              className={cn(
+                "min-h-screen bg-background font-sans antialiased overflow-x-hidden",
+                roboto.variable
+              )}
+            >
+              {children}
+              <Toaster />
+            </body>
+          </html>
+        </TransactionContextProvider>
       </AccountContextProvider>
     </AuthContextProvider>
   );

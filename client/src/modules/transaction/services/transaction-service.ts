@@ -1,5 +1,10 @@
 import { API_URL, Api, ApiResponse } from "@/lib/api";
-import { Transaction } from "../schemas/transaction";
+import { Transaction } from "@/modules/transaction/schemas/transaction";
+import { TransactionMonthResume } from "@/modules/transaction/schemas/transaction-month-resume";
+import {
+  BasicTransferencePayload,
+  TransferencePayload,
+} from "../schemas/transference";
 
 export class TransactionService {
   constructor(private api: Api = new Api()) {}
@@ -9,9 +14,28 @@ export class TransactionService {
     return data;
   }
 
-  async deposit() {}
+  async getAccountResume(): Promise<TransactionMonthResume[]> {
+    const data = this.api.get<TransactionMonthResume[]>(
+      `${API_URL}/transaction/resume`
+    );
+    return data;
+  }
 
-  async withdraw() {}
+  async deposit(transference: BasicTransferencePayload) {
+    const data = this.api.post<ApiResponse, BasicTransferencePayload>(
+      `${API_URL}/transaction/deposit`,
+      transference
+    );
+    return data;
+  }
 
-  async transfer() {}
+  async withdraw(transference: BasicTransferencePayload) {
+    const data = this.api.post<ApiResponse, BasicTransferencePayload>(
+      `${API_URL}/transaction/withdraw`,
+      transference
+    );
+    return data;
+  }
+
+  async transfer(transference: TransferencePayload) {}
 }

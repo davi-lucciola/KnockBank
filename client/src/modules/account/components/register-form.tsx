@@ -43,8 +43,8 @@ import { AccountType } from "@/modules/account/schemas/account";
 import { formatCpf } from "@/lib/utils";
 
 export function RegisterForm() {
-  const [open, setOpen] = useState<boolean>(false);
   const { toast } = useToast();
+  const [open, setOpen] = useState<boolean>(false);
   const { createAccount } = useContext(AccountContext);
   const form = useForm<CreateAccountPayload>({
     resolver: zodResolver(CreateAccountSchema),

@@ -14,11 +14,24 @@ export function toBrasilianReal(value: number): string | undefined {
     : undefined;
 }
 
-export const formatCpf = (value: string) => {
-  const cleanedValue = value.replace(/\D/g, ''); // remove caracteres não numéricos
+export function formatCpf(value: string): string {
+  const cleanedValue = value.replace(/\D/g, ""); // remove caracteres não numéricos
   return cleanedValue
-    .replace(/(\d{3})(\d)/, '$1.$2')
-    .replace(/(\d{3})(\d)/, '$1.$2')
-    .replace(/(\d{3})(\d{1,2})/, '$1-$2')
-    .replace(/(-\d{2})\d+?$/, '$1');
-};
+    .replace(/(\d{3})(\d)/, "$1.$2")
+    .replace(/(\d{3})(\d)/, "$1.$2")
+    .replace(/(\d{3})(\d{1,2})/, "$1-$2")
+    .replace(/(-\d{2})\d+?$/, "$1");
+}
+
+export function formatBrasilianReal(value: string): string {
+  const money = Number(value.replace(/[^0-9]/g, "")) / 100;
+
+  if (isNaN(money)) {
+    return "";
+  }
+
+  return money.toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  });
+}

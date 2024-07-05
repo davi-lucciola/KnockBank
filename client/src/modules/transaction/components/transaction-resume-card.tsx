@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -7,14 +9,10 @@ import {
   Tooltip,
   Legend,
 } from "chart.js/auto";
+import { useContext } from "react";
 import { Bar } from "react-chartjs-2";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "@/modules/auth/contexts/auth-context";
-import { useUnauthorizedHandler } from "@/modules/auth/hooks/use-unauthorized-handler";
-import { TransactionMonthResume } from "@/modules/account/schemas/transaction-month-resume";
-import { AccountService } from "@/modules/account/services/account-service";
-import { Api } from "@/lib/api";
+import { TransactionContext } from "@/modules/transaction/contexts/transaction-context";
 
 ChartJS.register(
   CategoryScale,
@@ -30,25 +28,12 @@ type AccountResumeCardProps = {
 };
 
 export function AccountResumeCard({ className }: AccountResumeCardProps) {
-  const { getToken } = useContext(AuthContext);
-  const { verifyToken, unauthorizedHandler } = useUnauthorizedHandler();
-  const [transactionsResume, setTransactionsResume] = useState<
-    TransactionMonthResume[]
-  >([]);
-
-  useEffect(() => {
-    verifyToken();
-    const accountService = new AccountService(new Api(getToken() ?? undefined));
-
-    const transactionsResumePromise = accountService.getAccountResume();
-    transactionsResumePromise
-      .then((data) => setTransactionsResume(data))
-      .catch(unauthorizedHandler);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const { transactionsResume } = useContext(TransactionContext);
 
   const data = {
-    labels: Array.from(new Set(transactionsResume.map((resume) => resume.month))),
+    labels: Array.from(
+      new Set(transactionsResume.map((resume) => resume.month))
+    ),
     datasets: [
       {
         label: "Entrada",

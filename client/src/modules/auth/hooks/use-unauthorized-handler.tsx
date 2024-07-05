@@ -17,6 +17,7 @@ export function useUnauthorizedHandler() {
     const token = getToken();
     if (!token || !isAuth) {
       setAccount(null);
+      setIsAuth(false);
       router.push("/");
       return;
     }
@@ -31,6 +32,7 @@ export function useUnauthorizedHandler() {
         variant: "destructive",
         duration: toastDurationInMiliseconds,
       });
+      router.push("/");
     } else {
       toast({
         title: "Houve um erro inesperado, tente novamente.",
@@ -38,7 +40,6 @@ export function useUnauthorizedHandler() {
         duration: toastDurationInMiliseconds,
       });
     }
-    router.push("/");
   };
 
   return { verifyToken, unauthorizedHandler };

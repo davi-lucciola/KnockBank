@@ -1,17 +1,13 @@
 "use client";
 
 import { KnockBankLogo } from "@/components/knock-bank-logo";
-import { useToast } from "@/components/ui/use-toast";
-import { ApiUnauthorizedError } from "@/lib/api";
-import { AccountResumeCard } from "@/modules/account/components/account-resume-card";
+import { AccountResumeCard } from "@/modules/transaction/components/transaction-resume-card";
 import { BalanceCard } from "@/modules/account/components/balance-card";
 import { AccountContext } from "@/modules/account/contexts/account-context";
 import { LogoutButton } from "@/modules/auth/components/logout-button";
-import { AuthContext } from "@/modules/auth/contexts/auth-context";
 import { useUnauthorizedHandler } from "@/modules/auth/hooks/use-unauthorized-handler";
 import { BankStatmentCard } from "@/modules/transaction/components/bank-statment-card";
 import { SquaresFour, User } from "@phosphor-icons/react/dist/ssr";
-import { useRouter } from "next/navigation";
 import { useContext, useEffect } from "react";
 
 function Menu() {
@@ -65,16 +61,6 @@ function Content() {
 }
 
 export default function DashboardPage() {
-  const { fetchAccount, setAccount } = useContext(AccountContext);
-  const { verifyToken, unauthorizedHandler } = useUnauthorizedHandler();
-
-  useEffect(() => {
-    verifyToken();
-    const accountPromise = fetchAccount();
-    accountPromise.then((data) => setAccount(data)).catch(unauthorizedHandler);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
     <div className="flex flex-row w-screen min-h-screen">
       <Menu />

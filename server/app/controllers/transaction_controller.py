@@ -1,7 +1,12 @@
 from apiflask import APIBlueprint
 from app.security import auth
-from app.models import Account
-from app.schemas import TransactionIn, TransactionOut, TransactionTransfer
+from app.models import Account, User
+from app.schemas import (
+    TransactionIn,
+    TransactionOut,
+    TransactionTransfer,
+    TransactionMonthResume,
+)
 from app.services import TransactionService
 
 
@@ -17,6 +22,20 @@ def get_all_transactions(
     current_account: Account = auth.current_user.account
     transactions = transaction_service.get_all(current_account.id)
     return [transaction.to_json() for transaction in transactions]
+
+
+@transaction_bp.get("/resume")
+@transaction_bp.auth_required(auth)
+@transaction_bp.output(TransactionMonthResume(many=True))
+def get_transactions_resume(
+    transaction_service: TransactionService = TransactionService(),
+):
+    """Endpoint para buscar resumo de transações realizadas no ano."""
+    current_user: User = auth.current_user
+    transactions_resume = transaction_service.get_transactions_resume(
+        current_user.account.id
+    )
+    return transactions_resume
 
 
 @transaction_bp.get("/<int:id>")

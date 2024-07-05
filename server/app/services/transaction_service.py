@@ -20,6 +20,39 @@ class TransactionService:
         transactions = self.transaction_repository.get_all(account_id)
         return transactions
 
+    def get_transactions_resume(self, account_id: int):
+        this_year_transactions_resume: list[dict] = []
+        data = self.transaction_repository.get_this_year_transactions(account_id)
+        month_map = {
+            1: "Jan",
+            2: "Fev",
+            3: "Mar",
+            4: "Abr",
+            5: "Mai",
+            6: "Jun",
+            7: "Jul",
+            8: "Ago",
+            9: "Set",
+            10: "Out",
+            11: "Nov",
+            12: "Dez",
+        }
+
+        for _, value in month_map.items():
+            this_year_transactions_resume.append({"month": value, "label": "Entrada"})
+            this_year_transactions_resume.append({"month": value, "label": "Saída"})
+
+        for resume in data:
+            for month_resume in this_year_transactions_resume:
+                if month_map.get(resume.get("month")) == month_resume.get(
+                    "month"
+                ) and resume.get("label") == month_resume.get("label"):
+                    month_resume["amount"] = resume.get("amount")
+                elif month_resume.get("amount") is None:
+                    month_resume["amount"] = 0
+
+        return this_year_transactions_resume
+
     def get_by_id(self, transaction_id: int) -> Transaction:
         transaction = self.transaction_repository.get_by_id(transaction_id)
 
@@ -36,7 +69,6 @@ class TransactionService:
             raise DomainError("Não é possivel sacar mais do que há na conta.")
 
         self.validate_daily_withdraw_limit(account, money)
-
         account.balance -= money
 
         transaction = Transaction(-money, TransactionType.WITHDRAW, account)
@@ -94,5 +126,5 @@ class TransactionService:
     def validate_daily_withdraw_limit(self, account: Account, new_amount: Decimal):
         total = self.get_today_withdraw(account.id)
 
-        if total + new_amount > account.daily_withdrawal_limit:
+        if -total + new_amount > account.daily_withdrawal_limit:
             raise DomainError("Limite de saque diário excedido.")

@@ -23,6 +23,7 @@
     "chart.js": "^4.4.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "cmdk": "^1.0.0",
     "cpf-cnpj-validator": "^1.0.3",
     "date-fns": "^3.6.0",
     "lucide-react": "^0.395.0",

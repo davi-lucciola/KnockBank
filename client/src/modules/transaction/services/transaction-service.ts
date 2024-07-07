@@ -37,5 +37,11 @@ export class TransactionService {
     return data;
   }
 
-  async transfer(transference: TransferencePayload) {}
+  async transfer(transference: TransferencePayload) {
+    const data = this.api.post<ApiResponse, TransferencePayload>(
+      `${API_URL}/transaction/transfer`,
+      transference
+    );
+    return data;
+  }
 }

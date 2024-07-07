@@ -10,7 +10,7 @@ export const BasicTransferenceSchema = z.object({
 export type BasicTransferencePayload = z.infer<typeof BasicTransferenceSchema>;
 
 export const TransferenceSchema = BasicTransferenceSchema.extend({
-  accountId: z.number().positive(),
+  accountId: z.number({required_error: "É obrigatório selecionar uma conta."}).positive(),
 });
 
 export type TransferencePayload = z.infer<typeof TransferenceSchema>;

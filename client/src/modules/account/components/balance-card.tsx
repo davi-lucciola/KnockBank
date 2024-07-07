@@ -6,14 +6,14 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
+import { Hiddleble } from "@/components/hiddeble";
+import { Account } from "@/modules/account/schemas/account";
 import { BalanceVisibilityToggle } from "@/modules/account/components/balance-visibility-toggle";
-import { toBrasilianReal } from "@/lib/utils";
-import { DailyWithdrawProgress } from "./daily-withdraw-progress";
+import { DailyWithdrawProgress } from "@/modules/account/components/daily-withdraw-progress";
 import { DepositForm } from "@/modules/transaction/components/deposit-form";
 import { WithdrawForm } from "@/modules/transaction/components/withdraw-form";
-import { TransferForm } from "@/modules/transaction/components/transfer-form";
-import { Hiddleble } from "@/components/hiddeble";
-import { Account } from "../schemas/account";
+import { TransferenceForm } from "@/modules/transaction/components/transference-form";
+import { toBrasilianReal } from "@/lib/utils";
 
 type BalanceCardProps = {
   account: Account | null;
@@ -41,7 +41,7 @@ export function BalanceCard({ account, className }: BalanceCardProps) {
       <CardFooter className="w-full flex flex-col lg:flex-row gap-8">
         <DepositForm />
         <WithdrawForm />
-        <TransferForm />
+        <TransferenceForm />
       </CardFooter>
     </Card>
   );

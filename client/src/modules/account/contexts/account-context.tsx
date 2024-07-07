@@ -2,18 +2,20 @@
 
 import { Api, ApiResponse, ApiUnauthorizedError } from "@/lib/api";
 import { createContext, useContext, useEffect, useState } from "react";
-import { Account } from "@/modules/account/schemas/account";
+import { Account, BaseAccount } from "@/modules/account/schemas/account";
 import { AccountService } from "@/modules/account/services/account-service";
 import { CreateAccountPayload } from "../schemas/create-account";
 import { AuthContext } from "@/modules/auth/contexts/auth-context";
 import { useUnauthorizedHandler } from "@/modules/auth/hooks/use-unauthorized-handler";
+import { QueryAccount } from "../schemas/query-account";
 
 interface IAccountContext {
   isBalanceVisible: boolean;
   toggleIsBalanceVisible: () => void;
-  fetchAccount: () => Promise<void>;
   getAccount: () => Account | null;
   setAccount: (account: Account | null) => void;
+  fetchAccount: () => Promise<void>;
+  getAccounts: (query: QueryAccount) => Promise<BaseAccount[]>;
   createAccount: (account: CreateAccountPayload) => Promise<ApiResponse>;
 }
 
@@ -32,6 +34,11 @@ export function AccountContextProvider({
   async function fetchAccount() {
     const myAccount = await accountService.getCurrentAccount();
     setAccount(myAccount);
+  }
+
+  async function getAccounts(query: QueryAccount) {
+    const data = accountService.getAccounts(query);
+    return data;
   }
 
   useEffect(() => {
@@ -60,9 +67,10 @@ export function AccountContextProvider({
       value={{
         isBalanceVisible,
         toggleIsBalanceVisible,
-        fetchAccount,
         getAccount,
         setAccount,
+        fetchAccount,
+        getAccounts,
         createAccount,
       }}
     >

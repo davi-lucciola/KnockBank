@@ -14,10 +14,12 @@ import {
 
 interface ITransactionContext {
   transactions: Transaction[];
+  setTransactions: (transactions: Transaction[]) => void;
   transactionsResume: TransactionMonthResume[];
   fetchTransactions: () => void;
   deposit: (transference: BasicTransferencePayload) => Promise<ApiResponse>;
   withdraw: (transference: BasicTransferencePayload) => Promise<ApiResponse>;
+  transfer: (transference: TransferencePayload) => Promise<ApiResponse>;
 }
 
 export const TransactionContext = createContext({} as ITransactionContext);
@@ -51,7 +53,10 @@ export function TransactionContextProvider({
     return data;
   }
 
-  async function transfer(transference: TransferencePayload) {}
+  async function transfer(transference: TransferencePayload) {
+    const data = transactionService.transfer(transference);
+    return data;
+  }
 
   useEffect(() => {
     verifyToken();
@@ -72,10 +77,12 @@ export function TransactionContextProvider({
     <TransactionContext.Provider
       value={{
         transactions,
+        setTransactions,
         transactionsResume,
         fetchTransactions,
         deposit,
         withdraw,
+        transfer,
       }}
     >
       {children}

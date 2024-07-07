@@ -57,10 +57,10 @@ export function RegisterForm() {
     },
   });
 
-  const onSubmit = async (data: CreateAccountPayload) => {
+  const onSubmit = async (payload: CreateAccountPayload) => {
     const toastDurationInMiliseconds = 3 * 1000; // 3 Seconds
     try {
-      const response = await createAccount(data);
+      const response = await createAccount(payload);
       toast({
         title: response.message,
         variant: "success",

@@ -1,6 +1,7 @@
 "use client";
 
 import { useContext, useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -16,35 +17,35 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
-import { MoneyInput } from "@/components/money-input";
-import { ArrowBendLeftDown } from "@phosphor-icons/react/dist/ssr";
 import { useToast } from "@/components/ui/use-toast";
+import { ArrowsLeftRight } from "@phosphor-icons/react/dist/ssr";
 import {
-  BasicTransferencePayload,
-  BasicTransferenceSchema,
+  TransferencePayload,
+  TransferenceSchema,
 } from "@/modules/transaction/schemas/transference";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { TransactionContext } from "@/modules/transaction/contexts/transaction-context";
+import { MoneyInput } from "@/components/money-input";
+import { AccountCombobox } from "@/modules/account/components/account-combobox";
 import { AccountContext } from "@/modules/account/contexts/account-context";
+import { TransactionContext } from "../contexts/transaction-context";
 
-export function WithdrawForm() {
+export function TransferenceForm() {
   const { toast } = useToast();
-  const [open, setOpen] = useState<boolean>(false);
   const { fetchAccount } = useContext(AccountContext);
-  const { withdraw, fetchTransactions } = useContext(TransactionContext);
-  const form = useForm<BasicTransferencePayload>({
-    resolver: zodResolver(BasicTransferenceSchema),
+  const { transfer, fetchTransactions } = useContext(TransactionContext);
+  const [open, setOpen] = useState<boolean>(false);
+  const form = useForm<TransferencePayload>({
+    resolver: zodResolver(TransferenceSchema),
     defaultValues: {
       money: 0,
     },
   });
 
-  const onSubmit = async (payload: BasicTransferencePayload) => {
+  const onSubmit = async (payload: TransferencePayload) => {
     const toastDurationInMiliseconds = 3 * 1000; // 3 Seconds
     try {
-      const response = await withdraw(payload);
+      const response = await transfer(payload);
       toast({
         title: response.message,
         variant: "success",
@@ -67,12 +68,9 @@ export function WithdrawForm() {
   return (
     <Dialog open={open} onOpenChange={(open) => setOpen(open)}>
       <DialogTrigger asChild>
-        <Button
-          className="w-full h-16 text-xl flex gap-4"
-          variant="destructive"
-        >
-          Sacar
-          <ArrowBendLeftDown size={32} />
+        <Button className="w-full h-16 text-xl flex gap-4">
+          Transferir
+          <ArrowsLeftRight size={32} />
         </Button>
       </DialogTrigger>
       <DialogContent>
@@ -91,18 +89,37 @@ export function WithdrawForm() {
                   <FormControl>
                     <MoneyInput {...field} />
                   </FormControl>
-                  <FormDescription>Valor que deseja sacar.</FormDescription>
+                  <FormDescription>
+                    Valor que deseja transferir.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="accountId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel> Conta Destino </FormLabel>
+                  <FormControl>
+                    <AccountCombobox
+                      value={field.value}
+                      setAccountId={(accountId: number) =>
+                        form.setValue("accountId", accountId)
+                      }
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Pesquise pelo nome ou começo do cpf da conta.
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <DialogFooter>
-              <Button
-                type="submit"
-                variant="destructive"
-                className="w-full max-w-52"
-              >
-                Sacar
+              <Button type="submit" className="w-full max-w-52">
+                Transferir
               </Button>
             </DialogFooter>
           </form>

@@ -7,17 +7,15 @@ export enum AccountType {
   PAYMENT_ACCOUNT = 4,
 }
 
-export type PartialAccount = {
+export type BaseAccount = {
   id: number;
-  name: string;
+  flActive: boolean;
+  person: Person;
 };
 
-export type Account = {
-  id: number;
+export type Account = BaseAccount & {
   balance: number;
-  flActive: boolean;
   dailyWithdrawLimit: number;
   todayWithdraw: number;
-  person: Person;
   accountType: AccountType;
-}
+};

@@ -14,9 +14,12 @@ export function toBrasilianReal(value: number): string | undefined {
     : undefined;
 }
 
-export function formatCpf(value: string): string {
-  const cleanedValue = value.replace(/\D/g, ""); // remove caracteres não numéricos
-  return cleanedValue
+export function formatCpf(value: string, removeChars: boolean = true): string {
+  if (removeChars) {
+    value = value.replace(/\D/g, ""); // remove caracteres não numéricos
+  }
+  
+  return value
     .replace(/(\d{3})(\d)/, "$1.$2")
     .replace(/(\d{3})(\d)/, "$1.$2")
     .replace(/(\d{3})(\d{1,2})/, "$1-$2")

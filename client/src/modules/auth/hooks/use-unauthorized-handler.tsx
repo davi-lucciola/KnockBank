@@ -16,10 +16,8 @@ export function useUnauthorizedHandler() {
   const verifyToken = () => {
     const token = getToken();
     if (!token || !isAuth) {
-      setAccount(null);
       setIsAuth(false);
       router.push("/");
-      return;
     }
   };
 

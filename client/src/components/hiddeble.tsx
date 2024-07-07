@@ -1,6 +1,6 @@
-import { AccountContext } from "@/modules/account/contexts/account-context";
 import React, { useContext } from "react";
-import { Skeleton } from "./ui/skeleton";
+import { Skeleton } from "@/components/ui/skeleton";
+import { AccountContext } from "@/modules/account/contexts/account-context";
 
 type HiddlebleProps = { children: React.ReactNode; className?: string };
 

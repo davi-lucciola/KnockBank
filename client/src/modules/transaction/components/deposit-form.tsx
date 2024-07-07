@@ -16,8 +16,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { MoneyInput } from "@/components/money-input";
 import { ArrowBendRightUp } from "@phosphor-icons/react/dist/ssr";
 import {
   BasicTransferenceSchema,
@@ -26,9 +26,8 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useToast } from "@/components/ui/use-toast";
-import { TransactionContext } from "@/modules/transaction/contexts/transaction-context";
 import { AccountContext } from "@/modules/account/contexts/account-context";
-import { formatBrasilianReal, toBrasilianReal } from "@/lib/utils";
+import { TransactionContext } from "@/modules/transaction/contexts/transaction-context";
 
 export function DepositForm() {
   const { toast } = useToast();
@@ -42,10 +41,10 @@ export function DepositForm() {
     },
   });
 
-  const onSubmit = async (data: BasicTransferencePayload) => {
+  const onSubmit = async (payload: BasicTransferencePayload) => {
     const toastDurationInMiliseconds = 3 * 1000; // 3 Seconds
     try {
-      const response = await deposit(data);
+      const response = await deposit(payload);
       toast({
         title: response.message,
         variant: "success",
@@ -83,20 +82,11 @@ export function DepositForm() {
             <FormField
               control={form.control}
               name="money"
-              render={({ field: { onChange, value, ...props } }) => (
+              render={({ field }) => (
                 <FormItem>
                   <FormLabel> Valor </FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="R$ 10,00"
-                      value={formatBrasilianReal(toBrasilianReal(value)!)}
-                      onChange={(event) => {
-                        const { value } = event.target;
-                        event.target.value = formatBrasilianReal(value);
-                        onChange(event);
-                      }}
-                      {...props}
-                    />
+                    <MoneyInput  {...field} />
                   </FormControl>
                   <FormDescription>Valor que deseja depositar.</FormDescription>
                   <FormMessage />

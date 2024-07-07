@@ -1,4 +1,4 @@
-import { PartialAccount } from "../../account/schemas/account";
+import { Person } from "@/modules/account/schemas/person";
 
 export enum TransactionType {
   DEPOSIT = 1,
@@ -10,6 +10,6 @@ export type Transaction = {
   money: number;
   dateTime: string;
   transactionType: TransactionType;
-  account: PartialAccount;
-  originAccount?: PartialAccount;
+  account: Person;
+  originAccount?: Person;
 };

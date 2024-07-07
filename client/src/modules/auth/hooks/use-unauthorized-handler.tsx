@@ -4,14 +4,12 @@ import { useContext } from "react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { AuthContext } from "@/modules/auth/contexts/auth-context";
-import { AccountContext } from "@/modules/account/contexts/account-context";
 import { ApiUnauthorizedError } from "@/lib/api";
 
 export function useUnauthorizedHandler() {
   const router = useRouter();
   const { toast } = useToast();
   const { isAuth, getToken, setIsAuth } = useContext(AuthContext);
-  const { setAccount } = useContext(AccountContext);
 
   const verifyToken = () => {
     const token = getToken();

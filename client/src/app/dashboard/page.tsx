@@ -1,14 +1,14 @@
 "use client";
 
-import { KnockBankLogo } from "@/components/knock-bank-logo";
-import { AccountResumeCard } from "@/modules/transaction/components/transaction-resume-card";
-import { BalanceCard } from "@/modules/account/components/balance-card";
-import { AccountContext } from "@/modules/account/contexts/account-context";
-import { LogoutButton } from "@/modules/auth/components/logout-button";
-import { useUnauthorizedHandler } from "@/modules/auth/hooks/use-unauthorized-handler";
-import { BankStatmentCard } from "@/modules/transaction/components/bank-statment-card";
-import { SquaresFour, User } from "@phosphor-icons/react/dist/ssr";
 import { useContext, useEffect } from "react";
+import { KnockBankLogo } from "@/components/knock-bank-logo";
+import { SquaresFour, User } from "@phosphor-icons/react/dist/ssr";
+import { LogoutButton } from "@/modules/auth/components/logout-button";
+import { BalanceCard } from "@/modules/account/components/balance-card";
+import { BankStatmentCard } from "@/modules/transaction/components/bank-statment-card";
+import { AccountResumeCard } from "@/modules/transaction/components/transaction-resume-card";
+import { AccountContext } from "@/modules/account/contexts/account-context";
+import { useUnauthorizedHandler } from "@/modules/auth/hooks/use-unauthorized-handler";
 
 function Menu() {
   return (
@@ -61,6 +61,15 @@ function Content() {
 }
 
 export default function DashboardPage() {
+  const { fetchAccount } = useContext(AccountContext);
+  const { verifyToken, unauthorizedHandler } = useUnauthorizedHandler();
+
+  useEffect(() => {
+    verifyToken();
+    fetchAccount().catch(unauthorizedHandler);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div className="flex flex-row w-screen min-h-screen">
       <Menu />

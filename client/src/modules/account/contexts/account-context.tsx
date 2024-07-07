@@ -41,12 +41,6 @@ export function AccountContextProvider({
     return data;
   }
 
-  useEffect(() => {
-    verifyToken();
-    fetchAccount().catch(unauthorizedHandler);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   function toggleIsBalanceVisible() {
     setIsBalanceVisible(!isBalanceVisible);
   }

@@ -3,20 +3,21 @@
 import { Api, ApiResponse } from "@/lib/api";
 import { createContext, useContext, useEffect, useState } from "react";
 import { AuthContext } from "@/modules/auth/contexts/auth-context";
-import { useUnauthorizedHandler } from "@/modules/auth/hooks/use-unauthorized-handler";
-import { Transaction } from "@/modules/transaction/schemas/transaction";
-import { TransactionService } from "@/modules/transaction/services/transaction-service";
-import { TransactionMonthResume } from "@/modules/transaction/schemas/transaction-month-resume";
 import {
   BasicTransferencePayload,
   TransferencePayload,
-} from "../schemas/transference";
+} from "@/modules/transaction/schemas/transference";
+import { Transaction } from "@/modules/transaction/schemas/transaction";
+import { TransactionMonthResume } from "@/modules/transaction/schemas/transaction-month-resume";
+import { TransactionService } from "@/modules/transaction/services/transaction-service";
 
 interface ITransactionContext {
   transactions: Transaction[];
   setTransactions: (transactions: Transaction[]) => void;
+  fetchTransactions: () => Promise<void>;
   transactionsResume: TransactionMonthResume[];
-  fetchTransactions: () => void;
+  setTransactionsResume: (transactionsResume: TransactionMonthResume[]) => void;
+  fetchTransactionsResume: () => Promise<void>;
   deposit: (transference: BasicTransferencePayload) => Promise<ApiResponse>;
   withdraw: (transference: BasicTransferencePayload) => Promise<ApiResponse>;
   transfer: (transference: TransferencePayload) => Promise<ApiResponse>;
@@ -29,7 +30,6 @@ export function TransactionContextProvider({
   children: React.ReactNode;
 }) {
   const { getToken } = useContext(AuthContext);
-  const { verifyToken, unauthorizedHandler } = useUnauthorizedHandler();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [transactionsResume, setTransactionsResume] = useState<
     TransactionMonthResume[]
@@ -41,6 +41,11 @@ export function TransactionContextProvider({
   async function fetchTransactions() {
     const myTransactions = await transactionService.getMyTransactions();
     setTransactions(myTransactions);
+  }
+
+  async function fetchTransactionsResume() {
+    const myTransactionsResume = await transactionService.getAccountResume();
+    setTransactionsResume(myTransactionsResume);
   }
 
   async function deposit(transference: BasicTransferencePayload) {
@@ -58,28 +63,15 @@ export function TransactionContextProvider({
     return data;
   }
 
-  useEffect(() => {
-    verifyToken();
-    fetchTransactions().catch(unauthorizedHandler);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    verifyToken();
-    const myTransactionsResume = transactionService.getAccountResume();
-    myTransactionsResume
-      .then((data) => setTransactionsResume(data))
-      .catch(unauthorizedHandler);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [transactions]);
-
   return (
     <TransactionContext.Provider
       value={{
         transactions,
         setTransactions,
-        transactionsResume,
         fetchTransactions,
+        transactionsResume,
+        setTransactionsResume,
+        fetchTransactionsResume,
         deposit,
         withdraw,
         transfer,

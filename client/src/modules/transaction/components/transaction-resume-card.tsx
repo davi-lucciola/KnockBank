@@ -9,10 +9,11 @@ import {
   Tooltip,
   Legend,
 } from "chart.js/auto";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { Bar } from "react-chartjs-2";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { TransactionContext } from "@/modules/transaction/contexts/transaction-context";
+import { useUnauthorizedHandler } from "@/modules/auth/hooks/use-unauthorized-handler";
 
 ChartJS.register(
   CategoryScale,
@@ -28,7 +29,15 @@ type AccountResumeCardProps = {
 };
 
 export function AccountResumeCard({ className }: AccountResumeCardProps) {
-  const { transactionsResume } = useContext(TransactionContext);
+  const { verifyToken, unauthorizedHandler } = useUnauthorizedHandler();
+  const { transactions, transactionsResume, fetchTransactionsResume } =
+    useContext(TransactionContext);
+
+  useEffect(() => {
+    verifyToken();
+    fetchTransactionsResume().catch(unauthorizedHandler);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [transactions]);
 
   const data = {
     labels: Array.from(

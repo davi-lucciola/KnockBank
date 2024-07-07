@@ -174,7 +174,7 @@ export function RegisterForm() {
                   <FormLabel> Tipo de Conta </FormLabel>
                   <FormControl>
                     <Select
-                      onValueChange={field.onChange}
+                      onValueChange={(value) => field.onChange(Number(value))}
                       defaultValue={`${field.value}`}
                     >
                       <SelectTrigger>

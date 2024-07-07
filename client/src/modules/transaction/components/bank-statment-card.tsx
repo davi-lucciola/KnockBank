@@ -1,12 +1,21 @@
 "use client";
 
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { TransactionList } from "@/modules/transaction/components/transaction-list";
 import { TransactionContext } from "../contexts/transaction-context";
+import { useUnauthorizedHandler } from "@/modules/auth/hooks/use-unauthorized-handler";
 
 export function BankStatmentCard({ className }: { className: string }) {
-  const { transactions } = useContext(TransactionContext);
+  const { verifyToken, unauthorizedHandler } = useUnauthorizedHandler();
+  const { transactions, fetchTransactions } = useContext(TransactionContext);
+
+  useEffect(() => {
+    verifyToken();
+    fetchTransactions().catch(unauthorizedHandler);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
 
   return (
     <Card className={className}>

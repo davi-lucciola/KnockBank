@@ -73,7 +73,7 @@ class Account(BaseModel):
     def __str__(self) -> str:
         return f"<Account - {self.person.name} | {self.id}>"
 
-    def to_json(self) -> dict:
+    def to_json(self, mask_cpf: bool = False) -> dict:
         return {
             "id": self.id,
             "balance": self.balance,
@@ -81,7 +81,7 @@ class Account(BaseModel):
             "person": {
                 "id": self.person.id,
                 "name": self.person.name,
-                "cpf": self.person.cpf,
+                "cpf": self.person.cpf if mask_cpf is False else "***." + self.person.cpf[3:6] + "." + self.person.cpf[6:9] + "-**",
                 "birthDate": self.person.birth_date,
             },
             "accountType": self.account_type,

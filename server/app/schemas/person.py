@@ -6,8 +6,8 @@ from apiflask.fields import Integer, String, Date
 class PersonBasic(Schema):
     id: int = Integer()
     name: int = String()
+    cpf: str = String()
 
 
 class PersonOut(PersonBasic):
-    cpf: str = String()
     birthDate: date = Date()

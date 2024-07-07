@@ -23,6 +23,7 @@ class AccountRepository:
                 )
             )
 
+        stmt = stmt.offset(filter.get('offset')).limit(filter.get('limit'))
         return [account[0] for account in db.session.execute(stmt).all()]
 
     def get_by_id(self, id: int) -> Account | None:

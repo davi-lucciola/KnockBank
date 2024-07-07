@@ -1,12 +1,12 @@
-from apiflask import Schema
-from app.schemas import PersonOut, PersonBasic
 from datetime import date
 from typing import TypedDict
 from pycpfcnpj import cpfcnpj
+from marshmallow import validates, ValidationError
+from app.schemas import PaginationQuery, PersonOut, PersonBasic
+from string import ascii_lowercase, ascii_uppercase, digits, punctuation
+from apiflask import Schema
 from apiflask.fields import Integer, String, Date, Float, Boolean, Nested
 from apiflask.validators import OneOf, Range
-from marshmallow import validates, ValidationError
-from string import ascii_lowercase, ascii_uppercase, digits, punctuation
 
 
 class AccountIn(Schema):
@@ -65,11 +65,13 @@ class AccountIn(Schema):
                 raise ValidationError("A senha deve conter carácteres especiais.")
 
 
-class AccountQuery(Schema):
+class AccountQuery(PaginationQuery):
     search: str = String()
 
 
 class AccountFilter(TypedDict):
+    limit: int
+    offset: int 
     search: str
 
 

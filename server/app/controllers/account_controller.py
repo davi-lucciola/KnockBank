@@ -40,7 +40,7 @@ def get_all(
     """Endpoint para buscar contas cadastradas."""
     current_user: User = auth.current_user
     accounts = account_service.get_all(account_query, current_user.account.id)
-    return [account.to_json() for account in accounts]
+    return [account.to_json(mask_cpf=True) for account in accounts]
 
 
 @account_bp.post("/")

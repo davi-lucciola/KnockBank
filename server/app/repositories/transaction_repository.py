@@ -1,40 +1,59 @@
+from app.db import db
 from datetime import date
+from decimal import Decimal
 from dataclasses import dataclass
 from sqlalchemy import text, select, func
-from app.db import db
 from app.errors import InfraError
 from app.models import Transaction, TransactionType
-from app.schemas import TransactionMonthResumeDict
+from app.schemas import TTransactionMonthResume, TTransactionQuery, PaginationBuilder
 
 
 @dataclass
 class TransactionRepository:
     def get_all(
         self,
+        filter: TTransactionQuery,
         account_id: int,
-        transaction_type: TransactionType = None,
-        date: date = None,
-    ) -> list[Transaction]:
+    ):
         query = (
             select(Transaction)
             .where(Transaction.account_id == account_id)
             .order_by(Transaction.id.desc())
         )
 
-        if transaction_type is not None:
+        if filter.get("transactionType") is not None:
             query = query.where(
-                Transaction.transaction_type == transaction_type.value[0]
+                Transaction.transaction_type == filter.get("transactionType")
             )
 
-        if date is not None:
-            query = query.where(func.date(Transaction.date_time) == date)
+        if filter.get("transactionDate") is not None:
+            query = query.where(
+                func.date(Transaction.date_time) == filter.get("transactionDate")
+            )
 
-        transactions = db.session.execute(query).all()
-        return [transaction[0] for transaction in transactions]
+        data = db.paginate(
+            query, page=filter.get("pageIndex"), per_page=filter.get("pageSize")
+        )
+        return PaginationBuilder.build(
+            data.items,
+            data.total,
+            data.pages,
+            filter.get("pageIndex"),
+            filter.get("pageSize"),
+        )
+
+    def get_total_today_withdraw(self, account_id: int) -> Decimal:
+        return (
+            db.session.query(func.sum(Transaction.money))
+            .where(Transaction.account_id == account_id)
+            .where(func.date(Transaction.date_time) == (date.today()))
+            .where(Transaction.transaction_type == TransactionType.WITHDRAW.value[0])
+            .first()[0]
+        )
 
     def get_this_year_transactions(
         self, account_id: int
-    ) -> list[TransactionMonthResumeDict]:
+    ) -> list[TTransactionMonthResume]:
         query = text(
             """
             SELECT
@@ -57,7 +76,6 @@ class TransactionRepository:
         )
 
         data = db.session.execute(query, {"account_id": account_id}).all()
-
         return [{"month": row[0], "label": row[1], "amount": row[2]} for row in data]
 
     def get_by_id(self, id: int) -> Transaction | None:

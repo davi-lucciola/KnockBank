@@ -1,19 +1,16 @@
 from datetime import date
-from typing import TypedDict
 from pycpfcnpj import cpfcnpj
 from marshmallow import validates, ValidationError
-from app.schemas import PaginationQuery, PersonOut, PersonBasic
+from app.schemas import PaginationQuery, TPaginationQuery, PersonOut, PersonBasic
 from string import ascii_lowercase, ascii_uppercase, digits, punctuation
 from apiflask import Schema
 from apiflask.fields import Integer, String, Date, Float, Boolean, Nested
 from apiflask.validators import OneOf, Range
 
 
-class AccountIn(Schema):
+class BaseAccount(Schema):
     name: str = String(required=True)
-    cpf: str = String(required=True)
     birthDate: date = Date(required=True)
-    password: str = String(required=True)
     accountType: int = Integer(
         required=True,
         validate=[
@@ -21,8 +18,13 @@ class AccountIn(Schema):
         ],
     )
     dailyWithdrawalLimit: float = Float(
-        required=False, validate=[Range(min=0)], default=999
+        required=False, validate=[Range(min=0)], load_default=999
     )
+
+
+class AccountIn(BaseAccount):
+    cpf: str = String(required=True)
+    password: str = String(required=True)
 
     @validates("cpf")
     def validate_cpf(self, cpf: str, **kwargs):
@@ -69,9 +71,7 @@ class AccountQuery(PaginationQuery):
     search: str = String()
 
 
-class AccountFilter(TypedDict):
-    limit: int
-    offset: int 
+class TAccountQuery(TPaginationQuery):
     search: str
 
 

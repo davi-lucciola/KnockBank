@@ -1,19 +1,22 @@
+from app.db import db
 from dataclasses import dataclass
 from sqlalchemy import or_, select
-from app.db import db
 from app.models import Account, Person
 from app.errors import InfraError
-from app.schemas import AccountFilter
+from app.schemas import TAccountQuery, PaginationBuilder
 
 
 @dataclass
 class AccountRepository:
-    def get_all(self, filter: AccountFilter, account_id: int):
-        stmt = select(Account).where(Account.id != account_id)
+    def get_all(self, filter: TAccountQuery, account_id: int = None):
+        query = select(Account)
+
+        if account_id is not None:
+            query = query.where(Account.id != account_id)
 
         if filter.get("search") is not None:
-            stmt = (
-                stmt.join(Person, Person.id == Account.person_id)
+            query = (
+                query.join(Person, Person.id == Account.person_id)
                 .where(Account.fl_active == True)
                 .where(
                     or_(
@@ -23,8 +26,16 @@ class AccountRepository:
                 )
             )
 
-        stmt = stmt.offset(filter.get('offset')).limit(filter.get('limit'))
-        return [account[0] for account in db.session.execute(stmt).all()]
+        data = db.paginate(
+            query, page=filter.get("pageIndex"), per_page=filter.get("pageSize")
+        )
+        return PaginationBuilder.build(
+            data.items,
+            data.total,
+            data.pages,
+            filter.get("pageIndex"),
+            filter.get("pageSize"),
+        )
 
     def get_by_id(self, id: int) -> Account | None:
         return db.session.query(Account).get(id)

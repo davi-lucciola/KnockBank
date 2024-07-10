@@ -61,8 +61,8 @@ class Transaction(BaseModel):
     def to_json(self):
         return {
             "id": self.id,
-            "money": self.money,
-            "dateTime": self.date_time,
+            "money": float(self.money),
+            "dateTime": self.date_time.isoformat(),
             "transactionType": self.transaction_type,
             "account": {
                 "id": self.account.id,

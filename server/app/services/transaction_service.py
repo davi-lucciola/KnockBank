@@ -5,6 +5,7 @@ from functools import reduce
 from app.errors import NotFoundError, DomainError
 from app.models import Account, Transaction, TransactionType
 from app.repositories import AccountRepository, TransactionRepository
+from app.schemas import TTransactionQuery
 
 
 @dataclass
@@ -16,9 +17,11 @@ class TransactionService:
         default_factory=lambda: TransactionRepository()
     )
 
-    def get_all(self, account_id: int) -> list[Transaction]:
-        transactions = self.transaction_repository.get_all(account_id)
-        return transactions
+    def get_all(self, filter: TTransactionQuery, account_id: int):
+        transactions_pagination = self.transaction_repository.get_all(
+            filter, account_id
+        )
+        return transactions_pagination
 
     def get_transactions_resume(self, account_id: int):
         this_year_transactions_resume: list[dict] = []
@@ -114,17 +117,8 @@ class TransactionService:
             [withdraw_transaction, deposit_transaction]
         )
 
-    def get_today_withdraw(self, accountId: int) -> Decimal:
-        today_transactions = self.transaction_repository.get_all(
-            accountId, TransactionType.WITHDRAW, date.today()
-        )
-
-        return reduce(
-            lambda total, tran: total + tran.money, today_transactions, Decimal(0)
-        )
-
     def validate_daily_withdraw_limit(self, account: Account, new_amount: Decimal):
-        total = self.get_today_withdraw(account.id)
+        total = self.transaction_repository.get_total_today_withdraw(account.id)
 
         if -total + new_amount > account.daily_withdrawal_limit:
             raise DomainError("Limite de saque diário excedido.")

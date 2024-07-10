@@ -1,8 +1,20 @@
-import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { type ClassValue, clsx } from "clsx";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
+}
+
+export function formatCpf(value: string, removeChars: boolean = true): string {
+  if (removeChars) {
+    value = value.replace(/\D/g, ""); // remove caracteres não numéricos
+  }
+
+  return value
+    .replace(/(\d{3})(\d)/, "$1.$2")
+    .replace(/(\d{3})(\d)/, "$1.$2")
+    .replace(/(\d{3})(\d{1,2})/, "$1-$2")
+    .replace(/(-\d{2})\d+?$/, "$1");
 }
 
 export function toBrasilianReal(value: number): string | undefined {
@@ -12,18 +24,6 @@ export function toBrasilianReal(value: number): string | undefined {
         currency: "BRL",
       })
     : undefined;
-}
-
-export function formatCpf(value: string, removeChars: boolean = true): string {
-  if (removeChars) {
-    value = value.replace(/\D/g, ""); // remove caracteres não numéricos
-  }
-  
-  return value
-    .replace(/(\d{3})(\d)/, "$1.$2")
-    .replace(/(\d{3})(\d)/, "$1.$2")
-    .replace(/(\d{3})(\d{1,2})/, "$1-$2")
-    .replace(/(-\d{2})\d+?$/, "$1");
 }
 
 export function formatBrasilianReal(value: string): string {

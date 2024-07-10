@@ -43,13 +43,15 @@ class TransactionRepository:
         )
 
     def get_total_today_withdraw(self, account_id: int) -> Decimal:
-        return (
+        total = (
             db.session.query(func.sum(Transaction.money))
             .where(Transaction.account_id == account_id)
             .where(func.date(Transaction.date_time) == (date.today()))
             .where(Transaction.transaction_type == TransactionType.WITHDRAW.value[0])
             .first()[0]
         )
+        
+        return total if total is not None else Decimal(0)
 
     def get_this_year_transactions(
         self, account_id: int

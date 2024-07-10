@@ -1,19 +1,28 @@
 import { API_URL, Api, ApiResponse } from "@/lib/api";
-import { CreateAccountPayload } from "../schemas/create-account";
-import { Account, BaseAccount } from "@/modules/account/schemas/account";
-import { QueryAccount } from "@/modules/account/schemas/query-account";
+import {
+  BaseAccount,
+  Account,
+  AccountQuery,
+} from "@/modules/account/schemas/account";
+import { PaginationResponse } from "@/lib/pagination";
+import { CreateAccountPayload } from "@/modules/account/schemas/create-account";
 
 export class AccountService {
   constructor(private api: Api = new Api()) {}
 
-  async getAccounts(query: QueryAccount) {
+  async getAccounts(
+    query: AccountQuery
+  ): Promise<PaginationResponse<BaseAccount>> {
     const urlParams = new URLSearchParams({
-      limit: query.limit.toString(),
-      offset: query.offset.toString(),
       search: query.search,
+      ...(query.pageSize && { pageSize: query.pageSize.toString() }),
+      ...(query.pageIndex && { pageIndex: query.pageIndex.toString() }),
     });
 
-    const data = this.api.get<BaseAccount[]>(`${API_URL}/account`, urlParams);
+    const data = this.api.get<PaginationResponse<BaseAccount>>(
+      `${API_URL}/account`,
+      urlParams
+    );
     return data;
   }
 

@@ -7,12 +7,12 @@ from app.schemas import (
     AccountMe,
     BaseAccount,
     PaginationResponse,
+    TAccountQuery
 )
-from app.schemas.account import TAccountQuery
 from app.security import auth
-from app.services import AccountService
 from app.models import Account, User
-from app.services import TransactionService
+from app.services import AccountService
+from app.repositories import TransactionRepository
 
 
 account_bp = APIBlueprint("Account", __name__, url_prefix="/account")
@@ -21,13 +21,13 @@ account_bp = APIBlueprint("Account", __name__, url_prefix="/account")
 @account_bp.get("/me")
 @account_bp.auth_required(auth)
 @account_bp.output(AccountMe)
-def get_auth_account(transaction_service: TransactionService = TransactionService()):
+def get_auth_account(transaction_repository: TransactionRepository = TransactionRepository()):
     """Endpoint para buscar os dados da conta logada."""
     account: Account = auth.current_user.account
-    today_withdraw = transaction_service.get_today_withdraw(account.id)
+    today_withdraw = transaction_repository.get_total_today_withdraw(account.id)
 
     account_json = account.to_json()
-    account_json["todayWithdraw"] = -(today_withdraw)
+    account_json["todayWithdraw"] = float(-(today_withdraw))
     return account_json
 
 

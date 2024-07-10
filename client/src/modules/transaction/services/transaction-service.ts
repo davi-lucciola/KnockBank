@@ -1,16 +1,21 @@
 import { API_URL, Api, ApiResponse } from "@/lib/api";
-import { Transaction } from "@/modules/transaction/schemas/transaction";
-import { TransactionMonthResume } from "@/modules/transaction/schemas/transaction-month-resume";
 import {
   BasicTransferencePayload,
   TransferencePayload,
-} from "../schemas/transference";
+} from "@/modules/transaction/schemas/transference";
+import {
+  Transaction,
+  TransactionMonthResume,
+} from "@/modules/transaction/schemas/transaction";
+import { PaginationResponse } from "@/lib/pagination";
 
 export class TransactionService {
   constructor(private api: Api = new Api()) {}
 
-  async getMyTransactions(): Promise<Transaction[]> {
-    const data = this.api.get<Transaction[]>(`${API_URL}/transaction`);
+  async getMyTransactions(): Promise<PaginationResponse<Transaction>> {
+    const data = this.api.get<PaginationResponse<Transaction>>(
+      `${API_URL}/transaction`
+    );
     return data;
   }
 
@@ -21,7 +26,7 @@ export class TransactionService {
     return data;
   }
 
-  async deposit(transference: BasicTransferencePayload) {
+  async deposit(transference: BasicTransferencePayload): Promise<ApiResponse> {
     const data = this.api.post<ApiResponse, BasicTransferencePayload>(
       `${API_URL}/transaction/deposit`,
       transference
@@ -29,7 +34,7 @@ export class TransactionService {
     return data;
   }
 
-  async withdraw(transference: BasicTransferencePayload) {
+  async withdraw(transference: BasicTransferencePayload): Promise<ApiResponse> {
     const data = this.api.post<ApiResponse, BasicTransferencePayload>(
       `${API_URL}/transaction/withdraw`,
       transference
@@ -37,7 +42,7 @@ export class TransactionService {
     return data;
   }
 
-  async transfer(transference: TransferencePayload) {
+  async transfer(transference: TransferencePayload): Promise<ApiResponse> {
     const data = this.api.post<ApiResponse, TransferencePayload>(
       `${API_URL}/transaction/transfer`,
       transference

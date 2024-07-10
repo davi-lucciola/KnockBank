@@ -40,14 +40,6 @@ def get_all_transactions(
     return transactions_pagination
 
 
-@transaction_bp.get("/test-sum")
-@transaction_bp.auth_required(auth)
-def test_sum(transaction_repository=TransactionRepository()):
-    current_account: Account = auth.current_user.account
-    transaction_repository.get_total_today_withdraw(current_account.id)
-    return "success"
-
-
 @transaction_bp.get("/resume")
 @transaction_bp.auth_required(auth)
 @transaction_bp.output(TransactionMonthResume(many=True))

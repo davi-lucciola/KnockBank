@@ -1,13 +1,11 @@
 "use client";
 
-import { Api, ApiResponse, ApiUnauthorizedError } from "@/lib/api";
-import { createContext, useContext, useEffect, useState } from "react";
-import { Account, BaseAccount } from "@/modules/account/schemas/account";
-import { AccountService } from "@/modules/account/services/account-service";
-import { CreateAccountPayload } from "../schemas/create-account";
+import { Api, ApiResponse } from "@/lib/api";
+import { createContext, useContext, useState } from "react";
 import { AuthContext } from "@/modules/auth/contexts/auth-context";
-import { useUnauthorizedHandler } from "@/modules/auth/hooks/use-unauthorized-handler";
-import { QueryAccount } from "../schemas/query-account";
+import { BaseAccount, Account, AccountQuery } from "@/modules/account/schemas/account";
+import { AccountService } from "@/modules/account/services/account-service";
+import { CreateAccountPayload } from "@/modules/account/schemas/create-account";
 
 interface IAccountContext {
   isBalanceVisible: boolean;
@@ -15,7 +13,7 @@ interface IAccountContext {
   getAccount: () => Account | null;
   setAccount: (account: Account | null) => void;
   fetchAccount: () => Promise<void>;
-  getAccounts: (query: QueryAccount) => Promise<BaseAccount[]>;
+  getAccounts: (query: AccountQuery) => Promise<BaseAccount[]>;
   createAccount: (account: CreateAccountPayload) => Promise<ApiResponse>;
 }
 
@@ -26,7 +24,6 @@ export function AccountContextProvider({
   children: React.ReactNode;
 }) {
   const { getToken } = useContext(AuthContext);
-  const { verifyToken, unauthorizedHandler } = useUnauthorizedHandler();
   const [account, setAccount] = useState<Account | null>(null);
   const [isBalanceVisible, setIsBalanceVisible] = useState<boolean>(true);
   const accountService = new AccountService(new Api(getToken() ?? undefined));
@@ -36,9 +33,9 @@ export function AccountContextProvider({
     setAccount(myAccount);
   }
 
-  async function getAccounts(query: QueryAccount) {
-    const data = accountService.getAccounts(query);
-    return data;
+  async function getAccounts(query: AccountQuery) {
+    const accounts = await accountService.getAccounts(query);
+    return accounts.data;
   }
 
   function toggleIsBalanceVisible() {

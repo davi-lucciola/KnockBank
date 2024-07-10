@@ -36,9 +36,6 @@ export function DepositForm() {
   const { deposit, fetchTransactions } = useContext(TransactionContext);
   const form = useForm<BasicTransferencePayload>({
     resolver: zodResolver(BasicTransferenceSchema),
-    defaultValues: {
-      money: 0,
-    },
   });
 
   const onSubmit = async (payload: BasicTransferencePayload) => {

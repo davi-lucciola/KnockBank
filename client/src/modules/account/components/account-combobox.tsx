@@ -15,9 +15,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useContext, useEffect, useState } from "react";
-import { BaseAccount } from "../schemas/account";
-import { AccountContext } from "../contexts/account-context";
-import { QueryAccount } from "../schemas/query-account";
+import { AccountContext } from "@/modules/account/contexts/account-context";
+import { BaseAccount, AccountQuery } from "@/modules/account/schemas/account";
 
 type AccountsComboboxProps = {
   value: number;
@@ -34,9 +33,7 @@ export function AccountCombobox({
   const [commandSearch, setCommandSearch] = useState<string>("");
 
   useEffect(() => {
-    const query: QueryAccount = {
-      limit: 10,
-      offset: 0,
+    const query: AccountQuery = {
       search: commandSearch,
     };
     getAccounts(query).then((data) => setAccounts(data));

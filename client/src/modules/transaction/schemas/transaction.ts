@@ -1,3 +1,4 @@
+import { PaginationQuery } from "@/lib/pagination";
 import { Person } from "@/modules/account/schemas/person";
 
 export enum TransactionType {
@@ -13,3 +14,14 @@ export type Transaction = {
   account: Person;
   originAccount?: Person;
 };
+
+export type TransactionMonthResume = {
+  month: string;
+  label: string;
+  amount: number;
+};
+
+export type TransactionQuery = PaginationQuery & {
+  transactionDate: Date
+  transactionType: TransactionType
+}

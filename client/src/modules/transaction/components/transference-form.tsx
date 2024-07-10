@@ -37,9 +37,6 @@ export function TransferenceForm() {
   const [open, setOpen] = useState<boolean>(false);
   const form = useForm<TransferencePayload>({
     resolver: zodResolver(TransferenceSchema),
-    defaultValues: {
-      money: 0,
-    },
   });
 
   const onSubmit = async (payload: TransferencePayload) => {

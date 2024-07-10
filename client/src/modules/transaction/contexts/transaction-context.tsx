@@ -1,14 +1,16 @@
 "use client";
 
 import { Api, ApiResponse } from "@/lib/api";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import { AuthContext } from "@/modules/auth/contexts/auth-context";
 import {
   BasicTransferencePayload,
   TransferencePayload,
 } from "@/modules/transaction/schemas/transference";
-import { Transaction } from "@/modules/transaction/schemas/transaction";
-import { TransactionMonthResume } from "@/modules/transaction/schemas/transaction-month-resume";
+import {
+  Transaction,
+  TransactionMonthResume,
+} from "@/modules/transaction/schemas/transaction";
 import { TransactionService } from "@/modules/transaction/services/transaction-service";
 
 interface ITransactionContext {
@@ -40,7 +42,7 @@ export function TransactionContextProvider({
 
   async function fetchTransactions() {
     const myTransactions = await transactionService.getMyTransactions();
-    setTransactions(myTransactions);
+    setTransactions(myTransactions.data);
   }
 
   async function fetchTransactionsResume() {

@@ -1,4 +1,5 @@
-import { Person } from "./person";
+import { PaginationQuery } from "@/lib/pagination";
+import { Person } from "@/modules/account/schemas/person";
 
 export enum AccountType {
   CURRENT_ACCOUNT = 1,
@@ -18,4 +19,8 @@ export type Account = BaseAccount & {
   dailyWithdrawLimit: number;
   todayWithdraw: number;
   accountType: AccountType;
+};
+
+export type AccountQuery = PaginationQuery & {
+  search: string;
 };

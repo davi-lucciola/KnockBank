@@ -10,13 +10,14 @@ import {
 import {
   Transaction,
   TransactionMonthResume,
+  TransactionQuery,
 } from "@/modules/transaction/schemas/transaction";
 import { TransactionService } from "@/modules/transaction/services/transaction-service";
+import { PaginationResponse } from "@/lib/pagination";
 
 interface ITransactionContext {
-  transactions: Transaction[];
-  setTransactions: (transactions: Transaction[]) => void;
-  fetchTransactions: () => Promise<void>;
+  transactions: PaginationResponse<Transaction> | undefined;
+  fetchTransactions: (query?: TransactionQuery) => Promise<void>;
   transactionsResume: TransactionMonthResume[];
   setTransactionsResume: (transactionsResume: TransactionMonthResume[]) => void;
   fetchTransactionsResume: () => Promise<void>;
@@ -32,7 +33,8 @@ export function TransactionContextProvider({
   children: React.ReactNode;
 }) {
   const { getToken } = useContext(AuthContext);
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [transactions, setTransactions] =
+    useState<PaginationResponse<Transaction>>();
   const [transactionsResume, setTransactionsResume] = useState<
     TransactionMonthResume[]
   >([]);
@@ -40,9 +42,9 @@ export function TransactionContextProvider({
     new Api(getToken() ?? undefined)
   );
 
-  async function fetchTransactions() {
-    const myTransactions = await transactionService.getMyTransactions();
-    setTransactions(myTransactions.data);
+  async function fetchTransactions(query: TransactionQuery = {}) {
+    const myTransactions = await transactionService.getMyTransactions(query);
+    setTransactions(myTransactions);
   }
 
   async function fetchTransactionsResume() {
@@ -69,7 +71,6 @@ export function TransactionContextProvider({
     <TransactionContext.Provider
       value={{
         transactions,
-        setTransactions,
         fetchTransactions,
         transactionsResume,
         setTransactionsResume,

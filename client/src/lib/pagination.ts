@@ -9,4 +9,4 @@ export type PaginationResponse<T> = {
   pageSize: number;
   pageIndex: number;
   totalPages: number;
-}
+};

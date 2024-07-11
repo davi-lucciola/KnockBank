@@ -43,9 +43,13 @@ export const UpdateAccountSchema = z.object({
     })
     .transform((date: Date) => date.toISOString().split("T")[0]),
   accountType: z.number(),
-  dailyWithdrawLimit: z
+  dailyWithdrawLimit: z.coerce
     .string()
-    .transform((value) => Number(value.replace(/[^0-9]/g, "")) / 100)
+    .transform((value) =>
+      isNaN(Number(value))
+        ? Number(value.replace(/[^0-9]/g, "")) / 100
+        : Number(value)
+    )
     .refine(
       (value) => value >= 0,
       "Você só pode transferir valores positivos."

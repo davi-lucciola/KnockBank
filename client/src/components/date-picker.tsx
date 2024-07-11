@@ -20,7 +20,7 @@ import { format, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 type DatePickerProps = {
-  date: string;
+  date: string | Date;
   disabled?: boolean;
   onChange: (...event: any[]) => void;
 };
@@ -39,6 +39,10 @@ export function DatePicker({ date, disabled, onChange }: DatePickerProps) {
     new Date(currentDate.getFullYear(), currentDate.getMonth())
   );
 
+  if (typeof date == "object") {
+    date = date.toISOString();
+  }
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -50,7 +54,11 @@ export function DatePicker({ date, disabled, onChange }: DatePickerProps) {
             !date && "text-muted-foreground"
           )}
         >
-          {date ? format(parseISO(date), "dd/MM/yyyy") : <span>Escolha uma data</span>}
+          {date ? (
+            format(parseISO(date), "dd/MM/yyyy")
+          ) : (
+            <span>Escolha uma data</span>
+          )}
           <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
         </Button>
       </PopoverTrigger>

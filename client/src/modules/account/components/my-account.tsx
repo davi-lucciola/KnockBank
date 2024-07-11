@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext, useEffect, useState } from "react";
+import { ChangeEvent, useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -89,7 +89,6 @@ export function MyAccount({ account }: { account: Account | null }) {
     }
   };
 
-  console.log(form.getValues())
   return (
     <Dialog
       open={open}
@@ -208,7 +207,7 @@ export function MyAccount({ account }: { account: Account | null }) {
               {editMode ? (
                 <>
                   <div className="p-1 rounded-full duration-300 hover:bg-secondary hover:cursor-pointer">
-                    <ArrowLeft size={32} onClick={onEditChange} />
+                    <ArrowLeft size={24} onClick={onEditChange} />
                   </div>
                   <Button type="submit" className="w-full max-w-52">
                     Salvar

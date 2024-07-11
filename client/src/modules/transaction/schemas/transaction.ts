@@ -22,6 +22,6 @@ export type TransactionMonthResume = {
 };
 
 export type TransactionQuery = PaginationQuery & {
-  transactionDate: Date
-  transactionType: TransactionType
-}
+  transactionDate?: Date;
+  transactionType?: TransactionType;
+};

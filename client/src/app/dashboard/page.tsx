@@ -55,7 +55,7 @@ function Content({ account }: DashboardProps) {
         account={account}
       />
       <AccountResumeCard className="w-full flex flex-col row-start-3 lg:row-start-2 lg:col-span-2" />
-      <BankStatmentCard className="h-full lg:row-span-2 lg:col-start-3" />
+      <BankStatmentCard className="h-full flex flex-col justify-between lg:row-span-2 lg:col-start-3" />
     </main>
   );
 }

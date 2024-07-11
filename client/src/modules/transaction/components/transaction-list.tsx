@@ -7,7 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 export function TransactionList({
   transactions,
 }: {
-  transactions: Transaction[];
+  transactions?: Transaction[];
 }) {
   return (
     <ul className="flex flex-col gap-4">

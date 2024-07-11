@@ -6,15 +6,30 @@ import {
 import {
   Transaction,
   TransactionMonthResume,
+  TransactionQuery,
 } from "@/modules/transaction/schemas/transaction";
 import { PaginationResponse } from "@/lib/pagination";
 
 export class TransactionService {
   constructor(private api: Api = new Api()) {}
 
-  async getMyTransactions(): Promise<PaginationResponse<Transaction>> {
+  async getMyTransactions(
+    query: TransactionQuery
+  ): Promise<PaginationResponse<Transaction>> {
+    const urlParams = new URLSearchParams({
+      ...(query.pageSize && { pageSize: query.pageSize.toString() }),
+      ...(query.pageIndex && { pageIndex: query.pageIndex.toString() }),
+      ...(query.transactionDate && {
+        transactionDate: query.transactionDate.toISOString(),
+      }),
+      ...(query.transactionType && {
+        transactionDate: query.transactionType.toString(),
+      }),
+    });
+
     const data = this.api.get<PaginationResponse<Transaction>>(
-      `${API_URL}/transaction`
+      `${API_URL}/transaction`,
+      urlParams
     );
     return data;
   }

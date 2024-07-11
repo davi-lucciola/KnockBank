@@ -63,8 +63,8 @@ const config = {
         "light-gray": "#EDEDED",
       },
       spacing: {
-        '128': '32rem',
-        '191': '47.75rem',
+        "128": "32rem",
+        "176": "44rem",
       },
       borderRadius: {
         lg: "var(--radius)",

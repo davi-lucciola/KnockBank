@@ -1,11 +1,9 @@
 from dataclasses import dataclass, field
-from datetime import date
 from decimal import Decimal
-from functools import reduce
 from app.errors import NotFoundError, DomainError
 from app.models import Account, Transaction, TransactionType
 from app.repositories import AccountRepository, TransactionRepository
-from app.schemas import TTransactionQuery
+from app.utils.types import TTransactionQuery, TTransactionMonthResume
 
 
 @dataclass
@@ -24,7 +22,7 @@ class TransactionService:
         return transactions_pagination
 
     def get_transactions_resume(self, account_id: int):
-        this_year_transactions_resume: list[dict] = []
+        this_year_transactions_resume: list[TTransactionMonthResume] = []
         data = self.transaction_repository.get_this_year_transactions(account_id)
         month_map = {
             1: "Jan",
@@ -89,7 +87,7 @@ class TransactionService:
     def transfer(
         self, account_sender_id: int, account_reciver_id: int, money: float
     ) -> None:
-        account_reciver: Account = self.account_repository.get_by_id(account_reciver_id)
+        account_reciver = self.account_repository.get_by_id(account_reciver_id)
 
         if account_reciver is None:
             raise NotFoundError("Conta destino não encontrada.")

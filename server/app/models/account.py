@@ -11,7 +11,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import Mapped, relationship, mapped_column
 from app.models import BaseModel, Person, User
-from app.schemas import TBaseAccount
+from app.utils.types import TBaseAccount
 
 
 class AccountType(Enum):

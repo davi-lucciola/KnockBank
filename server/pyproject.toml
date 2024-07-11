@@ -5,7 +5,7 @@ description = "Knock Bank API"
 authors = ["Davi Lucciola <davilucciola14@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.11"
 apiflask = "^2.0.2"
 flask-sqlalchemy = "^3.1.1"
 flask-migrate = "^4.0.5"

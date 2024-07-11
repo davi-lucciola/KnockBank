@@ -4,12 +4,15 @@ from dataclasses import dataclass
 from sqlalchemy import or_, select
 from app.models import Account, Person
 from app.errors import InfraError
-from app.schemas import TAccountQuery, PaginationBuilder
+from app.utils.types import TPaginationResponse, TAccountQuery
+from app.utils.builders import PaginationBuilder
 
 
 @dataclass
 class AccountRepository:
-    def get_all(self, filter: TAccountQuery, account_id: int = None):
+    def get_all(
+        self, filter: TAccountQuery, account_id: int = None
+    ) -> TPaginationResponse[Account]:
         query = select(Account)
 
         if account_id is not None:

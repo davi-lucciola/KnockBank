@@ -7,8 +7,8 @@ from app.schemas import (
     AccountMe,
     BaseAccount,
     PaginationResponse,
-    TAccountQuery,
 )
+from app.utils.types import TAccountQuery, TBaseAccount, TAccount
 from app.security import auth
 from app.models import Account, User
 from app.services import AccountService
@@ -50,7 +50,7 @@ def get_all(
         account_query, current_user.account.id
     )
 
-    accounts: list[Account] = accounts_pagination.get("data")
+    accounts = accounts_pagination.get("data")
     accounts_pagination.update(
         {"data": [account.to_json(mask_cpf=True) for account in accounts]}
     )
@@ -62,18 +62,11 @@ def get_all(
 @account_bp.input(AccountIn, arg_name="account_in")
 @account_bp.output(Response, status_code=HTTPStatus.CREATED)
 def create_account(
-    account_in: dict, account_service: AccountService = AccountService()
+    account_in: TAccount, account_service: AccountService = AccountService()
 ):
     """Endpoint para cadastrar uma nova conta."""
-    account = Account(
-        account_in.get("name"),
-        account_in.get("cpf"),
-        account_in.get("birthDate"),
-        account_in.get("password"),
-        account_in.get("accountType"),
-        account_in.get("dailyWithdrawLimit"),
-    )
-    account: Account = account_service.create(account)
+    account = Account(**account_in)
+    account = account_service.create(account)
     return {
         "message": "Conta cadastrada com sucesso.",
         "detail": {"created_id": account.id},
@@ -85,7 +78,9 @@ def create_account(
 @account_bp.input(BaseAccount, arg_name="updated_account")
 @account_bp.output(Response, status_code=HTTPStatus.CREATED)
 def update_account(
-    id: int, updated_account: dict, account_service: AccountService = AccountService()
+    id: int,
+    updated_account: TBaseAccount,
+    account_service: AccountService = AccountService(),
 ):
     """
     Endpoint para atualizar uma conta.\n
@@ -93,12 +88,9 @@ def update_account(
     Somente o dono da conta pode atualizar as informações.
     """
     current_user: User = auth.current_user
-    account: Account = account_service.update(
-        id, updated_account, current_user.account.id
-    )
+    account_service.update(id, updated_account, current_user.id)
     return {
         "message": "Conta atualizada com sucesso.",
-        "detail": {"created_id": account.id},
     }
 
 

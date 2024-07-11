@@ -6,7 +6,12 @@ from dataclasses import dataclass
 from sqlalchemy import text, select, func
 from app.errors import InfraError
 from app.models import Transaction, TransactionType
-from app.schemas import TTransactionMonthResume, TTransactionQuery, PaginationBuilder
+from app.utils.types import (
+    TPaginationResponse,
+    TTransactionQuery,
+    TTransactionMonthResume,
+)
+from app.utils.builders import PaginationBuilder
 
 
 @dataclass
@@ -15,7 +20,7 @@ class TransactionRepository:
         self,
         filter: TTransactionQuery,
         account_id: int,
-    ):
+    ) -> TPaginationResponse[Transaction]:
         query = (
             select(Transaction)
             .where(Transaction.account_id == account_id)
@@ -35,6 +40,7 @@ class TransactionRepository:
         data = db.paginate(
             query, page=filter.get("pageIndex"), per_page=filter.get("pageSize")
         )
+
         return PaginationBuilder.build(
             data.items,
             data.total,

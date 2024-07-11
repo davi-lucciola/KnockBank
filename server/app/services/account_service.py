@@ -1,8 +1,8 @@
 from dataclasses import dataclass, field
 from app.models import Account
-from app.schemas import TAccountQuery, TBaseAccount
-from app.repositories import AccountRepository, TransactionRepository
 from app.errors import NotFoundError, DomainError, ForbiddenError
+from app.repositories import AccountRepository, TransactionRepository
+from app.utils.types import TAccountQuery, TBaseAccount
 
 
 @dataclass

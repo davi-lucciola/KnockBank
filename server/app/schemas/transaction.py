@@ -1,9 +1,8 @@
 from apiflask import Schema
-from typing import TypedDict
 from apiflask.validators import OneOf
 from datetime import datetime as dt, date
 from marshmallow import validates, ValidationError
-from app.schemas import TPaginationQuery, PaginationQuery, PersonOut
+from app.schemas import PaginationQuery, PersonOut
 from apiflask.fields import Float, Integer, Nested, DateTime, Date, String
 
 
@@ -14,13 +13,6 @@ class TransactionQuery(PaginationQuery):
             OneOf([1, 2, None], error="Tipo de transação inválida, deve ser 1 ou 2.")
         ],
     )
-
-
-class TTransactionQuery(TPaginationQuery):
-    pageSize: int
-    pageIndex: int
-    transactionDate: date
-    transactionType: int
 
 
 class TransactionIn(Schema):
@@ -49,9 +41,3 @@ class TransactionMonthResume(Schema):
     month: str = String()
     label: str = String()
     amount: float = Float()
-
-
-class TTransactionMonthResume(TypedDict):
-    month: int
-    label: str
-    amount: float

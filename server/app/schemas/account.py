@@ -1,12 +1,11 @@
 from datetime import date
-from typing import TypedDict
 from pycpfcnpj import cpfcnpj
-from marshmallow import validates, ValidationError
-from app.schemas import PaginationQuery, TPaginationQuery, PersonOut, PersonBasic
-from string import ascii_lowercase, ascii_uppercase, digits, punctuation
 from apiflask import Schema
 from apiflask.fields import Integer, String, Date, Float, Boolean, Nested
 from apiflask.validators import OneOf, Range
+from marshmallow import validates, ValidationError
+from string import ascii_lowercase, ascii_uppercase, digits, punctuation
+from app.schemas import PaginationQuery, PersonOut, PersonBasic
 
 
 class BaseAccount(Schema):
@@ -21,13 +20,6 @@ class BaseAccount(Schema):
     dailyWithdrawLimit: float = Float(
         required=False, validate=[Range(min=0)], load_default=999
     )
-
-
-class TBaseAccount(TypedDict):
-    name: str
-    birthDate: date
-    accountType: int
-    dailyWithdrawLimit: float
 
 
 class AccountIn(BaseAccount):
@@ -77,10 +69,6 @@ class AccountIn(BaseAccount):
 
 class AccountQuery(PaginationQuery):
     search: str = String()
-
-
-class TAccountQuery(TPaginationQuery):
-    search: str
 
 
 class AccountOut(Schema):

@@ -34,3 +34,4 @@ react-front
 .venv
 __pycache__
 users.txt
+.env

@@ -3,9 +3,14 @@
 import { Api, ApiResponse } from "@/lib/api";
 import { createContext, useContext, useState } from "react";
 import { AuthContext } from "@/modules/auth/contexts/auth-context";
-import { BaseAccount, Account, AccountQuery } from "@/modules/account/schemas/account";
+import {
+  BaseAccount,
+  Account,
+  AccountQuery,
+  CreateAccountPayload,
+  UpdateAccountPayload,
+} from "@/modules/account/schemas/account";
 import { AccountService } from "@/modules/account/services/account-service";
-import { CreateAccountPayload } from "@/modules/account/schemas/create-account";
 
 interface IAccountContext {
   isBalanceVisible: boolean;
@@ -15,6 +20,7 @@ interface IAccountContext {
   fetchAccount: () => Promise<void>;
   getAccounts: (query: AccountQuery) => Promise<BaseAccount[]>;
   createAccount: (account: CreateAccountPayload) => Promise<ApiResponse>;
+  updateAccount: (account: UpdateAccountPayload) => Promise<ApiResponse>;
 }
 
 export const AccountContext = createContext({} as IAccountContext);
@@ -53,6 +59,13 @@ export function AccountContextProvider({
     return data;
   }
 
+  async function updateAccount(
+    payload: UpdateAccountPayload
+  ): Promise<ApiResponse> {
+    const data = accountService.updateAccount(account?.id!, payload);
+    return data;
+  }
+
   return (
     <AccountContext.Provider
       value={{
@@ -63,6 +76,7 @@ export function AccountContextProvider({
         fetchAccount,
         getAccounts,
         createAccount,
+        updateAccount,
       }}
     >
       {children}

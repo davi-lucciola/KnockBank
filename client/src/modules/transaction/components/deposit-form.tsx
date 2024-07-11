@@ -62,7 +62,13 @@ export function DepositForm() {
   };
 
   return (
-    <Dialog open={open} onOpenChange={(open) => setOpen(open)}>
+    <Dialog
+      open={open}
+      onOpenChange={(open) => {
+        setOpen(open);
+        form.setValue("money", 0);
+      }}
+    >
       <DialogTrigger asChild>
         <Button className="w-full h-16 text-xl flex gap-4" variant="success">
           Depositar
@@ -83,7 +89,7 @@ export function DepositForm() {
                 <FormItem>
                   <FormLabel> Valor </FormLabel>
                   <FormControl>
-                    <MoneyInput  {...field} />
+                    <MoneyInput {...field} />
                   </FormControl>
                   <FormDescription>Valor que deseja depositar.</FormDescription>
                   <FormMessage />

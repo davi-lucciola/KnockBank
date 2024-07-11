@@ -62,7 +62,13 @@ export function WithdrawForm() {
   };
 
   return (
-    <Dialog open={open} onOpenChange={(open) => setOpen(open)}>
+    <Dialog
+      open={open}
+      onOpenChange={(open) => {
+        setOpen(open);
+        form.setValue("money", 0);
+      }}
+    >
       <DialogTrigger asChild>
         <Button
           className="w-full h-16 text-xl flex gap-4"

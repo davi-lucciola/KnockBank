@@ -16,11 +16,12 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { CalendarIcon } from "lucide-react";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 type DatePickerProps = {
   date: string;
+  disabled?: boolean;
   onChange: (...event: any[]) => void;
 };
 
@@ -32,7 +33,7 @@ function getLastHundredYears(currentYear: number) {
   return lastHundredYears;
 }
 
-export function DatePicker({ date, onChange }: DatePickerProps) {
+export function DatePicker({ date, disabled, onChange }: DatePickerProps) {
   const currentDate = new Date();
   const [displayedMounth, setDisplayedMounth] = useState<Date>(
     new Date(currentDate.getFullYear(), currentDate.getMonth())
@@ -43,12 +44,13 @@ export function DatePicker({ date, onChange }: DatePickerProps) {
       <PopoverTrigger asChild>
         <Button
           variant={"outline"}
+          disabled={disabled ?? false}
           className={cn(
             "pl-3 text-left font-normal",
             !date && "text-muted-foreground"
           )}
         >
-          {date ? format(date, "dd/MM/yyyy") : <span>Escolha uma data</span>}
+          {date ? format(parseISO(date), "dd/MM/yyyy") : <span>Escolha uma data</span>}
           <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
         </Button>
       </PopoverTrigger>

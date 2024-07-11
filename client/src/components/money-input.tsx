@@ -8,8 +8,8 @@ export const MoneyInput = React.forwardRef<HTMLInputElement, InputProps>(
       <Input
         type="text"
         placeholder="R$ 10,00"
-        value={formatBrasilianReal(toBrasilianReal((value as number) ?? 0)!)}
         ref={ref}
+        value={formatBrasilianReal(toBrasilianReal((value as number) ?? 0)!)}
         onChange={(event) => {
           const { value } = event.target;
           event.target.value = formatBrasilianReal(value);

@@ -3,9 +3,10 @@ import {
   BaseAccount,
   Account,
   AccountQuery,
+  UpdateAccountPayload,
 } from "@/modules/account/schemas/account";
 import { PaginationResponse } from "@/lib/pagination";
-import { CreateAccountPayload } from "@/modules/account/schemas/create-account";
+import { CreateAccountPayload } from "@/modules/account/schemas/account";
 
 export class AccountService {
   constructor(private api: Api = new Api()) {}
@@ -34,6 +35,17 @@ export class AccountService {
   async createAccount(payload: CreateAccountPayload): Promise<ApiResponse> {
     const data = this.api.post<ApiResponse, CreateAccountPayload>(
       `${API_URL}/account`,
+      payload
+    );
+    return data;
+  }
+
+  async updateAccount(
+    accountId: number,
+    payload: UpdateAccountPayload
+  ): Promise<ApiResponse> {
+    const data = this.api.put<ApiResponse, UpdateAccountPayload>(
+      `${API_URL}/account/${accountId}`,
       payload
     );
     return data;

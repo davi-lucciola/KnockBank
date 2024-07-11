@@ -30,7 +30,7 @@ import {
 import {
   CreateAccountPayload,
   CreateAccountSchema,
-} from "@/modules/account/schemas/create-account";
+} from "@/modules/account/schemas/account";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";

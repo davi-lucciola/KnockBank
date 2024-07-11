@@ -1,3 +1,4 @@
+import logging
 from app.db import db
 from dataclasses import dataclass
 from sqlalchemy import or_, select
@@ -29,6 +30,7 @@ class AccountRepository:
         data = db.paginate(
             query, page=filter.get("pageIndex"), per_page=filter.get("pageSize")
         )
+
         return PaginationBuilder.build(
             data.items,
             data.total,
@@ -58,5 +60,6 @@ class AccountRepository:
             db.session.commit()
             return account
         except Exception as err:
+            logging.error(err)
             db.session.rollback()
             raise InfraError("Houve um error ao salvar a conta.")

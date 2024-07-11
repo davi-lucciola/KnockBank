@@ -1,3 +1,4 @@
+import logging
 from app.db import db
 from datetime import date
 from decimal import Decimal
@@ -50,7 +51,7 @@ class TransactionRepository:
             .where(Transaction.transaction_type == TransactionType.WITHDRAW.value[0])
             .first()[0]
         )
-        
+
         return total if total is not None else Decimal(0)
 
     def get_this_year_transactions(
@@ -90,7 +91,7 @@ class TransactionRepository:
             db.session.commit()
             return transaction
         except Exception as err:
-            print(err)
+            logging.error(err)
             db.session.rollback()
             raise InfraError("Houve um error ao salvar a transação.")
 
@@ -99,5 +100,6 @@ class TransactionRepository:
             db.session.add_all(transactions)
             db.session.commit()
         except Exception as err:
+            logging.error(err)
             db.session.rollback()
             raise InfraError("Houve um error ao salvar as transações.")

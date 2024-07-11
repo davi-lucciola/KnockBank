@@ -16,12 +16,12 @@ def verify_token(
     user_repository: UserRepository = UserRepository(),
 ) -> User:
     if not token:
-        raise UnauthorizedError("Token inválido")
+        raise UnauthorizedError("É obrigatório estar autenticado.")
 
-    user: User = user_repository.get_by_token(token)
+    user = user_repository.get_by_token(token)
 
     if user is None:
-        raise UnauthorizedError("Token expirado.")
+        raise UnauthorizedError("Você foi deslogado.")
 
     try:
         jwt_service.decode_token(token)

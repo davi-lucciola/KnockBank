@@ -1,4 +1,5 @@
 from datetime import date
+from typing import TypedDict
 from pycpfcnpj import cpfcnpj
 from marshmallow import validates, ValidationError
 from app.schemas import PaginationQuery, TPaginationQuery, PersonOut, PersonBasic
@@ -17,9 +18,16 @@ class BaseAccount(Schema):
             OneOf([1, 2, 3, 4], error="Tipo de Conta Inválida. Deve ser 1, 2, 3 ou 4.")
         ],
     )
-    dailyWithdrawalLimit: float = Float(
+    dailyWithdrawLimit: float = Float(
         required=False, validate=[Range(min=0)], load_default=999
     )
+
+
+class TBaseAccount(TypedDict):
+    name: str
+    birthDate: date
+    accountType: int
+    dailyWithdrawLimit: float
 
 
 class AccountIn(BaseAccount):

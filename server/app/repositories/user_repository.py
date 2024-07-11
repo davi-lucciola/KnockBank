@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+import logging
 from app.db import db
 from app.models import User
 from app.errors import InfraError
@@ -20,5 +21,6 @@ class UserRepository:
             db.session.commit()
             return user
         except Exception as err:
+            logging.error(err)
             db.session.rollback()
             raise InfraError("Houve um error ao salvar o usuario.")

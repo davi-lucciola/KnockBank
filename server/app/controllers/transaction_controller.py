@@ -1,5 +1,4 @@
 from apiflask import APIBlueprint
-from app.repositories.transaction_repository import TransactionRepository
 from app.security import auth
 from app.models import Transaction, Account, User
 from app.schemas import (
@@ -34,9 +33,10 @@ def get_all_transactions(
     )
 
     transactions: list[Transaction] = transactions_pagination.get("data")
-    transactions_pagination["data"] = [
-        transaction.to_json() for transaction in transactions
-    ]
+    transactions_pagination.update(
+        {"data": [transaction.to_json() for transaction in transactions]}
+    )
+
     return transactions_pagination
 
 
@@ -48,9 +48,11 @@ def get_transactions_resume(
 ):
     """Endpoint para buscar resumo de transações realizadas no ano."""
     current_user: User = auth.current_user
+
     transactions_resume = transaction_service.get_transactions_resume(
         current_user.account.id
     )
+
     return transactions_resume
 
 
@@ -73,9 +75,11 @@ def withdraw_money(
 ):
     """Endpoint para realizar um saque da conta logada."""
     current_account: Account = auth.current_user.account
+
     new_transaction = transaction_service.withdraw(
         current_account.id, transaction_data.get("money")
     )
+
     return {
         "message": "Saque realizado com sucesso.",
         "detail": {"created_id": new_transaction.id},
@@ -91,9 +95,11 @@ def deposit_money(
 ):
     """Endpoint para realizar um depósito na conta logada."""
     current_account: Account = auth.current_user.account
+
     new_transaction = transaction_service.deposit(
         current_account.id, transaction_data.get("money")
     )
+
     return {
         "message": "Deposito realizado com sucesso.",
         "detail": {"created_id": new_transaction.id},
@@ -109,9 +115,11 @@ def transfer_money(
 ):
     """Endpoint para realizar uma transferencia para outra conta registrada."""
     current_account: Account = auth.current_user.account
+
     transaction_service.transfer(
         current_account.id,
         transaction_data.get("accountId"),
         transaction_data.get("money"),
     )
+
     return {"message": "Transferência realizada com sucesso."}

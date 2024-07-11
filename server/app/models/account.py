@@ -11,6 +11,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import Mapped, relationship, mapped_column
 from app.models import BaseModel, Person, User
+from app.schemas import TBaseAccount
 
 
 class AccountType(Enum):
@@ -40,7 +41,7 @@ class Account(BaseModel):
     )
     fl_active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
     account_type: Mapped[int] = mapped_column(Integer, nullable=False)
-    daily_withdrawal_limit: Mapped[Decimal] = mapped_column(
+    daily_withdraw_limit: Mapped[Decimal] = mapped_column(
         Numeric(10, 2), nullable=False, default=Decimal(999)
     )
 
@@ -61,23 +62,23 @@ class Account(BaseModel):
         birth_date: date,
         password: str,
         account_type: int,
-        daily_withdrawal_limit: float = 999,
+        daily_withdraw_limit: float = 999,
     ) -> None:
         self.person = Person(name, cpf, birth_date)
         self.user = User(password)
         self.account_type = account_type
         self.balance = 0
-        self.daily_withdrawal_limit = daily_withdrawal_limit
+        self.daily_withdraw_limit = daily_withdraw_limit
         self.fl_active = True
 
     def __str__(self) -> str:
         return f"<Account - {self.person.name} | {self.id}>"
 
-    def update(self, data: dict) -> None:
+    def update(self, data: TBaseAccount) -> None:
         self.person.name = data.get("name")
         self.person.birth_date = data.get("birthDate")
         self.account_type = data.get("accountType")
-        self.daily_withdrawal_limit = data.get("dailyWithdrawalLimit")
+        self.daily_withdraw_limit = data.get("dailyWithdrawLimit")
 
     def to_json(self, mask_cpf: bool = False) -> dict:
         return {
@@ -99,5 +100,5 @@ class Account(BaseModel):
                 "birthDate": self.person.birth_date,
             },
             "accountType": self.account_type,
-            "dailyWithdrawLimit": float(self.daily_withdrawal_limit),
+            "dailyWithdrawLimit": float(self.daily_withdraw_limit),
         }

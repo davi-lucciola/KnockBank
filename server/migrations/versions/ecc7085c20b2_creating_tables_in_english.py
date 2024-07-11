@@ -43,7 +43,7 @@ def upgrade():
         sa.Column("fl_active", sa.Boolean(), nullable=False),
         sa.Column("account_type", sa.Integer(), nullable=False),
         sa.Column(
-            "daily_withdrawal_limit", sa.Numeric(precision=10, scale=2), nullable=False
+            "daily_withdraw_limit", sa.Numeric(precision=10, scale=2), nullable=False
         ),
         sa.Column("person_id", sa.BigInteger(), nullable=False),
         sa.Column("user_id", sa.BigInteger(), nullable=False),

@@ -120,5 +120,5 @@ class TransactionService:
     def validate_daily_withdraw_limit(self, account: Account, new_amount: Decimal):
         total = self.transaction_repository.get_total_today_withdraw(account.id)
 
-        if -total + new_amount > account.daily_withdrawal_limit:
+        if -total + new_amount > account.daily_withdraw_limit:
             raise DomainError("Limite de saque diário excedido.")

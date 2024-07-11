@@ -1,7 +1,7 @@
 from datetime import date
 from app.models import BaseModel
-from sqlalchemy.orm import Mapped, relationship
-from sqlalchemy import Column, BigInteger, String, Date
+from sqlalchemy.orm import Mapped, relationship, mapped_column
+from sqlalchemy import BigInteger, String, Date
 import typing
 
 if typing.TYPE_CHECKING:
@@ -11,10 +11,10 @@ if typing.TYPE_CHECKING:
 class Person(BaseModel):
     __tablename__ = "persons"
 
-    id: int = Column(BigInteger, primary_key=True, autoincrement=True)
-    cpf: str = Column(String(11), nullable=False, unique=True)
-    name: str = Column(String(255), nullable=False)
-    birth_date: date = Column(Date, nullable=False)
+    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    cpf: Mapped[str] = mapped_column(String(11), nullable=False, unique=True)
+    name: Mapped[str] = mapped_column(String(255), nullable=False)
+    birth_date: Mapped[date] = mapped_column(Date, nullable=False)
 
     account: Mapped["Account"] = relationship("Account", back_populates="person")
 

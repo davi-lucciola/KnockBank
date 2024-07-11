@@ -7,7 +7,7 @@ from app.schemas import (
     AccountMe,
     BaseAccount,
     PaginationResponse,
-    TAccountQuery
+    TAccountQuery,
 )
 from app.security import auth
 from app.models import Account, User
@@ -21,13 +21,15 @@ account_bp = APIBlueprint("Account", __name__, url_prefix="/account")
 @account_bp.get("/me")
 @account_bp.auth_required(auth)
 @account_bp.output(AccountMe)
-def get_auth_account(transaction_repository: TransactionRepository = TransactionRepository()):
+def get_auth_account(
+    transaction_repository: TransactionRepository = TransactionRepository(),
+):
     """Endpoint para buscar os dados da conta logada."""
     account: Account = auth.current_user.account
     today_withdraw = transaction_repository.get_total_today_withdraw(account.id)
 
     account_json = account.to_json()
-    account_json["todayWithdraw"] = float(-(today_withdraw))
+    account_json.update({"todayWithdraw": float(-(today_withdraw))})
     return account_json
 
 
@@ -49,9 +51,10 @@ def get_all(
     )
 
     accounts: list[Account] = accounts_pagination.get("data")
-    accounts_pagination["data"] = [
-        account.to_json(mask_cpf=True) for account in accounts
-    ]
+    accounts_pagination.update(
+        {"data": [account.to_json(mask_cpf=True) for account in accounts]}
+    )
+
     return accounts_pagination
 
 
@@ -68,7 +71,7 @@ def create_account(
         account_in.get("birthDate"),
         account_in.get("password"),
         account_in.get("accountType"),
-        account_in.get("dailyWithdrawalLimit"),
+        account_in.get("dailyWithdrawLimit"),
     )
     account: Account = account_service.create(account)
     return {

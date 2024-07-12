@@ -1,13 +1,5 @@
-<div style="display: flex; gap: 8px;">
-
 # Knock Bank
-
-<span style="margin-top: 4px">
-
 ![KnockBankLogo](./assets/knock_bank_logo.svg)
-
-</span>
-</div>
 
 O KnockBank é uma plataforma bancaria que possibilita que os seus usuários realizem transações de deposito, saque e trânsferência para outras contas na plataforma, também disponibilizando um grafico de vizualização de entradas e saidas totais por mês do ano corrente.
 

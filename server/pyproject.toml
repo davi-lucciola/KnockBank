@@ -1,6 +1,6 @@
 [tool.poetry]
-name = "app"
-version = "0.1.0"
+name = "knockbankapi"
+version = "1.0.0"
 description = "Knock Bank API"
 authors = ["Davi Lucciola <davilucciola14@gmail.com>"]
 

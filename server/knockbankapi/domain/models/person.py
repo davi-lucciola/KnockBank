@@ -1,8 +1,8 @@
 import typing
 from datetime import date
-from sqlalchemy import BigInteger, String, Date
+from sqlalchemy import String, Date
 from sqlalchemy.orm import Mapped, relationship, mapped_column
-from knockbankapi.domain.models import BaseModel
+from knockbankapi.domain.models import BaseModel, BigIntegerPK
 
 
 if typing.TYPE_CHECKING:
@@ -12,7 +12,7 @@ if typing.TYPE_CHECKING:
 class Person(BaseModel):
     __tablename__ = "persons"
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(BigIntegerPK, primary_key=True, autoincrement=True)
     cpf: Mapped[str] = mapped_column(String(11), nullable=False, unique=True)
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     birth_date: Mapped[date] = mapped_column(Date, nullable=False)

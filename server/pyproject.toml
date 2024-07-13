@@ -1,8 +1,9 @@
 [tool.poetry]
 name = "knockbankapi"
-version = "1.0.0"
+version = "1.0.1"
 description = "Knock Bank API"
 authors = ["Davi Lucciola <davilucciola14@gmail.com>"]
+package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.11"

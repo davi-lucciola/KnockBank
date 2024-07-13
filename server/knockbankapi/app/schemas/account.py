@@ -1,11 +1,16 @@
 from datetime import date
 from pycpfcnpj import cpfcnpj
 from apiflask import Schema
-from apiflask.fields import Integer, String, Date, Float, Boolean, Nested
+from apiflask.fields import Integer, String, Date, Float, Boolean, Nested, List
 from apiflask.validators import OneOf, Range
 from marshmallow import validates, ValidationError
 from string import ascii_lowercase, ascii_uppercase, digits, punctuation
-from knockbankapi.app.schemas import PaginationQuery, PersonOut, PersonBasic
+from knockbankapi.app.schemas import (
+    PaginationQuery,
+    PaginationResponse,
+    PersonOut,
+    PersonBasic,
+)
 
 
 class BaseAccount(Schema):
@@ -64,7 +69,7 @@ class AccountIn(BaseAccount):
                 raise ValidationError("A senha deve conter numeros.")
 
             if have_special is False:
-                raise ValidationError("A senha deve conter carácteres especiais.")
+                raise ValidationError("A senha deve conter caracteres especiais.")
 
 
 class AccountQuery(PaginationQuery):
@@ -75,6 +80,10 @@ class AccountOut(Schema):
     id: int = Integer()
     flActive: bool = Boolean()
     person: dict = Nested(PersonBasic)
+
+
+class PaginationAccountOut(PaginationResponse):
+    data = List(Nested(AccountOut))
 
 
 class AccountMe(AccountOut):

@@ -1,6 +1,6 @@
 from apiflask import APIBlueprint
 from knockbankapi.app.auth import auth
-from knockbankapi.app.schemas import UserLogin
+from knockbankapi.app.schemas import Response, UserLogin, TokenOut
 from knockbankapi.domain.dto import UserLoginDTO
 from knockbankapi.domain.models import User
 from knockbankapi.domain.services import AuthService
@@ -11,6 +11,7 @@ auth_bp = APIBlueprint("Auth", __name__)
 
 @auth_bp.post("/login")
 @auth_bp.input(UserLogin, arg_name="user_login_dto")
+@auth_bp.output(TokenOut)
 def login(user_login_dto: UserLoginDTO, auth_service: AuthService = AuthService()):
     """
     Endpoint para realização do login.\n
@@ -23,6 +24,7 @@ def login(user_login_dto: UserLoginDTO, auth_service: AuthService = AuthService(
 
 @auth_bp.delete("/logout")
 @auth_bp.auth_required(auth)
+@auth_bp.output(Response)
 def logout(auth_service: AuthService = AuthService()):
     """
     Endpoint para deslogar o usuário.\n

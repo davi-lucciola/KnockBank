@@ -1,5 +1,4 @@
 import os
-import logging
 from jose import jwt
 from dataclasses import dataclass
 

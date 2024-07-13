@@ -30,7 +30,7 @@ def upgrade():
     # ### end Alembic commands ###
     with op.batch_alter_table("accounts", schema=None) as batch_op:
         batch_op.create_check_constraint(
-            "check_accounts_balance_positive", "balance > 0"
+            "check_accounts_balance_positive", "balance >= 0"
         )
 
 

@@ -1,9 +1,9 @@
 from datetime import datetime as dt, date
 from apiflask import Schema
-from apiflask.validators import OneOf, Range
-from apiflask.fields import Float, Integer, Nested, DateTime, Date, String
+from apiflask.validators import OneOf
+from apiflask.fields import Float, Integer, Nested, DateTime, Date, String, List
 from marshmallow import validates, ValidationError
-from knockbankapi.app.schemas import PaginationQuery, PersonOut
+from knockbankapi.app.schemas import PaginationQuery, PaginationResponse, PersonBasic
 
 
 class TransactionQuery(PaginationQuery):
@@ -33,9 +33,12 @@ class TransactionOut(Schema):
     money: float = Float()
     dateTime: dt = DateTime()
     transactionType: int = Integer()
-    account: dict = Nested(PersonOut)
-    originAccount: dict = Nested(PersonOut)
+    account: dict = Nested(PersonBasic)
+    originAccount: dict = Nested(PersonBasic)
 
+
+class PaginationTransactionOut(PaginationResponse):
+    data = List(Nested(TransactionOut))
 
 class TransactionMonthResume(Schema):
     month: str = String()

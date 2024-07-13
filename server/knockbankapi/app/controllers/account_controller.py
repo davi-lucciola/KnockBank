@@ -7,7 +7,7 @@ from knockbankapi.app.schemas import (
     AccountQuery,
     AccountMe,
     BaseAccount,
-    PaginationResponse,
+    PaginationAccountOut,
 )
 from knockbankapi.domain.dto import AccountQueryDTO, CreateAccountDTO, UpdateAccountDTO
 from knockbankapi.domain.models import Account, User
@@ -37,7 +37,7 @@ def get_auth_account(
 @account_bp.get("/")
 @account_bp.auth_required(auth)
 @account_bp.input(AccountQuery, location="query", arg_name="account_query")
-@account_bp.output(PaginationResponse)
+@account_bp.output(PaginationAccountOut)
 def get_all(
     account_query: AccountQueryDTO, account_service: AccountService = AccountService()
 ):

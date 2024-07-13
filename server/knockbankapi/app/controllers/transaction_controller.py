@@ -5,7 +5,7 @@ from knockbankapi.app.schemas import (
     TransactionQuery,
     TransactionTransfer,
     TransactionMonthResume,
-    PaginationResponse,
+    PaginationTransactionOut,
 )
 from knockbankapi.domain.dto import (
     TransactionQueryDTO,
@@ -22,7 +22,7 @@ transaction_bp = APIBlueprint("Transaction", __name__, url_prefix="/transaction"
 @transaction_bp.get("/")
 @transaction_bp.auth_required(auth)
 @transaction_bp.input(TransactionQuery, location="query", arg_name="transaction_query")
-@transaction_bp.output(PaginationResponse)
+@transaction_bp.output(PaginationTransactionOut)
 def get_all_transactions(
     transaction_query: TransactionQueryDTO,
     transaction_service: TransactionService = TransactionService(),

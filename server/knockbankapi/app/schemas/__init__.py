@@ -4,7 +4,7 @@ from apiflask.fields import String, Dict
 
 class Response(Schema):
     message: str = String()
-    detail: dict = Dict(default={})
+    detail: dict = Dict(load_default={})
 
 
 from .pagination import *

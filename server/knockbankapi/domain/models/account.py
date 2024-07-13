@@ -3,7 +3,6 @@ from decimal import Decimal
 from datetime import date
 from sqlalchemy import (
     CheckConstraint,
-    BigInteger,
     ForeignKey,
     Integer,
     Numeric,
@@ -11,7 +10,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import Mapped, relationship, mapped_column
 from knockbankapi.domain.dto import UpdateAccountDTO
-from knockbankapi.domain.models import BaseModel, Person, User
+from knockbankapi.domain.models import BaseModel, BigIntegerPK, Person, User
 
 
 class AccountType(Enum):
@@ -32,10 +31,10 @@ class AccountType(Enum):
 class Account(BaseModel):
     __tablename__ = "accounts"
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(BigIntegerPK, primary_key=True, autoincrement=True)
     balance: Mapped[Decimal] = mapped_column(
         Numeric(10, 2),
-        CheckConstraint("balance > 0"),
+        CheckConstraint("balance >= 0"),
         nullable=False,
         default=Decimal(0),
     )
@@ -46,12 +45,12 @@ class Account(BaseModel):
     )
 
     person_id: Mapped[int] = mapped_column(
-        BigInteger, ForeignKey("persons.id"), nullable=False, unique=True
+        BigIntegerPK, ForeignKey("persons.id"), nullable=False, unique=True
     )
     person: Mapped["Person"] = relationship("Person", back_populates="account")
 
     user_id: Mapped[int] = mapped_column(
-        BigInteger, ForeignKey("users.id"), nullable=False, unique=True
+        BigIntegerPK, ForeignKey("users.id"), nullable=False, unique=True
     )
     user: Mapped["User"] = relationship("User", back_populates="account")
 

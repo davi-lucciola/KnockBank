@@ -1,8 +1,8 @@
 import typing
 from sqlalchemy.orm import Mapped, relationship, mapped_column
-from sqlalchemy import BigInteger, String
+from sqlalchemy import String
 from werkzeug.security import generate_password_hash, check_password_hash
-from knockbankapi.domain.models import BaseModel
+from knockbankapi.domain.models import BaseModel, BigIntegerPK
 
 if typing.TYPE_CHECKING:
     from knockbankapi.domain.models import Account
@@ -11,7 +11,7 @@ if typing.TYPE_CHECKING:
 class User(BaseModel):
     __tablename__ = "users"
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(BigIntegerPK, primary_key=True, autoincrement=True)
     password: Mapped[str] = mapped_column(String(255), nullable=False)
     token: Mapped[str] = mapped_column(String(255), nullable=True)
     refresh_token: Mapped[str] = mapped_column(String(255), nullable=True)

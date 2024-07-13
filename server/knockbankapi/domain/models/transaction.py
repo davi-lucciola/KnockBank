@@ -1,9 +1,9 @@
 from enum import Enum
 from datetime import datetime as dt
 from decimal import Decimal
-from sqlalchemy import Integer, BigInteger, DateTime, Numeric, ForeignKey
+from sqlalchemy import Integer, DateTime, Numeric, ForeignKey
 from sqlalchemy.orm import Mapped, relationship, mapped_column
-from knockbankapi.domain.models import BaseModel, Account
+from knockbankapi.domain.models import BaseModel, BigIntegerPK, Account
 
 
 class TransactionType(Enum):
@@ -22,18 +22,18 @@ class TransactionType(Enum):
 class Transaction(BaseModel):
     __tablename__ = "transactions"
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(BigIntegerPK, primary_key=True, autoincrement=True)
     date_time: Mapped[dt] = mapped_column(DateTime, nullable=False, default=dt.now())
     money: Mapped[Decimal] = mapped_column(Numeric(10, 2), nullable=False)
     transaction_type: Mapped[int] = mapped_column(Integer, nullable=False)
 
     account_id: Mapped[int] = mapped_column(
-        BigInteger, ForeignKey("accounts.id"), nullable=False
+        BigIntegerPK, ForeignKey("accounts.id"), nullable=False
     )
     account: Mapped["Account"] = relationship("Account", foreign_keys=[account_id])
 
     origin_account_id: Mapped[int] = mapped_column(
-        BigInteger, ForeignKey("accounts.id"), nullable=True
+        BigIntegerPK, ForeignKey("accounts.id"), nullable=True
     )
     origin_account: Mapped["Account"] = relationship(
         "Account", foreign_keys=[origin_account_id]
@@ -62,7 +62,7 @@ class Transaction(BaseModel):
         return {
             "id": self.id,
             "money": float(self.money),
-            "dateTime": self.date_time.isoformat(),
+            "dateTime": self.date_time,
             "transactionType": self.transaction_type,
             "account": {
                 "id": self.account.id,

@@ -46,7 +46,11 @@ class Transaction(BaseModel):
         account: Account,
         origin_account: Account = None,
     ) -> None:
-        self.money = Decimal(money)
+        self.money = (
+            Decimal(-abs(money))
+            if transaction_type == TransactionType.WITHDRAW
+            else Decimal(abs(money))
+        )
         self.transaction_type = transaction_type.value[0]
         self.account_id = account.id
         self.account = account

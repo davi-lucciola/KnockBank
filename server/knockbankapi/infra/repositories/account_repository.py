@@ -44,7 +44,7 @@ class AccountRepository:
         )
 
     def get_by_id(self, id: int) -> Account | None:
-        return db.session.query(Account).get(id)
+        return db.session.get(Account, id)
 
     def get_by_cpf(self, cpf: str) -> Account | None:
         account: Account = (

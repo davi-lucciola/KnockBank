@@ -51,7 +51,7 @@ class AccountService:
             -self.transaction_repository.get_total_today_withdraw(account.id)
         )
 
-        if updated_account_dto["dailyWithdrawLimit"] < today_total_withdraw:
+        if updated_account_dto["dailyWithdrawLimit"] < float(today_total_withdraw):
             raise DomainError(
                 "Você não pode alterar o limite de saque diário para um menor do que já foi sacado hoje."
             )

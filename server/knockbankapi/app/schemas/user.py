@@ -7,6 +7,7 @@ class UserLogin(Schema):
     cpf: str = String(required=True, validate=[Length(equal=11)])
     password: str = String(required=True)
 
+
 class TokenOut(Schema):
     type = String()
     accessToken = String()

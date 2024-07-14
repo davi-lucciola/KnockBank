@@ -23,7 +23,9 @@ class BaseAccount(Schema):
         ],
     )
     dailyWithdrawLimit: float = Float(
-        required=False, validate=[Range(min=0)], load_default=999
+        required=False,
+        validate=[Range(min=0, error="O limite de saque diário deve maior que zero.")],
+        load_default=999,
     )
 
 

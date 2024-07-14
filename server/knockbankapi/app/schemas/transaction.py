@@ -40,6 +40,7 @@ class TransactionOut(Schema):
 class PaginationTransactionOut(PaginationResponse):
     data = List(Nested(TransactionOut))
 
+
 class TransactionMonthResume(Schema):
     month: str = String()
     label: str = String()

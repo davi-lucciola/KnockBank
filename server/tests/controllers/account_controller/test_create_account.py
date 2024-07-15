@@ -1,3 +1,4 @@
+from datetime import date, timedelta
 from http import HTTPStatus
 from flask.testing import FlaskClient
 from tests.mocks import create_account_dto
@@ -136,6 +137,20 @@ def test_create_account_password_with_special_characters(client: FlaskClient):
 
 
 # Bussiness Rules
+def test_create_account_minor_not_allowed(client: FlaskClient):
+    data = create_account_dto()
+    minor_age = date.today() - timedelta(days=365 * 6) # 6 Years
+    data["birthDate"] = minor_age.isoformat()
+    response = client.post("/account", json=data)
+
+    assert response.status_code == HTTPStatus.BAD_REQUEST
+    assert response.json is not None
+
+    json: dict = response.json
+
+    assert json.get("message") == "Você precisa ser maior de idade para criar uma conta."
+
+
 def test_create_account_cpf_already_exists(client: FlaskClient):
     data = create_account_dto()
     data["cpf"] = "58228952040"  # Tester1 CPF

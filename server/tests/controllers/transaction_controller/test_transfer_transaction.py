@@ -108,7 +108,7 @@ def test_transfer_no_available_balance(
     assert response.json is not None
 
     json: dict = response.json
-    assert json.get("message") == "Não é possivel transferir mais do que há na conta."
+    assert json.get("message") == "Saldo insuficiente."
 
 
 def test_transfer_no_daily_limit_available(

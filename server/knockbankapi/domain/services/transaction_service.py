@@ -44,7 +44,7 @@ class TransactionService:
 
         money: Decimal = Decimal(transaction_dto["money"])
         if account.balance - money < 0:
-            raise DomainError("Não é possivel sacar mais do que há na conta.")
+            raise DomainError("Saldo insuficiente.")
 
         self.validate_daily_withdraw_limit(account, money)
         account.balance -= money
@@ -85,7 +85,7 @@ class TransactionService:
 
         money: Decimal = Decimal(transaction_transfer_dto["money"])
         if account_sender.balance - money < 0:
-            raise DomainError("Não é possivel transferir mais do que há na conta.")
+            raise DomainError("Saldo insuficiente.")
 
         self.validate_daily_withdraw_limit(account_sender, money)
 

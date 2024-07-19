@@ -1,11 +1,12 @@
 import tomllib
+from typing import Type
 from apiflask import APIFlask
 from flask_cors import CORS
 from .infra import Config, init_db
 from .app import account_bp, auth_bp, transaction_bp
 
 
-def create_app(config=Config) -> APIFlask:
+def create_app(config: Type[Config] = Config) -> APIFlask:
     # Flask APP
     app = APIFlask(__name__, title=Config.API_TITLE)
 

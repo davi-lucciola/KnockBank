@@ -6,7 +6,7 @@ from knockbankapi import APIFlask, create_app
 from knockbankapi.domain.dto import UserLoginDTO
 from knockbankapi.domain.models import Account
 from knockbankapi.infra import Config, db
-from knockbankapi.infra.repositories import AccountRepository
+from knockbankapi.infra.repositories import AccountRepository, TransactionRepository
 
 
 class TestingConfig(Config):
@@ -59,6 +59,11 @@ def client(app: APIFlask):
 @pytest.fixture(scope="module")
 def account_repository():
     return AccountRepository()
+
+
+@pytest.fixture(scope="module")
+def transaction_repository():
+    return TransactionRepository()
 
 
 @pytest.fixture(scope="function")

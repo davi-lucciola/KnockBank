@@ -1,3 +1,4 @@
+from datetime import date
 from dataclasses import dataclass, field
 from knockbankapi.domain.models import Account
 from knockbankapi.domain.dto import AccountQueryDTO, CreateAccountDTO, UpdateAccountDTO
@@ -27,6 +28,11 @@ class AccountService:
         return account
 
     def create(self, create_account_dto: CreateAccountDTO):
+        person_age = (date.today() - create_account_dto["birthDate"]).days // 365
+
+        if person_age < 18:
+            raise DomainError("Você precisa ser maior de idade para criar uma conta.")
+
         account: Account | None = self.account_repository.get_by_cpf(
             create_account_dto["cpf"]
         )
@@ -51,7 +57,7 @@ class AccountService:
             -self.transaction_repository.get_total_today_withdraw(account.id)
         )
 
-        if updated_account_dto["dailyWithdrawLimit"] < today_total_withdraw:
+        if updated_account_dto["dailyWithdrawLimit"] < float(today_total_withdraw):
             raise DomainError(
                 "Você não pode alterar o limite de saque diário para um menor do que já foi sacado hoje."
             )

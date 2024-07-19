@@ -1,0 +1,50 @@
+name: Tests
+
+on: 
+  push:
+    branches: [main, dev]
+
+  pull_request:
+      branches: [main]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      
+      # API - Build
+      - name: Using Python
+        uses: actions/setup-python@v4
+        with: 
+          python-version: "3.11"
+      - name: Install Dependencies
+        run: |
+          cd server
+          pip install --upgrade pip
+          pip install --no-cache-dir poetry
+          poetry config virtualenvs.create false
+          poetry install
+
+      # API - Tests
+      - name: Running Tests
+        run: |
+          cd server
+          poetry run pytest
+        env:
+          TOKEN_SECRET: testkey
+      
+      # Web - Build
+      - name: Using NodeJS
+        uses: actions/setup-node@v4
+        with: 
+          node-version: "20.8.0"
+      - name: Building NextJS
+        run: |
+          cd client
+          npm install
+          npm run build
+
+      # Web - Tests
+      # Work In Progress

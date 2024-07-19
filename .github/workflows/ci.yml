@@ -1,0 +1,36 @@
+name: Continuos Integration - CI
+
+on: 
+  workflow_run:
+    workflows: ["Tests"]
+    types:
+      - completed
+    branches-ignore:
+      - "dev"
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      
+      # Login Dockerhub
+      - name: Login Dockerhub
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: docker login -u
+
+      # API - Docker Image
+      - name: Build Docker Image (API)
+        run: docker build ./server -t knockbank-api
+
+      - name: Push Docker Image (API)
+        run: docker push davilucciola/knockbank-api:latest
+      
+      # Web - Docker Image
+      # - name: Build Web Image
+      #   run: |
+      #     cd client
+      #     docker build ./client -t knockbank-web

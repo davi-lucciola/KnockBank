@@ -70,8 +70,8 @@ def detail_transaction(
 
 
 @transaction_bp.post("/withdraw")
-@transaction_bp.input(TransactionIn, arg_name="transaction_dto")
 @transaction_bp.auth_required(auth)
+@transaction_bp.input(TransactionIn, arg_name="transaction_dto")
 def withdraw_money(
     transaction_dto: TransactionDTO,
     transaction_service: TransactionService = TransactionService(),
@@ -100,8 +100,8 @@ def deposit_money(
 
 
 @transaction_bp.post("/transfer")
-@transaction_bp.input(TransactionTransfer, arg_name="transaction_transfer_dto")
 @transaction_bp.auth_required(auth)
+@transaction_bp.input(TransactionTransfer, arg_name="transaction_transfer_dto")
 def transfer_money(
     transaction_transfer_dto: TransactionTransferDTO,
     transaction_service: TransactionService = TransactionService(),

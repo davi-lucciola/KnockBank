@@ -1,12 +1,15 @@
 name: Continuos Integration - CI
 
 on: 
-  workflow_run:
-    workflows: ["Tests"]
-    types:
-      - completed
-    branches-ignore:
-      - "dev"
+  push:
+    branches: [main]
+
+  # workflow_run:
+  #   workflows: ["Tests"]
+  #   types:
+  #     - completed
+  #   branches-ignore:
+  #     - "dev"
 
 jobs:
   ci:
@@ -24,7 +27,9 @@ jobs:
 
       # API - Docker Image
       - name: Build Docker Image (API)
-        run: docker build ./server -t knockbank-api
+        run: |
+          cd server
+          docker build -t knockbank-api .
 
       - name: Push Docker Image (API)
         run: docker push davilucciola/knockbank-api:latest

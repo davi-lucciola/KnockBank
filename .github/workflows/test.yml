@@ -1,0 +1,62 @@
+name: Tests
+
+on: 
+  push:
+    branches: [main]
+
+  pull_request:
+      branches: [dev]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      
+      # API - Build
+      - name: Using Python
+        uses: actions/setup-python@v4
+        with: 
+          python-version: "3.11"
+      - name: Install Dependencies
+        run: |
+          cd server
+          pip install --upgrade pip
+          pip install --no-cache-dir poetry
+          poetry config virtualenvs.create false
+          poetry install
+
+      # API - Tests
+      - name: Running Tests
+        run: |
+          cd server
+          poetry run pytest
+        env:
+          TOKEN_SECRET: testkey
+
+      # API - Docker Build
+      - name: Build Api Image
+        run: |
+          cd server
+          docker build . -t knockbank-api
+      
+      # Web - Build
+      - name: Using NodeJS
+        uses: actions/setup-node@v4
+        with: 
+          node-version: "20.8.0"
+      - name: Install Dependencies
+        run: |
+          cd client
+          npm install
+          npm run build
+
+      # Web - Tests
+      # Work In Progress
+
+      # Web - Docker Build
+      - name: Build Web Image
+        run: |
+          cd client
+          docker build . -t knockbank-web

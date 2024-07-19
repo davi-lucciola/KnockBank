@@ -34,19 +34,13 @@ jobs:
           poetry run pytest
         env:
           TOKEN_SECRET: testkey
-
-      # API - Docker Build
-      - name: Build Api Image
-        run: |
-          cd server
-          docker build . -t knockbank-api
       
       # Web - Build
       - name: Using NodeJS
         uses: actions/setup-node@v4
         with: 
           node-version: "20.8.0"
-      - name: Install Dependencies
+      - name: Building NextJS
         run: |
           cd client
           npm install
@@ -54,9 +48,3 @@ jobs:
 
       # Web - Tests
       # Work In Progress
-
-      # Web - Docker Build
-      - name: Build Web Image
-        run: |
-          cd client
-          docker build . -t knockbank-web

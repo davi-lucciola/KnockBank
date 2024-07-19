@@ -29,7 +29,7 @@ jobs:
       - name: Build Docker Image (API)
         run: |
           cd server
-          docker build -t knockbank-api .
+          docker build -t davilucciola/knockbank-api .
 
       - name: Push Docker Image (API)
         run: docker push davilucciola/knockbank-api:latest

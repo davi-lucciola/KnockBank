@@ -13,7 +13,9 @@ jobs:
     steps:   
       # Running API Container
       - name: Pull Docker Image (API)
-        run: sudo docker pull davilucciola/knockbank-api:latest
+        run: |
+          sudo docker image rm -f davilucciola/knockbank-api 
+          sudo docker pull davilucciola/knockbank-api:latest
       
       - name: Delete Old Container (API)
         run: sudo docker rm -f knockbank-api || true
@@ -26,4 +28,4 @@ jobs:
           sudo docker run --name knockbank-api -p 5000:5000 \
           -e TOKEN_SECRET=$TOKEN_SECRET \
           -e SQLALCHEMY_DATABASE_URI=$SQLALCHEMY_DATABASE_URI \
-          -d davilucciola/knockbank-api
+          -d davilucciola/knockbank-api --restart=always

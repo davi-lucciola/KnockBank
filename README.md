@@ -61,3 +61,4 @@ A API foi construida utilizando a arquitetura MVC com camada de Servico (MVC+Ser
 - Service encapsulando as regras de negócio, que através da injeção de dependencia dos repositories facilita os testes unitários.
 
 WORK IN PROGRESS...
+

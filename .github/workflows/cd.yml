@@ -25,7 +25,7 @@ jobs:
           TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
           SQLALCHEMY_DATABASE_URI: ${{ secrets.SQLALCHEMY_DATABASE_URI }}
         run: |
-          sudo docker run --name knockbank-api -p 5000:5000 \
+          sudo docker run --name knockbank-api -p 5000:5000 --restart=always \
           -e TOKEN_SECRET=$TOKEN_SECRET \
           -e SQLALCHEMY_DATABASE_URI=$SQLALCHEMY_DATABASE_URI \
-          -d davilucciola/knockbank-api --restart=always
+          -d davilucciola/knockbank-api

@@ -31,7 +31,7 @@ class TransactionTransfer(TransactionIn):
 class TransactionOut(Schema):
     id: int = Integer()
     money: float = Float()
-    dateTime: dt = DateTime()
+    dateTime: dt = DateTime("%Y-%m-%dT%H:%M:%S-03:00")
     transactionType: int = Integer()
     account: dict = Nested(PersonBasic)
     originAccount: dict = Nested(PersonBasic)

@@ -183,4 +183,4 @@ def test_transfer_successfully(
             == TransactionType.WITHDRAW.value[0]
         )
         assert transactions["data"][0].origin_account.id is not None
-        assert transactions["data"][0].origin_account.id == data["accountId"] 
+        assert transactions["data"][0].origin_account.id == data["accountId"]

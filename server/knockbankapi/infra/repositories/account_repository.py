@@ -46,15 +46,17 @@ class AccountRepository:
     def get_by_id(self, id: int) -> Account | None:
         return db.session.get(Account, id)
 
-    def get_by_cpf(self, cpf: str) -> Account | None:
-        account: Account = (
+    def get_by_cpf(self, cpf: str, active: bool = None) -> Account | None:
+        query = (
             db.session.query(Account)
             .join(Person, Account.person_id == Person.id)
             .where(Person.cpf == cpf)
-            .first()
         )
 
-        return account
+        if active is not None:
+            query = query.where(Account.fl_active == active)
+
+        return query.first()
 
     def save(self, account: Account) -> Account:
         try:

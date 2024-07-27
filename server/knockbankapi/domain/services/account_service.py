@@ -33,9 +33,7 @@ class AccountService:
         if person_age < 18:
             raise DomainError("Você precisa ser maior de idade para criar uma conta.")
 
-        account: Account | None = self.account_repository.get_by_cpf(
-            create_account_dto["cpf"]
-        )
+        account = self.account_repository.get_by_cpf(create_account_dto["cpf"], True)
 
         if account is not None:
             raise DomainError(f"Esse CPF já tem uma conta cadastrada.")
@@ -65,12 +63,6 @@ class AccountService:
         account.update(updated_account_dto)
         return self.account_repository.save(account)
 
-    def activate(self, account_id: int):
-        account: Account = self.account_repository.get_by_id(account_id)
-
-        account.fl_active = True
-        self.account_repository.save(account)
-
     def deactivate(self, account_id: int, user_id: int):
         account: Account = self.account_repository.get_by_id(account_id)
 
@@ -78,4 +70,5 @@ class AccountService:
             raise ForbiddenError("Você não tem permissão para bloquear essa conta.")
 
         account.fl_active = False
+        account.user.token = None
         self.account_repository.save(account)

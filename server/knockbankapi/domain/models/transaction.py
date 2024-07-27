@@ -23,7 +23,9 @@ class Transaction(BaseModel):
     __tablename__ = "transactions"
 
     id: Mapped[int] = mapped_column(BigIntegerPK, primary_key=True, autoincrement=True)
-    date_time: Mapped[dt] = mapped_column(DateTime, nullable=False, default=dt.now())
+    date_time: Mapped[dt] = mapped_column(
+        DateTime, nullable=False, default=dt.now
+    )
     money: Mapped[Decimal] = mapped_column(Numeric(10, 2), nullable=False)
     transaction_type: Mapped[int] = mapped_column(Integer, nullable=False)
 

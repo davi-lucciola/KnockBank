@@ -9,7 +9,6 @@ export function DailyWithdrawProgress({
   todayWithdraw?: number;
   dailyWithdrawLimit?: number;
 }) {
-  // const usagePercent = (todayWithdraw * 100) / dailyWithdrawLimit;
   return (
     <div className="w-full flex flex-col">
       <div className="flex flex-row mb-2 items-center justify-between">

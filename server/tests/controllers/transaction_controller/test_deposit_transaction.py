@@ -9,7 +9,7 @@ from knockbankapi.infra.repositories import AccountRepository, TransactionReposi
 def test_deposit_unauthorized(client: FlaskClient):
     # Test
     data = transaction_dto()
-    response = client.post(f"/transaction/deposit", json=data)
+    response = client.post("/api/transaction/deposit", json=data)
 
     # Assertion
     assert response.status_code == HTTPStatus.UNAUTHORIZED
@@ -23,7 +23,7 @@ def test_deposit_unauthorized(client: FlaskClient):
 def test_withdraw_required_fields(client: FlaskClient, authorization: dict):
     # Test
     data = {}
-    response = client.post(f"/transaction/deposit", json=data, headers=authorization)
+    response = client.post("/api/transaction/deposit", json=data, headers=authorization)
 
     # Assertion
     assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
@@ -43,7 +43,7 @@ def test_withdraw_invalid_money(client: FlaskClient, authorization: dict):
     # Test
     data = transaction_dto()
     data["money"] = -200
-    response = client.post(f"/transaction/deposit", json=data, headers=authorization)
+    response = client.post("/api/transaction/deposit", json=data, headers=authorization)
 
     # Assertion
     assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
@@ -75,7 +75,7 @@ def test_withdraw_successfully(
 
         assert account.balance == 0
 
-    response = client.post(f"/transaction/deposit", json=data, headers=authorization)
+    response = client.post("/api/transaction/deposit", json=data, headers=authorization)
 
     assert response.status_code == HTTPStatus.OK
     assert response.json is not None

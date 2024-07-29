@@ -23,7 +23,7 @@ class AuthService:
             or account.user.verify_password_hash(user_login_dto["password"]) is False
         ):
             raise ForbiddenError("Credenciais Inválidas.")
-        
+
         if account is not None and account.fl_active is False:
             raise ForbiddenError(
                 "Você não pode entrar em uma conta bloqueada, por favor entre em contato com o suporte para desbloquear sua conta."

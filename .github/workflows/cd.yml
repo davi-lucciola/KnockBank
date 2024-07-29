@@ -1,31 +1,32 @@
 name: Continuos Delivery - CD
 
 on: 
-  workflow_run:
-    workflows: ["Continuos Integration - CI"]
-    types:
-      - completed
+  # workflow_run:
+  #   workflows: ["Continuos Integration - CI"]
+  #   types:
+  #     - requested
+  workflow_dispatch:
 
 jobs:
   aws:
     runs-on: self-hosted
 
-    steps:   
-      # Running API Container
-      - name: Pull Docker Image (API)
-        run: |
-          sudo docker image rm -f davilucciola/knockbank-api 
-          sudo docker pull davilucciola/knockbank-api:latest
+#     steps:   
+#       # Running API Container
+#       - name: Pull Docker Image (API)
+#         run: |
+#           sudo docker image rm -f davilucciola/knockbank-api 
+#           sudo docker pull davilucciola/knockbank-api:latest
       
-      - name: Delete Old Container (API)
-        run: sudo docker rm -f knockbank-api || true
+#       - name: Delete Old Container (API)
+#         run: sudo docker rm -f knockbank-api || true
       
-      - name: Run Docker Container (API)
-        env:
-          TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
-          SQLALCHEMY_DATABASE_URI: ${{ secrets.SQLALCHEMY_DATABASE_URI }}
-        run: |
-          sudo docker run --name knockbank-api -p 5000:5000 --restart=always \
-          -e TOKEN_SECRET=$TOKEN_SECRET \
-          -e SQLALCHEMY_DATABASE_URI=$SQLALCHEMY_DATABASE_URI \
-          -d davilucciola/knockbank-api
+#       - name: Run Docker Container (API)
+#         env:
+#           TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
+#           SQLALCHEMY_DATABASE_URI: ${{ secrets.SQLALCHEMY_DATABASE_URI }}
+#         run: |
+#           sudo docker run --name knockbank-api -p 5000:5000 --restart=always \
+#           -e TOKEN_SECRET=$TOKEN_SECRET \
+#           -e SQLALCHEMY_DATABASE_URI=$SQLALCHEMY_DATABASE_URI \
+#           -d davilucciola/knockbank-api

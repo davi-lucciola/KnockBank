@@ -9,7 +9,7 @@ from knockbankapi.infra.repositories import AccountRepository, TransactionReposi
 def test_transfer_unauthorized(client: FlaskClient):
     # Test
     data = transaction_transfer_dto()
-    response = client.post(f"/transaction/transfer", json=data)
+    response = client.post("/api/transaction/transfer", json=data)
 
     # Assertion
     assert response.status_code == HTTPStatus.UNAUTHORIZED
@@ -23,7 +23,7 @@ def test_transfer_unauthorized(client: FlaskClient):
 def test_transfer_required_fields(client: FlaskClient, authorization: dict):
     # Test
     data = {}
-    response = client.post(f"/transaction/transfer", json=data, headers=authorization)
+    response = client.post("/api/transaction/transfer", json=data, headers=authorization)
 
     # Assertion
     assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
@@ -44,7 +44,7 @@ def test_transfer_invalid_money(client: FlaskClient, authorization: dict):
     # Test
     data = transaction_transfer_dto()
     data["money"] = -200
-    response = client.post(f"/transaction/transfer", json=data, headers=authorization)
+    response = client.post("/api/transaction/transfer", json=data, headers=authorization)
 
     # Assertion
     assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
@@ -64,7 +64,7 @@ def test_transfer_invalid_account(client: FlaskClient, authorization: dict):
     # Test
     data = transaction_transfer_dto()
     data["accountId"] = 1  # AccountId of token
-    response = client.post(f"/transaction/transfer", json=data, headers=authorization)
+    response = client.post("/api/transaction/transfer", json=data, headers=authorization)
 
     # Assertion
     assert response.status_code == HTTPStatus.BAD_REQUEST
@@ -82,7 +82,7 @@ def test_transfer_account_not_found(client: FlaskClient, authorization: dict):
     # Test
     data = transaction_transfer_dto()
     data["accountId"] = 0  # AccountId of token
-    response = client.post(f"/transaction/transfer", json=data, headers=authorization)
+    response = client.post("/api/transaction/transfer", json=data, headers=authorization)
 
     # Assertion
     assert response.status_code == HTTPStatus.NOT_FOUND
@@ -102,7 +102,7 @@ def test_transfer_no_available_balance(
 
         assert account.balance < data["money"]
 
-    response = client.post(f"/transaction/transfer", json=data, headers=authorization)
+    response = client.post("/api/transaction/transfer", json=data, headers=authorization)
 
     assert response.status_code == HTTPStatus.BAD_REQUEST
     assert response.json is not None
@@ -128,7 +128,7 @@ def test_transfer_no_daily_limit_available(
         assert account.balance > data["money"]
         assert account.daily_withdraw_limit < data["money"]
 
-    response = client.post(f"/transaction/transfer", json=data, headers=authorization)
+    response = client.post("/api/transaction/transfer", json=data, headers=authorization)
 
     assert response.status_code == HTTPStatus.BAD_REQUEST
     assert response.json is not None
@@ -155,7 +155,7 @@ def test_transfer_successfully(
         assert account.balance >= data["money"]
         assert account.daily_withdraw_limit > data["money"]
 
-    response = client.post(f"/transaction/transfer", json=data, headers=authorization)
+    response = client.post("/api/transaction/transfer", json=data, headers=authorization)
 
     assert response.status_code == HTTPStatus.OK
     assert response.json is not None

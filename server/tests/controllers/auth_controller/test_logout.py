@@ -5,7 +5,7 @@ from knockbankapi.infra.repositories import AccountRepository
 
 # ------------ Logout User Tests --------------
 def test_logout_unauthorized(client: FlaskClient):
-    response = client.delete("/logout")
+    response = client.delete("/api/logout")
 
     assert response.status_code == HTTPStatus.UNAUTHORIZED
     assert response.json is not None
@@ -18,7 +18,7 @@ def test_logout_unauthorized(client: FlaskClient):
 def test_logout_successfully(
     client: FlaskClient, authorization: dict, account_repository: AccountRepository
 ):
-    response = client.delete("/logout", headers=authorization)
+    response = client.delete("/api/logout", headers=authorization)
 
     assert response.status_code == HTTPStatus.OK
     assert response.json is not None

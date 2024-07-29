@@ -42,12 +42,12 @@ import { ArrowLeft, Lock, Pencil, User } from "@phosphor-icons/react/dist/ssr";
 import { AccountContext } from "@/modules/account/contexts/account-context";
 import { useToast } from "@/components/ui/use-toast";
 import { AuthContext } from "@/modules/auth/contexts/auth-context";
-import { useUnauthorizedHandler } from "@/modules/auth/hooks/use-unauthorized-handler";
+import { useRouter } from "next/navigation";
 
 export function MyAccount({ account }: { account: Account | null }) {
+  const router = useRouter();
   const { toast } = useToast();
   const { logout } = useContext(AuthContext);
-  const { verifyToken } = useUnauthorizedHandler();
   const { fetchAccount, updateAccount, blockAccount } =
     useContext(AccountContext);
   const [open, setOpen] = useState<boolean>(false);
@@ -104,7 +104,7 @@ export function MyAccount({ account }: { account: Account | null }) {
         duration: toastDurationInMiliseconds,
       });
       await logout();
-      verifyToken();
+      router.push("/");
     } catch (error) {
       if (error instanceof Error) {
         toast({

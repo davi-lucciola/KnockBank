@@ -6,7 +6,7 @@ from knockbankapi.domain.models import User
 from knockbankapi.domain.services import AuthService
 
 
-auth_bp = APIBlueprint("Auth", __name__)
+auth_bp = APIBlueprint("Auth", __name__, url_prefix="/api")
 
 
 @auth_bp.post("/login")

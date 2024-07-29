@@ -4,7 +4,7 @@ from flask.testing import FlaskClient
 
 # ------------ Get My Account Test ---------------
 def test_get_my_account_unauthorized(client: FlaskClient):
-    response = client.get("/account/me")
+    response = client.get("/api/account/me")
 
     assert response.status_code == HTTPStatus.UNAUTHORIZED
     assert response.json is not None
@@ -15,7 +15,7 @@ def test_get_my_account_unauthorized(client: FlaskClient):
 
 
 def test_get_my_account_successfully(client: FlaskClient, authorization: dict):
-    response = client.get("/account/me", headers=authorization)
+    response = client.get("/api/account/me", headers=authorization)
 
     assert response.status_code == HTTPStatus.OK
     assert response.json is not None
@@ -34,7 +34,7 @@ def test_get_my_account_successfully(client: FlaskClient, authorization: dict):
 
 # ------------ Get Other Accounts Test ---------------
 def test_get_other_accounts_unauthorized(client: FlaskClient):
-    response = client.get("/account")
+    response = client.get("/api/account")
 
     assert response.status_code == HTTPStatus.UNAUTHORIZED
     assert response.json is not None
@@ -45,7 +45,7 @@ def test_get_other_accounts_unauthorized(client: FlaskClient):
 
 
 def test_get_other_accounts(client: FlaskClient, authorization: dict):
-    response = client.get("/account", headers=authorization)
+    response = client.get("/api/account", headers=authorization)
 
     assert response.status_code == HTTPStatus.OK
     assert response.json is not None

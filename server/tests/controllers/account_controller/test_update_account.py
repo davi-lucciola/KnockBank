@@ -10,7 +10,7 @@ def test_update_account_unauthorized(client: FlaskClient):
     account_id = 1
     data = {}
     # Account with id 1 is "Tester1"
-    response = client.put(f"/account/{account_id}", json=data)
+    response = client.put(f"/api/account/{account_id}", json=data)
 
     assert response.status_code == HTTPStatus.UNAUTHORIZED
     assert response.json is not None
@@ -25,7 +25,7 @@ def test_update_account_missing_values(client: FlaskClient, authorization: dict)
     account_id = 1
     data = {}
     # Account with id 1 is "Tester1"
-    response = client.put(f"/account/{account_id}", json=data, headers=authorization)
+    response = client.put(f"/api/account/{account_id}", json=data, headers=authorization)
 
     assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
     assert response.json is not None
@@ -50,7 +50,7 @@ def test_update_invalid_account_type_and_withdraw_limit(
     data["accountType"] = 0
     data["dailyWithdrawLimit"] = -1
 
-    response = client.put(f"/account/{account_id}", json=data, headers=authorization)
+    response = client.put(f"/api/account/{account_id}", json=data, headers=authorization)
 
     assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
     assert response.json is not None
@@ -75,7 +75,7 @@ def test_update_invalid_account_type_and_withdraw_limit(
 def test_update_account_not_found(client: FlaskClient, authorization: dict):
     account_id = 0
     data = update_account_dto()
-    response = client.put(f"/account/{account_id}", json=data, headers=authorization)
+    response = client.put(f"/api/account/{account_id}", json=data, headers=authorization)
 
     assert response.status_code == HTTPStatus.NOT_FOUND
     assert response.json is not None
@@ -89,7 +89,7 @@ def test_update_account_forbidden(client: FlaskClient, authorization: dict):
     account_id = 2
     data = update_account_dto()
     # AccountId 2 is for "Tester2", but the token are from "Tester1"
-    response = client.put(f"/account/{account_id}", json=data, headers=authorization)
+    response = client.put(f"/api/account/{account_id}", json=data, headers=authorization)
 
     assert response.status_code == HTTPStatus.FORBIDDEN
     assert response.json is not None
@@ -121,7 +121,7 @@ def test_update_account_daily_withdraw_limit_not_possible(
     data["dailyWithdrawLimit"] = 600  # Smaller than what the account spend today
 
     # Test
-    response = client.put(f"/account/{account_id}", json=data, headers=authorization)
+    response = client.put(f"/api/account/{account_id}", json=data, headers=authorization)
 
     # Assertion
     assert response.status_code == HTTPStatus.BAD_REQUEST
@@ -142,7 +142,7 @@ def test_update_account_successfully(
     data = update_account_dto()
 
     # Test
-    response = client.put(f"/account/{account_id}", json=data, headers=authorization)
+    response = client.put(f"/api/account/{account_id}", json=data, headers=authorization)
 
     # Assertion
     assert response.status_code == HTTPStatus.CREATED

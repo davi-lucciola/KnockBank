@@ -50,4 +50,11 @@ export class AccountService {
     );
     return data;
   }
+
+  async blockAccount(accountId: number): Promise<ApiResponse> {
+    const data = this.api.delete<ApiResponse>(
+      `${API_URL}/account/${accountId}`
+    );
+    return data;
+  }
 }

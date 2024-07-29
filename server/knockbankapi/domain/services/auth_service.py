@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from datetime import datetime as dt, timedelta
 from knockbankapi.domain.errors import ForbiddenError
 from knockbankapi.domain.dto import UserLoginDTO
-from knockbankapi.domain.models import Account, User
+from knockbankapi.domain.models import User
 from knockbankapi.infra.utils import JwtService
 from knockbankapi.infra.repositories import AccountRepository, UserRepository
 
@@ -16,7 +16,7 @@ class AuthService:
     )
 
     def login(self, user_login_dto: UserLoginDTO) -> str:
-        account: Account = self.account_repository.get_by_cpf(user_login_dto["cpf"])
+        account = self.account_repository.get_by_cpf(user_login_dto["cpf"])
 
         if (
             account is None
@@ -24,7 +24,12 @@ class AuthService:
         ):
             raise ForbiddenError("Credenciais Inválidas.")
 
-        initiated_at: dt = dt.utcnow()
+        if account is not None and account.fl_active is False:
+            raise ForbiddenError(
+                "Você não pode entrar em uma conta bloqueada, por favor entre em contato com o suporte para desbloquear sua conta."
+            )
+
+        initiated_at: dt = dt.now()
         token_payload = {
             "iat": initiated_at,
             "exp": initiated_at + timedelta(days=1),

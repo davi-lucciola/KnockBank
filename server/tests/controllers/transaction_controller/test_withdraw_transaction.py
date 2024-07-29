@@ -9,7 +9,7 @@ from knockbankapi.infra.repositories import AccountRepository, TransactionReposi
 def test_withdraw_unauthorized(client: FlaskClient):
     # Test
     data = transaction_dto()
-    response = client.post(f"/transaction/withdraw", json=data)
+    response = client.post("/api/transaction/withdraw", json=data)
 
     # Assertion
     assert response.status_code == HTTPStatus.UNAUTHORIZED
@@ -23,7 +23,7 @@ def test_withdraw_unauthorized(client: FlaskClient):
 def test_withdraw_required_fields(client: FlaskClient, authorization: dict):
     # Test
     data = {}
-    response = client.post(f"/transaction/withdraw", json=data, headers=authorization)
+    response = client.post("/api/transaction/withdraw", json=data, headers=authorization)
 
     # Assertion
     assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
@@ -43,7 +43,7 @@ def test_withdraw_invalid_money(client: FlaskClient, authorization: dict):
     # Test
     data = transaction_dto()
     data["money"] = -200
-    response = client.post(f"/transaction/withdraw", json=data, headers=authorization)
+    response = client.post("/api/transaction/withdraw", json=data, headers=authorization)
 
     # Assertion
     assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
@@ -69,7 +69,7 @@ def test_withdraw_no_available_balance(
 
         assert account.balance < data["money"]
 
-    response = client.post(f"/transaction/withdraw", json=data, headers=authorization)
+    response = client.post("/api/transaction/withdraw", json=data, headers=authorization)
 
     assert response.status_code == HTTPStatus.BAD_REQUEST
     assert response.json is not None
@@ -95,7 +95,7 @@ def test_withdraw_no_daily_limit_available(
         assert account.balance > data["money"]
         assert account.daily_withdraw_limit < data["money"]
 
-    response = client.post(f"/transaction/withdraw", json=data, headers=authorization)
+    response = client.post("/api/transaction/withdraw", json=data, headers=authorization)
 
     assert response.status_code == HTTPStatus.BAD_REQUEST
     assert response.json is not None
@@ -122,7 +122,7 @@ def test_withdraw_successfully(
         assert account.balance >= data["money"]
         assert account.daily_withdraw_limit > data["money"]
 
-    response = client.post(f"/transaction/withdraw", json=data, headers=authorization)
+    response = client.post("/api/transaction/withdraw", json=data, headers=authorization)
 
     assert response.status_code == HTTPStatus.OK
     assert response.json is not None

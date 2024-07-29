@@ -11,21 +11,57 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       
-      # Login Dockerhub
-      - name: Login Dockerhub
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-
-      # API - Docker Image
-      - name: Build Docker Image (API)
+      # API - Build
+      - name: Using Python
+        uses: actions/setup-python@v4
+        with: 
+          python-version: "3.11"
+      - name: Install Dependencies
         run: |
           cd server
-          docker build -t davilucciola/knockbank-api .
+          pip install --upgrade pip
+          pip install --no-cache-dir poetry
+          poetry config virtualenvs.create false
+          poetry install
 
-      - name: Push Docker Image (API)
-        run: docker push davilucciola/knockbank-api:latest
+      # API - Tests
+      - name: Running Tests
+        run: |
+          cd server
+          poetry run pytest
+        env:
+          TOKEN_SECRET: testkey
+      
+      # Web - Build
+      - name: Using NodeJS
+        uses: actions/setup-node@v4
+        with: 
+          node-version: "20.8.0"
+      - name: Building NextJS
+        run: |
+          cd client
+          npm install
+          npm run build
+
+      # Web - Tests
+      # Work In Progress
+
+      
+      # Login Dockerhub
+      # - name: Login Dockerhub
+      #   env:
+      #     DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      #     DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      #   run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+
+      # # API - Docker Image
+      # - name: Build Docker Image (API)
+      #   run: |
+      #     cd server
+      #     docker build -t davilucciola/knockbank-api .
+
+      # - name: Push Docker Image (API)
+      #   run: docker push davilucciola/knockbank-api:latest
       
       # Web - Docker Image
       # - name: Build Web Image

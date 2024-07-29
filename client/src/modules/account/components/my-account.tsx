@@ -41,10 +41,15 @@ import { MoneyInput } from "@/components/money-input";
 import { ArrowLeft, Lock, Pencil, User } from "@phosphor-icons/react/dist/ssr";
 import { AccountContext } from "@/modules/account/contexts/account-context";
 import { useToast } from "@/components/ui/use-toast";
+import { AuthContext } from "@/modules/auth/contexts/auth-context";
+import { useRouter } from "next/navigation";
 
 export function MyAccount({ account }: { account: Account | null }) {
+  const router = useRouter();
   const { toast } = useToast();
-  const { updateAccount, fetchAccount } = useContext(AccountContext);
+  const { logout } = useContext(AuthContext);
+  const { fetchAccount, updateAccount, blockAccount } =
+    useContext(AccountContext);
   const [open, setOpen] = useState<boolean>(false);
   const [editMode, setEditMode] = useState<boolean>(false);
 
@@ -78,6 +83,28 @@ export function MyAccount({ account }: { account: Account | null }) {
       });
       fetchAccount();
       setOpen(false);
+    } catch (error) {
+      if (error instanceof Error) {
+        toast({
+          title: error.message,
+          variant: "destructive",
+          duration: toastDurationInMiliseconds,
+        });
+      }
+    }
+  };
+
+  const onBlockAccount = async () => {
+    const toastDurationInMiliseconds = 3 * 1000; // 3 Seconds
+    try {
+      const response = await blockAccount();
+      toast({
+        title: response.message,
+        variant: "success",
+        duration: toastDurationInMiliseconds,
+      });
+      await logout();
+      router.push("/");
     } catch (error) {
       if (error instanceof Error) {
         toast({
@@ -219,6 +246,7 @@ export function MyAccount({ account }: { account: Account | null }) {
                     type="button"
                     variant="destructive"
                     className="flex gap-2"
+                    onClick={onBlockAccount}
                   >
                     Bloquear
                     <Lock size={24} className="fill-white" />

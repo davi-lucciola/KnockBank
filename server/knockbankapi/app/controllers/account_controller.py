@@ -15,7 +15,7 @@ from knockbankapi.domain.services import AccountService
 from knockbankapi.infra.repositories import TransactionRepository
 
 
-account_bp = APIBlueprint("Account", __name__, url_prefix="/account")
+account_bp = APIBlueprint("Account", __name__, url_prefix="/api/account")
 
 
 @account_bp.get("/me")

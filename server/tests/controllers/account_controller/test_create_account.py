@@ -9,7 +9,7 @@ from knockbankapi.infra.repositories import AccountRepository
 # Schema Validation Tests
 def test_create_account_missing_values(client: FlaskClient):
     data = {}
-    response = client.post("/account", json=data)
+    response = client.post("/api/account", json=data)
 
     assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
     assert response.json is not None
@@ -31,7 +31,7 @@ def test_create_account_invalid_cpf(client: FlaskClient):
     data = create_account_dto()
     data["cpf"] = "58901211078"
 
-    response = client.post("/account", json=data)
+    response = client.post("/api/account", json=data)
 
     assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
     assert response.json is not None
@@ -49,7 +49,7 @@ def test_create_account_invalid_cpf(client: FlaskClient):
 def test_create_account_invalid_password_lenght(client: FlaskClient):
     data = create_account_dto()
     data["password"] = "tes"
-    response = client.post("/account", json=data)
+    response = client.post("/api/account", json=data)
 
     assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
     assert response.json is not None
@@ -67,7 +67,7 @@ def test_create_account_invalid_password_lenght(client: FlaskClient):
 def test_create_account_password_with_no_lowercase(client: FlaskClient):
     data = create_account_dto()
     data["password"] = "TESTE#123"
-    response = client.post("/account", json=data)
+    response = client.post("/api/account", json=data)
 
     assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
     assert response.json is not None
@@ -85,7 +85,7 @@ def test_create_account_password_with_no_lowercase(client: FlaskClient):
 def test_create_account_password_with_no_uppercase(client: FlaskClient):
     data = create_account_dto()
     data["password"] = "teste#123"
-    response = client.post("/account", json=data)
+    response = client.post("/api/account", json=data)
 
     assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
     assert response.json is not None
@@ -103,7 +103,7 @@ def test_create_account_password_with_no_uppercase(client: FlaskClient):
 def test_create_account_password_with_no_numbers(client: FlaskClient):
     data = create_account_dto()
     data["password"] = "teste#ASD"
-    response = client.post("/account", json=data)
+    response = client.post("/api/account", json=data)
 
     assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
     assert response.json is not None
@@ -121,7 +121,7 @@ def test_create_account_password_with_no_numbers(client: FlaskClient):
 def test_create_account_password_with_special_characters(client: FlaskClient):
     data = create_account_dto()
     data["password"] = "Teste1234"
-    response = client.post("/account", json=data)
+    response = client.post("/api/account", json=data)
 
     assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
     assert response.json is not None
@@ -139,22 +139,24 @@ def test_create_account_password_with_special_characters(client: FlaskClient):
 # Bussiness Rules
 def test_create_account_minor_not_allowed(client: FlaskClient):
     data = create_account_dto()
-    minor_age = date.today() - timedelta(days=365 * 6) # 6 Years
+    minor_age = date.today() - timedelta(days=365 * 6)  # 6 Years
     data["birthDate"] = minor_age.isoformat()
-    response = client.post("/account", json=data)
+    response = client.post("/api/account", json=data)
 
     assert response.status_code == HTTPStatus.BAD_REQUEST
     assert response.json is not None
 
     json: dict = response.json
 
-    assert json.get("message") == "Você precisa ser maior de idade para criar uma conta."
+    assert (
+        json.get("message") == "Você precisa ser maior de idade para criar uma conta."
+    )
 
 
 def test_create_account_cpf_already_exists(client: FlaskClient):
     data = create_account_dto()
     data["cpf"] = "58228952040"  # Tester1 CPF
-    response = client.post("/account", json=data)
+    response = client.post("/api/account", json=data)
 
     assert response.status_code == HTTPStatus.BAD_REQUEST
     assert response.json is not None
@@ -169,7 +171,7 @@ def test_create_account_successfully(
 ):
     data = create_account_dto()
 
-    response = client.post("/account", json=data)
+    response = client.post("/api/account", json=data)
 
     assert response.status_code == HTTPStatus.CREATED
     assert response.json.get("message") == "Conta cadastrada com sucesso."

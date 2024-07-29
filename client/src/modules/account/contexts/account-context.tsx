@@ -21,6 +21,7 @@ interface IAccountContext {
   getAccounts: (query: AccountQuery) => Promise<BaseAccount[]>;
   createAccount: (account: CreateAccountPayload) => Promise<ApiResponse>;
   updateAccount: (account: UpdateAccountPayload) => Promise<ApiResponse>;
+  blockAccount: () => Promise<ApiResponse>;
 }
 
 export const AccountContext = createContext({} as IAccountContext);
@@ -66,6 +67,11 @@ export function AccountContextProvider({
     return data;
   }
 
+  async function blockAccount() {
+    const data = accountService.blockAccount(account?.id!);
+    return data;
+  }
+
   return (
     <AccountContext.Provider
       value={{
@@ -77,6 +83,7 @@ export function AccountContextProvider({
         getAccounts,
         createAccount,
         updateAccount,
+        blockAccount,
       }}
     >
       {children}

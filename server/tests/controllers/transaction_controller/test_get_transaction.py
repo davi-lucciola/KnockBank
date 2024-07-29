@@ -7,7 +7,7 @@ from knockbankapi.infra.repositories import AccountRepository, TransactionReposi
 # ------------ Get Transactions Tests --------------
 def test_get_my_transactions_unauthorized(client: FlaskClient):
     # Test
-    response = client.get(f"/transaction")
+    response = client.get("/api/transaction")
 
     # Assertion
     assert response.status_code == HTTPStatus.UNAUTHORIZED
@@ -45,7 +45,7 @@ def test_get_my_transactions(
         transaction_repository.save(transaction2)
 
     # Test
-    response = client.get(f"/transaction", headers=authorization)
+    response = client.get("/api/transaction", headers=authorization)
 
     # Assertion
     assert response.status_code == HTTPStatus.OK

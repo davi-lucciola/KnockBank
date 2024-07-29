@@ -2,20 +2,6 @@ version: '3.9'
 
 
 services:
-  web:
-    container_name: knockbank-web
-    build: 
-      context: ./client
-    ports:
-      - "3000:3000"
-
-  api:
-    container_name: knockbank-api
-    build: 
-      context: ./server
-    ports:
-      - "5000:5000"
-
   db:
     image: mysql:5.7
     container_name: knockbank-db
@@ -24,10 +10,32 @@ services:
       MYSQL_USER: 'admin'
       MYSQL_PASSWORD: 'admin'
       MYSQL_ROOT_PASSWORD: 'password'
-    ports:
-      - "3306:3306"
     volumes:
       - mysql-db:/var/lib/mysql
+
+  api:
+    container_name: knockbank-api
+    build: 
+      context: ./server
+    depends_on:
+      - db
+
+  web:
+    container_name: knockbank-web
+    build: 
+      context: ./client
+    depends_on:
+      - api
+
+  proxy:
+    container_name: nginx-proxy
+    restart: always
+    build: 
+      context: ./deploy
+    depends_on:
+      - web
+    ports:
+      - "80:80"
 
 volumes:
   mysql-db:

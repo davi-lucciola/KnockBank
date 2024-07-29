@@ -70,7 +70,7 @@ def transaction_repository():
 def authorization(client: FlaskClient):
     data = UserLoginDTO(cpf="58228952040", password="Test#123")
 
-    response = client.post("/login", json=data)
+    response = client.post("/api/login", json=data)
 
     assert response.status_code == HTTPStatus.OK
     assert response.json is not None

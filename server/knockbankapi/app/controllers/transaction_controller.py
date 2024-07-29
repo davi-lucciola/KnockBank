@@ -16,7 +16,7 @@ from knockbankapi.domain.models import Account
 from knockbankapi.domain.services import TransactionService
 
 
-transaction_bp = APIBlueprint("Transaction", __name__, url_prefix="/transaction")
+transaction_bp = APIBlueprint("Transaction", __name__, url_prefix="/api/transaction")
 
 
 @transaction_bp.get("/")

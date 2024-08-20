@@ -55,16 +55,19 @@ jobs:
       #   run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 
       # # API - Docker Image
-      # - name: Build Docker Image (API)
+      # - name: Build API Docker Image 
       #   run: |
       #     cd server
-      #     docker build -t davilucciola/knockbank-api .
+      #     docker build . -t davilucciola/knockbank-api
 
-      # - name: Push Docker Image (API)
+      # - name: Push API Docker Image
       #   run: docker push davilucciola/knockbank-api:latest
       
       # Web - Docker Image
-      # - name: Build Web Image
+      # - name: Build Web Docker Image
       #   run: |
       #     cd client
-      #     docker build ./client -t knockbank-web
+      #     docker build . -t davilucciola/knockbank-web
+      
+      # - name: Push Web Docker Image
+      #   run: docker push davilucciola/knockbank-web:latest

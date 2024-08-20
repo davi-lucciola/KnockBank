@@ -1,9 +1,8 @@
 version: '3.9'
 
-
 services:
   db:
-    image: mysql:5.7
+    image: mysql:8.3.0
     container_name: knockbank-db
     environment:
       MYSQL_DATABASE: 'knock_bank_db'
@@ -15,27 +14,26 @@ services:
 
   api:
     container_name: knockbank-api
+    ports:
+      - "5000:5000"
     build: 
       context: ./server
+    environment:
+      TOKEN_SECRET: 'supersecretkey'
+      SQLALCHEMY_DATABASE_URI: 'mysql+mysqlconnector://admin:admin@db:3306/knock_bank_db'
     depends_on:
       - db
 
   web:
     container_name: knockbank-web
+    ports:
+      - "3000:3000"
     build: 
       context: ./client
+      args:
+        NEXT_PUBLIC_API_URL: 'http://localhost:5000/api'
     depends_on:
       - api
-
-  proxy:
-    container_name: nginx-proxy
-    restart: always
-    build: 
-      context: ./deploy
-    depends_on:
-      - web
-    ports:
-      - "80:80"
 
 volumes:
   mysql-db:

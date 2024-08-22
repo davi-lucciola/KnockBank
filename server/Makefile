@@ -24,3 +24,7 @@ generate:
 
 migrate:
 	poetry run flask --app knockbankapi db upgrade
+
+image-push:
+	docker build -t davilucciola/knockbank-api .
+	docker push davilucciola/knockbank-api:latest

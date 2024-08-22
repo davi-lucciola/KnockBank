@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "clean": "rm -rf node_modules .next",
-    "reinstall": "npm run clean && npm install"
+    "reinstall": "npm run clean && npm install",
+    "image-push": "docker build -t davilucciola/knockbank-web . && docker push davilucciola/knockbank-web:latest"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.6.0",

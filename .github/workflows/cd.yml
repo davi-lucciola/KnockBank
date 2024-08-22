@@ -12,16 +12,21 @@ jobs:
     runs-on: self-hosted
 
 #     steps:   
-#       # Running API Container
-#       - name: Pull Docker Image (API)
+        # - name: Stoping Containers
+        # - run: |
+        #     sudo docker stop knockbank-web || true
+        #     sudo docker rm -f knockbank-web || true
+        #     sudo docker image rm -f davilucciola/knockbank-web || true
+        #     sudo docker stop knockbank-api || true
+        #     sudo docker rm -f knockbank-api || true
+        #     sudo docker image rm -f davilucciola/knockbank-api || true
+    
+#       - name: Pull Docker Images
 #         run: |
-#           sudo docker image rm -f davilucciola/knockbank-api 
 #           sudo docker pull davilucciola/knockbank-api:latest
-      
-#       - name: Delete Old Container (API)
-#         run: sudo docker rm -f knockbank-api || true
-      
-#       - name: Run Docker Container (API)
+#           sudo docker pull davilucciola/knockbank-web:latest
+
+#       - name: Running API Container
 #         env:
 #           TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
 #           SQLALCHEMY_DATABASE_URI: ${{ secrets.SQLALCHEMY_DATABASE_URI }}
@@ -30,3 +35,9 @@ jobs:
 #           -e TOKEN_SECRET=$TOKEN_SECRET \
 #           -e SQLALCHEMY_DATABASE_URI=$SQLALCHEMY_DATABASE_URI \
 #           -d davilucciola/knockbank-api
+
+#       - name: Running Web Container
+#         env:
+#         run: |
+#           sudo docker run --name knockbank-web -p 3000:3000 --restart=always \
+#           -d davilucciola/knockbank-web

@@ -57,7 +57,6 @@ A API foi construida utilizando a arquitetura MVC com camada de Servico (MVC+Ser
 
 - Injeção de Depêndencias, para melhor isolamento das camadas e facilitação de testes unitários
 - Repository Pattern para encapsular lógica de acesso ao banco de dados e garantir atomicidade quando mais de uma entidade está sendo alterada.
-- Builder Pattern, para montar objetos paginados e converter as entidades para JSON.
 - Service encapsulando as regras de negócio, que através da injeção de dependencia dos repositories facilita os testes unitários.
 
 WORK IN PROGRESS...
